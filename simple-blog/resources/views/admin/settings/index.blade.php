@@ -391,6 +391,54 @@
                                 @enderror
                             </div>
 
+                            <!-- Minimum Posts for Monetization -->
+                            <div>
+                                <label for="monetization_min_posts" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    Minimum Posts for Monetization <span class="text-red-500">*</span>
+                                </label>
+                                <input type="number" 
+                                       name="monetization_min_posts" 
+                                       id="monetization_min_posts" 
+                                       min="0"
+                                       class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent focus:bg-white transition @error('monetization_min_posts') border-red-500 bg-red-50 @enderror" 
+                                       value="{{ old('monetization_min_posts', $settings['monetization_min_posts'] ?? 3) }}" 
+                                       required>
+                                @error('monetization_min_posts')
+                                    <p class="text-red-600 text-sm mt-2 flex items-center">
+                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        {{ $message }}
+                                    </p>
+                                @else
+                                    <p class="text-sm text-gray-500 mt-2">Minimum number of published posts required to enable monetization</p>
+                                @enderror
+                            </div>
+
+                            <!-- Minimum Views for Monetization -->
+                            <div>
+                                <label for="monetization_min_views" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    Minimum Views for Monetization <span class="text-red-500">*</span>
+                                </label>
+                                <input type="number" 
+                                       name="monetization_min_views" 
+                                       id="monetization_min_views" 
+                                       min="0"
+                                       class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent focus:bg-white transition @error('monetization_min_views') border-red-500 bg-red-50 @enderror" 
+                                       value="{{ old('monetization_min_views', $settings['monetization_min_views'] ?? 100) }}" 
+                                       required>
+                                @error('monetization_min_views')
+                                    <p class="text-red-600 text-sm mt-2 flex items-center">
+                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        {{ $message }}
+                                    </p>
+                                @else
+                                    <p class="text-sm text-gray-500 mt-2">Minimum total views required to enable monetization</p>
+                                @enderror
+                            </div>
+
                             <!-- Monetization Info Box -->
                             <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                             <a href="{{ route('dashboard') }}" class="px-6 py-3 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition">

@@ -21,6 +21,10 @@ class SettingController extends Controller
             'hero_show' => Setting::get('hero_show', '1'),
             'hero_title' => Setting::get('hero_title', 'Stay curious.'),
             'hero_description' => Setting::get('hero_description', ''),
+            'coins_per_post' => Setting::get('coins_per_post', 10),
+            'coins_per_1000_views' => Setting::get('coins_per_1000_views', 5),
+            'monetization_min_posts' => Setting::get('monetization_min_posts', 3),
+            'monetization_min_views' => Setting::get('monetization_min_views', 100),
         ];
 
         return view('admin.settings.index', compact('settings'));
@@ -39,6 +43,10 @@ class SettingController extends Controller
             'hero_show' => 'nullable|boolean',
             'hero_title' => 'nullable|string|max:255',
             'hero_description' => 'nullable|string|max:500',
+            'coins_per_post' => 'required|numeric|min:0',
+            'coins_per_1000_views' => 'required|numeric|min:0',
+            'monetization_min_posts' => 'required|integer|min:0',
+            'monetization_min_views' => 'required|integer|min:0',
         ]);
 
         $data = $request->except('_token');
