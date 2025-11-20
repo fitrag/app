@@ -1,0 +1,3408 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WAConnect - WhatsApp API Business Solution</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
+
+      * {
+        font-family: "Inter", sans-serif;
+      }
+
+      .gradient-text {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .hero-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+
+      .card-hover:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      .floating {
+        animation: floating 3s ease-in-out infinite;
+      }
+
+      @keyframes floating {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      .slide-in {
+        animation: slideIn 0.5s ease-out;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .pulse-button {
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba(102, 126, 234, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+        }
+      }
+
+      .whatsapp-pattern {
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2325D366' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      }
+
+      /* Enhanced Navigation Styles */
+      .nav-glass {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .nav-link {
+        position: relative;
+        transition: all 0.3s ease;
+      }
+
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+      }
+
+      .nav-link:hover::after {
+        width: 100%;
+      }
+
+      .dropdown-content {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+      }
+
+      .dropdown:hover .dropdown-content {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .mobile-menu-overlay {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+
+      .mobile-menu-overlay.active {
+        transform: translateX(0);
+      }
+
+      .hamburger-line {
+        transition: all 0.3s ease;
+      }
+
+      .hamburger.active .hamburger-line:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+
+      .hamburger.active .hamburger-line:nth-child(2) {
+        opacity: 0;
+      }
+
+      .hamburger.active .hamburger-line:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -6px);
+      }
+
+      .logo-glow {
+        box-shadow: 0 0 20px rgba(37, 211, 102, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .logo-glow:hover {
+        box-shadow: 0 0 30px rgba(37, 211, 102, 0.5);
+        transform: scale(1.05);
+      }
+
+      .search-box {
+        transition: all 0.3s ease;
+      }
+
+      .search-box:focus-within {
+        width: 300px;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .notification-badge {
+        animation: notificationPulse 2s infinite;
+      }
+
+      @keyframes notificationPulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .mega-menu {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-20px);
+        transition: all 0.3s ease;
+      }
+
+      .mega-menu.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .user-avatar {
+        transition: all 0.3s ease;
+      }
+
+      .user-avatar:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+      }
+
+      /* Refined Hero Section Styles */
+      .hero-section {
+        background: linear-gradient(
+          135deg,
+          #667eea 0%,
+          #764ba2 50%,
+          #f093fb 100%
+        );
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+            circle at 20% 80%,
+            rgba(120, 119, 198, 0.3),
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(255, 119, 198, 0.3),
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 40% 40%,
+            rgba(255, 255, 255, 0.1),
+            transparent 50%
+          );
+        animation: gradientShift 15s ease infinite;
+      }
+
+      @keyframes gradientShift {
+        0%,
+        100% {
+          transform: translate(0, 0) rotate(0deg);
+        }
+        33% {
+          transform: translate(-20px, -20px) rotate(120deg);
+        }
+        66% {
+          transform: translate(20px, -10px) rotate(240deg);
+        }
+      }
+
+      .hero-grid-pattern {
+        background-image: linear-gradient(
+            rgba(255, 255, 255, 0.05) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        background-size: 50px 50px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+
+      .typing-cursor {
+        display: inline-block;
+        width: 3px;
+        height: 1.2em;
+        background-color: white;
+        animation: blink 1s infinite;
+        margin-left: 2px;
+        vertical-align: text-bottom;
+      }
+
+      @keyframes blink {
+        0%,
+        50% {
+          opacity: 1;
+        }
+        51%,
+        100% {
+          opacity: 0;
+        }
+      }
+
+      .phone-container {
+        perspective: 1200px;
+        transform-style: preserve-3d;
+      }
+
+      .phone-mockup {
+        transform: rotateY(-15deg) rotateX(5deg);
+        transition: transform 0.6s ease;
+        transform-style: preserve-3d;
+      }
+
+      .phone-mockup:hover {
+        transform: rotateY(0deg) rotateX(0deg);
+      }
+
+      .message-animation {
+        animation: messageSlide 0.5s ease-out forwards;
+        opacity: 0;
+      }
+
+      .message-animation:nth-child(1) {
+        animation-delay: 0.2s;
+      }
+      .message-animation:nth-child(2) {
+        animation-delay: 0.4s;
+      }
+      .message-animation:nth-child(3) {
+        animation-delay: 0.6s;
+      }
+      .message-animation:nth-child(4) {
+        animation-delay: 0.8s;
+      }
+
+      @keyframes messageSlide {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .typing-indicator span {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #6b7280;
+        animation: typingBounce 1.4s infinite ease-in-out;
+      }
+
+      .typing-indicator span:nth-child(1) {
+        animation-delay: -0.32s;
+      }
+      .typing-indicator span:nth-child(2) {
+        animation-delay: -0.16s;
+      }
+
+      @keyframes typingBounce {
+        0%,
+        80%,
+        100% {
+          transform: scale(0.8);
+          opacity: 0.5;
+        }
+        40% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .floating-card {
+        animation: floatCard 4s ease-in-out infinite;
+      }
+
+      .floating-card:nth-child(2) {
+        animation-delay: 1s;
+      }
+
+      @keyframes floatCard {
+        0%,
+        100% {
+          transform: translateY(0px) rotate(0deg);
+        }
+        25% {
+          transform: translateY(-10px) rotate(1deg);
+        }
+        75% {
+          transform: translateY(5px) rotate(-1deg);
+        }
+      }
+
+      .hero-badge {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .stats-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+      }
+
+      .stats-card:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .cta-button {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .cta-button::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+      }
+
+      .cta-button:hover::before {
+        width: 400px;
+        height: 400px;
+      }
+
+      .social-proof-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .avatar-stack {
+        display: flex;
+        align-items: center;
+      }
+
+      .avatar-stack img {
+        margin-left: -12px;
+        border: 3px solid white;
+        transition: all 0.3s ease;
+      }
+
+      .avatar-stack img:hover {
+        transform: scale(1.1);
+        z-index: 10;
+        margin-left: -8px;
+      }
+
+      .avatar-stack img:first-child {
+        margin-left: 0;
+      }
+
+      .gradient-border {
+        position: relative;
+        background: linear-gradient(white, white) padding-box,
+          linear-gradient(135deg, #667eea, #764ba2) border-box;
+        border: 2px solid transparent;
+      }
+
+      .shimmer-effect {
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        background-size: 200% 100%;
+        animation: shimmer 3s infinite;
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: -200% 0;
+        }
+        100% {
+          background-position: 200% 0;
+        }
+      }
+
+      .hero-shape {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(5px);
+      }
+
+      .shape-1 {
+        width: 400px;
+        height: 400px;
+        top: -200px;
+        right: -150px;
+        animation: floatShape 20s infinite ease-in-out;
+      }
+
+      .shape-2 {
+        width: 300px;
+        height: 300px;
+        bottom: -150px;
+        left: -100px;
+        animation: floatShape 15s infinite ease-in-out reverse;
+      }
+
+      .shape-3 {
+        width: 200px;
+        height: 200px;
+        top: 30%;
+        right: 5%;
+        animation: floatShape 25s infinite ease-in-out;
+      }
+
+      @keyframes floatShape {
+        0%,
+        100% {
+          transform: translate(0, 0) rotate(0deg);
+        }
+        33% {
+          transform: translate(30px, -30px) rotate(120deg);
+        }
+        66% {
+          transform: translate(-20px, 20px) rotate(240deg);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .hero-section {
+          min-height: 100vh;
+          padding-top: 80px;
+        }
+
+        .phone-mockup {
+          transform: none !important;
+          max-width: 280px;
+          margin: 0 auto;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50">
+    <!-- Enhanced Navigation -->
+    <nav
+      id="navbar"
+      class="fixed top-0 w-full nav-glass z-50 transition-all duration-300"
+    >
+      <div class="container mx-auto px-6">
+        <div class="flex items-center justify-between h-16">
+          <!-- Logo Section -->
+          <div class="flex items-center space-x-8">
+            <div class="flex items-center space-x-3 group cursor-pointer">
+              <div
+                class="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center logo-glow"
+              >
+                <i
+                  class="fab fa-whatsapp text-white text-xl group-hover:rotate-12 transition-transform"
+                ></i>
+              </div>
+              <div>
+                <span class="text-xl font-bold text-gray-800">WAConnect</span>
+                <span class="text-xs text-purple-600 font-semibold block"
+                  >PRO</span
+                >
+              </div>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <div class="hidden lg:flex items-center space-x-1">
+              <!-- Products Dropdown -->
+              <div class="dropdown relative">
+                <button
+                  class="nav-link px-4 py-2 text-gray-700 hover:text-purple-600 font-medium flex items-center space-x-1"
+                >
+                  <span>Produk</span>
+                  <i class="fas fa-chevron-down text-xs"></i>
+                </button>
+                <div
+                  class="dropdown-content absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-2xl p-4"
+                >
+                  <div class="space-y-2">
+                    <a
+                      href="#"
+                      class="flex items-center space-x-3 p-3 rounded-lg hover:bg-purple-50 transition"
+                    >
+                      <div
+                        class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center"
+                      >
+                        <i class="fas fa-robot text-purple-600"></i>
+                      </div>
+                      <div>
+                        <p class="font-semibold text-gray-800">WhatsApp API</p>
+                        <p class="text-xs text-gray-600">
+                          Integrasi API lengkap
+                        </p>
+                      </div>
+                    </a>
+                    <a
+                      href="#"
+                      class="flex items-center space-x-3 p-3 rounded-lg hover:bg-purple-50 transition"
+                    >
+                      <div
+                        class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center"
+                      >
+                        <i class="fas fa-comments text-green-600"></i>
+                      </div>
+                      <div>
+                        <p class="font-semibold text-gray-800">Chatbot AI</p>
+                        <p class="text-xs text-gray-600">Otomasi cerdas</p>
+                      </div>
+                    </a>
+                    <a
+                      href="#"
+                      class="flex items-center space-x-3 p-3 rounded-lg hover:bg-purple-50 transition"
+                    >
+                      <div
+                        class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center"
+                      >
+                        <i class="fas fa-bullhorn text-blue-600"></i>
+                      </div>
+                      <div>
+                        <p class="font-semibold text-gray-800">Broadcast</p>
+                        <p class="text-xs text-gray-600">Kirim massal</p>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Solutions Dropdown -->
+              <div class="dropdown relative">
+                <button
+                  class="nav-link px-4 py-2 text-gray-700 hover:text-purple-600 font-medium flex items-center space-x-1"
+                >
+                  <span>Solusi</span>
+                  <i class="fas fa-chevron-down text-xs"></i>
+                </button>
+                <div
+                  class="dropdown-content absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-2xl p-4"
+                >
+                  <div class="space-y-2">
+                    <a
+                      href="#"
+                      class="flex items-center space-x-3 p-3 rounded-lg hover:bg-purple-50 transition"
+                    >
+                      <div
+                        class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center"
+                      >
+                        <i class="fas fa-store text-yellow-600"></i>
+                      </div>
+                      <div>
+                        <p class="font-semibold text-gray-800">E-Commerce</p>
+                        <p class="text-xs text-gray-600">Notifikasi otomatis</p>
+                      </div>
+                    </a>
+                    <a
+                      href="#"
+                      class="flex items-center space-x-3 p-3 rounded-lg hover:bg-purple-50 transition"
+                    >
+                      <div
+                        class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center"
+                      >
+                        <i class="fas fa-graduation-cap text-red-600"></i>
+                      </div>
+                      <div>
+                        <p class="font-semibold text-gray-800">Edutech</p>
+                        <p class="text-xs text-gray-600">Reminder kelas</p>
+                      </div>
+                    </a>
+                    <a
+                      href="#"
+                      class="flex items-center space-x-3 p-3 rounded-lg hover:bg-purple-50 transition"
+                    >
+                      <div
+                        class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center"
+                      >
+                        <i class="fas fa-hospital text-indigo-600"></i>
+                      </div>
+                      <div>
+                        <p class="font-semibold text-gray-800">Healthcare</p>
+                        <p class="text-xs text-gray-600">
+                          Appointment reminder
+                        </p>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <a
+                href="#pricing"
+                class="nav-link px-4 py-2 text-gray-700 hover:text-purple-600 font-medium"
+                >Harga</a
+              >
+              <a
+                href="#resources"
+                class="nav-link px-4 py-2 text-gray-700 hover:text-purple-600 font-medium"
+                >Resources</a
+              >
+            </div>
+          </div>
+
+          <!-- Right Section -->
+          <div class="flex items-center space-x-4">
+            <!-- Search Bar -->
+            <div
+              class="hidden md:flex items-center search-box bg-gray-100 rounded-full px-4 py-2"
+            >
+              <i class="fas fa-search text-gray-400 mr-2"></i>
+              <input
+                type="text"
+                placeholder="Cari..."
+                class="bg-transparent outline-none text-sm w-40 focus:w-48 transition-all"
+              />
+            </div>
+
+            <!-- Notifications -->
+            <button
+              class="relative p-2 text-gray-600 hover:text-purple-600 transition"
+            >
+              <i class="fas fa-bell text-xl"></i>
+              <span
+                class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full notification-badge"
+              ></span>
+            </button>
+
+            <!-- User Menu -->
+            <div class="dropdown relative">
+              <button
+                class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition"
+              >
+                <img
+                  src="https://picsum.photos/seed/user-avatar/32/32"
+                  alt="User"
+                  class="w-8 h-8 rounded-full user-avatar"
+                />
+                <i class="fas fa-chevron-down text-xs text-gray-600"></i>
+              </button>
+              <div
+                class="dropdown-content absolute top-full right-0 mt-2 w-56 bg-white rounded-xl shadow-2xl p-4"
+              >
+                <div class="border-b pb-3 mb-3">
+                  <p class="font-semibold text-gray-800">John Doe</p>
+                  <p class="text-sm text-gray-600">john@example.com</p>
+                </div>
+                <div class="space-y-2">
+                  <a
+                    href="#"
+                    class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition"
+                  >
+                    <i class="fas fa-user text-gray-600"></i>
+                    <span class="text-gray-700">Profile</span>
+                  </a>
+                  <a
+                    href="#"
+                    class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition"
+                  >
+                    <i class="fas fa-cog text-gray-600"></i>
+                    <span class="text-gray-700">Settings</span>
+                  </a>
+                  <a
+                    href="#"
+                    class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition"
+                  >
+                    <i class="fas fa-chart-bar text-gray-600"></i>
+                    <span class="text-gray-700">Dashboard</span>
+                  </a>
+                  <hr class="my-2" />
+                  <a
+                    href="#"
+                    class="flex items-center space-x-3 p-2 rounded-lg hover:bg-red-50 transition"
+                  >
+                    <i class="fas fa-sign-out-alt text-red-600"></i>
+                    <span class="text-red-600">Logout</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- CTA Button -->
+            <button
+              class="hidden md:block bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+            >
+              Mulai Gratis
+            </button>
+
+            <!-- Mobile Menu Toggle -->
+            <button id="mobileMenuToggle" class="lg:hidden hamburger p-2">
+              <div class="space-y-1">
+                <div class="hamburger-line w-6 h-0.5 bg-gray-600"></div>
+                <div class="hamburger-line w-6 h-0.5 bg-gray-600"></div>
+                <div class="hamburger-line w-6 h-0.5 bg-gray-600"></div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div
+      id="mobileMenuOverlay"
+      class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden"
+    >
+      <div
+        class="mobile-menu-overlay fixed left-0 top-0 h-full w-80 bg-white shadow-2xl"
+      >
+        <div class="p-6">
+          <!-- Mobile Header -->
+          <div class="flex items-center justify-between mb-8">
+            <div class="flex items-center space-x-3">
+              <div
+                class="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center"
+              >
+                <i class="fab fa-whatsapp text-white text-xl"></i>
+              </div>
+              <div>
+                <span class="text-xl font-bold text-gray-800">WAConnect</span>
+                <span class="text-xs text-purple-600 font-semibold block"
+                  >PRO</span
+                >
+              </div>
+            </div>
+            <button
+              id="closeMobileMenu"
+              class="p-2 hover:bg-gray-100 rounded-lg transition"
+            >
+              <i class="fas fa-times text-gray-600"></i>
+            </button>
+          </div>
+
+          <!-- Mobile Search -->
+          <div class="mb-6">
+            <div class="flex items-center bg-gray-100 rounded-lg px-4 py-3">
+              <i class="fas fa-search text-gray-400 mr-3"></i>
+              <input
+                type="text"
+                placeholder="Cari..."
+                class="bg-transparent outline-none flex-1"
+              />
+            </div>
+          </div>
+
+          <!-- Mobile Navigation -->
+          <nav class="space-y-2">
+            <div class="mobile-dropdown">
+              <button
+                class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-purple-50 transition"
+                onclick="toggleMobileDropdown('products')"
+              >
+                <div class="flex items-center space-x-3">
+                  <i class="fas fa-box text-purple-600"></i>
+                  <span class="font-medium text-gray-800">Produk</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400"></i>
+              </button>
+              <div id="mobile-products" class="hidden pl-12 space-y-2">
+                <a
+                  href="#"
+                  class="block py-2 text-gray-600 hover:text-purple-600"
+                  >WhatsApp API</a
+                >
+                <a
+                  href="#"
+                  class="block py-2 text-gray-600 hover:text-purple-600"
+                  >Chatbot AI</a
+                >
+                <a
+                  href="#"
+                  class="block py-2 text-gray-600 hover:text-purple-600"
+                  >Broadcast</a
+                >
+              </div>
+            </div>
+
+            <div class="mobile-dropdown">
+              <button
+                class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-purple-50 transition"
+                onclick="toggleMobileDropdown('solutions')"
+              >
+                <div class="flex items-center space-x-3">
+                  <i class="fas fa-lightbulb text-purple-600"></i>
+                  <span class="font-medium text-gray-800">Solusi</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400"></i>
+              </button>
+              <div id="mobile-solutions" class="hidden pl-12 space-y-2">
+                <a
+                  href="#"
+                  class="block py-2 text-gray-600 hover:text-purple-600"
+                  >E-Commerce</a
+                >
+                <a
+                  href="#"
+                  class="block py-2 text-gray-600 hover:text-purple-600"
+                  >Edutech</a
+                >
+                <a
+                  href="#"
+                  class="block py-2 text-gray-600 hover:text-purple-600"
+                  >Healthcare</a
+                >
+              </div>
+            </div>
+
+            <a
+              href="#pricing"
+              class="flex items-center space-x-3 p-3 rounded-lg hover:bg-purple-50 transition"
+            >
+              <i class="fas fa-tag text-purple-600"></i>
+              <span class="font-medium text-gray-800">Harga</span>
+            </a>
+
+            <a
+              href="#resources"
+              class="flex items-center space-x-3 p-3 rounded-lg hover:bg-purple-50 transition"
+            >
+              <i class="fas fa-book text-purple-600"></i>
+              <span class="font-medium text-gray-800">Resources</span>
+            </a>
+          </nav>
+
+          <!-- Mobile User Section -->
+          <div class="mt-8 pt-8 border-t">
+            <div class="flex items-center space-x-3 mb-6">
+              <img
+                src="https://picsum.photos/seed/user-avatar/48/48"
+                alt="User"
+                class="w-12 h-12 rounded-full"
+              />
+              <div>
+                <p class="font-semibold text-gray-800">John Doe</p>
+                <p class="text-sm text-gray-600">john@example.com</p>
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <a
+                href="#"
+                class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition"
+              >
+                <i class="fas fa-user text-gray-600"></i>
+                <span class="text-gray-700">Profile</span>
+              </a>
+              <a
+                href="#"
+                class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition"
+              >
+                <i class="fas fa-cog text-gray-600"></i>
+                <span class="text-gray-700">Settings</span>
+              </a>
+              <a
+                href="#"
+                class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition"
+              >
+                <i class="fas fa-chart-bar text-gray-600"></i>
+                <span class="text-gray-700">Dashboard</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Mobile CTA -->
+          <div class="mt-8 space-y-3">
+            <button
+              class="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white py-3 rounded-full font-semibold hover:shadow-lg transition"
+            >
+              Mulai Gratis
+            </button>
+            <button
+              class="w-full bg-gray-100 text-gray-700 py-3 rounded-full font-semibold hover:bg-gray-200 transition"
+            >
+              Hubungi Sales
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Refined Hero Section -->
+    <section
+      class="hero-section min-h-screen flex items-center relative pt-40 pb-20"
+    >
+      <!-- Background Elements -->
+      <div class="hero-grid-pattern"></div>
+      <div class="hero-shape shape-1"></div>
+      <div class="hero-shape shape-2"></div>
+      <div class="hero-shape shape-3"></div>
+
+      <div class="container mx-auto px-6 relative z-10">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <!-- Left Content -->
+          <div class="text-white space-y-8">
+            <!-- Announcement Badge -->
+            <div
+              class="inline-flex items-center hero-badge rounded-full px-5 py-2.5 shimmer-effect"
+            >
+              <span class="relative flex h-3 w-3 mr-3">
+                <span
+                  class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"
+                ></span>
+                <span
+                  class="relative inline-flex rounded-full h-3 w-3 bg-green-400"
+                ></span>
+              </span>
+              <span class="text-sm font-semibold"
+                >🚀 New: AI-Powered Chatbot Available</span
+              >
+            </div>
+
+            <!-- Main Heading -->
+            <div class="space-y-4">
+              <h1
+                class="text-4xl lg:text-6xl xl:text-7xl font-black leading-tight tracking-tight"
+              >
+                Kirim Pesan WhatsApp dengan
+                <br />
+                <span class="relative">
+                  <span id="typingText" class="text-white">API Terbaik</span>
+                  <span class="typing-cursor"></span>
+                </span>
+              </h1>
+            </div>
+
+            <!-- Description -->
+            <p
+              class="text-xl lg:text-2xl text-white/90 leading-relaxed max-w-2xl"
+            >
+              Solusi WhatsApp API Business untuk mengotomasi komunikasi,
+              meningkatkan penjualan
+              <span class="font-bold text-white">hingga 300%</span>, dan
+              memberikan layanan pelanggan yang luar biasa.
+            </p>
+
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4">
+              <button
+                class="cta-button group relative bg-white text-purple-600 px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+              >
+                <span class="relative z-10 flex items-center justify-center">
+                  <i class="fas fa-rocket mr-3 group-hover:animate-bounce"></i>
+                  Coba Gratis 7 Hari
+                </span>
+              </button>
+              <button
+                class="group bg-transparent text-white border-2 border-white/50 px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-purple-600 transition-all duration-300 transform hover:scale-105"
+              >
+                <i
+                  class="fas fa-play-circle mr-3 group-hover:animate-pulse"
+                ></i>
+                Lihat Demo
+              </button>
+            </div>
+
+            <!-- Trust Indicators -->
+            <div class="flex flex-wrap items-center gap-6 text-white/80">
+              <div class="flex items-center space-x-2">
+                <i class="fas fa-check-circle text-green-400 text-lg"></i>
+                <span class="font-medium">Tanpa Kartu Kredit</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <i class="fas fa-check-circle text-green-400 text-lg"></i>
+                <span class="font-medium">Setup 5 Menit</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <i class="fas fa-check-circle text-green-400 text-lg"></i>
+                <span class="font-medium">24/7 Support</span>
+              </div>
+            </div>
+
+            <!-- Social Proof -->
+            <div class="social-proof-card rounded-2xl p-6">
+              <div
+                class="flex flex-col sm:flex-row items-center justify-between gap-4"
+              >
+                <div class="avatar-stack">
+                  <img
+                    src="https://picsum.photos/seed/user1/40/40"
+                    alt="User"
+                    class="w-10 h-10 rounded-full"
+                  />
+                  <img
+                    src="https://picsum.photos/seed/user2/40/40"
+                    alt="User"
+                    class="w-10 h-10 rounded-full"
+                  />
+                  <img
+                    src="https://picsum.photos/seed/user3/40/40"
+                    alt="User"
+                    class="w-10 h-10 rounded-full"
+                  />
+                  <img
+                    src="https://picsum.photos/seed/user4/40/40"
+                    alt="User"
+                    class="w-10 h-10 rounded-full"
+                  />
+                  <div
+                    class="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-sm font-bold text-white border-3 border-white"
+                  >
+                    +5K
+                  </div>
+                </div>
+                <div class="text-center sm:text-right">
+                  <div
+                    class="flex justify-center sm:justify-end text-yellow-400 mb-1"
+                  >
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                  </div>
+                  <p class="text-sm text-white/80">5,000+ Ulasan Positif</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Content - Enhanced Phone Mockup -->
+          <div class="relative flex justify-center lg:justify-center">
+            <!-- Floating Stats Cards - Improved Positioning -->
+            <div class="absolute top-8 lg:top-12 -left-4 lg:left-0 z-20">
+              <div
+                class="floating-card bg-white rounded-2xl p-5 shadow-2xl max-w-[280px] border border-gray-100"
+              >
+                <div class="flex items-center space-x-4">
+                  <div
+                    class="w-14 h-14 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center shadow-lg"
+                  >
+                    <i class="fas fa-chart-line text-white text-xl"></i>
+                  </div>
+                  <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-600">
+                      Konversi Naik
+                    </p>
+                    <p class="text-3xl font-bold text-gray-800">+285%</p>
+                    <div class="flex items-center mt-1">
+                      <i
+                        class="fas fa-arrow-up text-green-500 text-xs mr-1"
+                      ></i>
+                      <span class="text-xs text-green-600 font-medium"
+                        >vs bulan lalu</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="absolute bottom-8 lg:bottom-12 -right-4 lg:right-0 z-20"
+            >
+              <div
+                class="floating-card bg-white rounded-2xl p-5 shadow-2xl max-w-[280px] border border-gray-100"
+              >
+                <div class="flex items-center space-x-4">
+                  <div
+                    class="w-14 h-14 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center shadow-lg"
+                  >
+                    <i class="fas fa-users text-white text-xl"></i>
+                  </div>
+                  <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-600">
+                      Pelanggan Aktif
+                    </p>
+                    <p class="text-3xl font-bold text-gray-800">10,234</p>
+                    <div class="flex items-center mt-1">
+                      <i
+                        class="fas fa-arrow-up text-green-500 text-xs mr-1"
+                      ></i>
+                      <span class="text-xs text-green-600 font-medium"
+                        >+1,234 minggu ini</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Main Phone Mockup - Enhanced Design -->
+            <div class="phone-container relative z-10 mt-8 lg:mt-0">
+              <div class="phone-mockup relative">
+                <!-- Phone Frame Shadow -->
+                <div
+                  class="absolute inset-0 bg-black/20 rounded-3xl blur-xl transform translate-y-4 scale-95"
+                ></div>
+
+                <!-- Phone Frame -->
+                <div
+                  class="relative bg-gray-900 rounded-3xl p-2 shadow-2xl"
+                  style="width: 320px; height: 640px"
+                >
+                  <!-- Phone Screen -->
+                  <div
+                    class="bg-white rounded-2xl h-full overflow-hidden relative"
+                  >
+                    <!-- Notch -->
+                    <div
+                      class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-6 bg-gray-900 rounded-b-2xl z-10"
+                    ></div>
+
+                    <!-- Phone Status Bar -->
+                    <div
+                      class="bg-gradient-to-r from-green-500 to-green-600 px-6 py-2 flex items-center justify-between text-white text-xs pt-8"
+                    >
+                      <span class="font-medium">9:41 AM</span>
+                      <div class="flex items-center space-x-1">
+                        <i class="fas fa-signal"></i>
+                        <i class="fas fa-wifi"></i>
+                        <i class="fas fa-battery-three-quarters"></i>
+                      </div>
+                    </div>
+
+                    <!-- WhatsApp Header -->
+                    <div
+                      class="bg-gradient-to-r from-green-500 to-green-600 px-4 py-3 flex items-center justify-between text-white shadow-sm"
+                    >
+                      <div class="flex items-center space-x-3">
+                        <button
+                          class="p-1 hover:bg-white/20 rounded-full transition"
+                        >
+                          <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <div
+                          class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center"
+                        >
+                          <i class="fab fa-whatsapp text-2xl"></i>
+                        </div>
+                        <div>
+                          <p class="font-semibold">WAConnect Bot</p>
+                          <p class="text-xs opacity-90 flex items-center">
+                            <span
+                              class="w-2 h-2 bg-green-400 rounded-full mr-1 animate-pulse"
+                            ></span>
+                            Online
+                          </p>
+                        </div>
+                      </div>
+                      <div class="flex items-center space-x-3">
+                        <button
+                          class="p-1 hover:bg-white/20 rounded-full transition"
+                        >
+                          <i class="fas fa-video"></i>
+                        </button>
+                        <button
+                          class="p-1 hover:bg-white/20 rounded-full transition"
+                        >
+                          <i class="fas fa-phone"></i>
+                        </button>
+                        <button
+                          class="p-1 hover:bg-white/20 rounded-full transition"
+                        >
+                          <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Chat Messages -->
+                    <div
+                      class="p-4 space-y-3 bg-gray-50"
+                      style="height: 400px; overflow-y: auto"
+                    >
+                      <!-- Date Separator -->
+                      <div class="flex items-center justify-center my-2">
+                        <span
+                          class="bg-gray-200 text-gray-600 text-xs px-3 py-1 rounded-full"
+                          >Hari ini</span
+                        >
+                      </div>
+
+                      <!-- Bot Message -->
+                      <div class="flex justify-start message-animation">
+                        <div class="flex items-end space-x-2">
+                          <div
+                            class="w-8 h-8 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center"
+                          >
+                            <i class="fab fa-whatsapp text-white text-sm"></i>
+                          </div>
+                          <div
+                            class="bg-white rounded-2xl rounded-tl-none p-4 max-w-xs shadow-sm"
+                          >
+                            <p class="text-sm">
+                              Halo! Selamat datang di WAConnect 🎉
+                            </p>
+                            <p class="text-xs text-gray-500 mt-1">09:30</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Bot Message with Options -->
+                      <div class="flex justify-start message-animation">
+                        <div class="flex items-end space-x-2">
+                          <div
+                            class="w-8 h-8 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center"
+                          >
+                            <i class="fab fa-whatsapp text-white text-sm"></i>
+                          </div>
+                          <div
+                            class="bg-white rounded-2xl rounded-tl-none p-4 max-w-xs shadow-sm"
+                          >
+                            <p class="text-sm mb-3">
+                              Saya bisa membantu Anda dengan:
+                            </p>
+                            <div class="space-y-2">
+                              <button
+                                class="w-full text-left bg-gray-100 hover:bg-gray-200 rounded-lg p-2 transition flex items-center"
+                              >
+                                <i class="fas fa-box text-green-500 mr-2"></i>
+                                <span class="text-sm">Info produk</span>
+                              </button>
+                              <button
+                                class="w-full text-left bg-gray-100 hover:bg-gray-200 rounded-lg p-2 transition flex items-center"
+                              >
+                                <i class="fas fa-truck text-blue-500 mr-2"></i>
+                                <span class="text-sm">Tracking pesanan</span>
+                              </button>
+                              <button
+                                class="w-full text-left bg-gray-100 hover:bg-gray-200 rounded-lg p-2 transition flex items-center"
+                              >
+                                <i
+                                  class="fas fa-headset text-purple-500 mr-2"
+                                ></i>
+                                <span class="text-sm">Bantuan CS 24/7</span>
+                              </button>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2">09:30</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- User Message -->
+                      <div class="flex justify-end message-animation">
+                        <div
+                          class="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-2xl rounded-tr-none p-4 max-w-xs shadow-sm"
+                        >
+                          <p class="text-sm">Saya ingin cek status pesanan</p>
+                          <div
+                            class="flex items-center justify-end mt-1 space-x-1"
+                          >
+                            <p class="text-xs opacity-70">09:32</p>
+                            <i class="fas fa-check-double text-xs"></i>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Bot Message -->
+                      <div class="flex justify-start message-animation">
+                        <div class="flex items-end space-x-2">
+                          <div
+                            class="w-8 h-8 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center"
+                          >
+                            <i class="fab fa-whatsapp text-white text-sm"></i>
+                          </div>
+                          <div
+                            class="bg-white rounded-2xl rounded-tl-none p-4 max-w-xs shadow-sm"
+                          >
+                            <p class="text-sm mb-2">
+                              Tentu! Masukkan nomor pesanan Anda 🔍
+                            </p>
+                            <div
+                              class="bg-gray-100 rounded-lg p-3 flex items-center space-x-2"
+                            >
+                              <i class="fas fa-hashtag text-gray-400"></i>
+                              <input
+                                type="text"
+                                placeholder="No. Pesanan"
+                                class="bg-transparent outline-none text-sm flex-1"
+                              />
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2">09:32</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Typing Indicator -->
+                      <div class="flex justify-start">
+                        <div class="flex items-end space-x-2">
+                          <div
+                            class="w-8 h-8 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center"
+                          >
+                            <i class="fab fa-whatsapp text-white text-sm"></i>
+                          </div>
+                          <div
+                            class="bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm"
+                          >
+                            <div class="typing-indicator flex space-x-1">
+                              <span
+                                class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                                style="animation-delay: 0ms"
+                              ></span>
+                              <span
+                                class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                                style="animation-delay: 150ms"
+                              ></span>
+                              <span
+                                class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                                style="animation-delay: 300ms"
+                              ></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Input Area - Enhanced -->
+                    <div
+                      class="absolute bottom-0 left-0 right-0 bg-white border-t p-3"
+                    >
+                      <div class="flex items-center space-x-2">
+                        <button
+                          class="p-2.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition"
+                        >
+                          <i class="fas fa-plus text-lg"></i>
+                        </button>
+                        <div
+                          class="flex-1 bg-gray-100 rounded-full px-4 py-2 flex items-center"
+                        >
+                          <input
+                            type="text"
+                            placeholder="Ketik pesan..."
+                            class="bg-transparent outline-none text-sm flex-1"
+                          />
+                          <button
+                            class="p-1 text-gray-500 hover:text-gray-700 transition"
+                          >
+                            <i class="fas fa-smile"></i>
+                          </button>
+                        </div>
+                        <button
+                          class="w-10 h-10 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center hover:shadow-lg transition transform hover:scale-105"
+                        >
+                          <i class="fas fa-paper-plane text-white text-sm"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+<!-- Enhanced Stats Section -->
+<section class="py-20 bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 relative overflow-hidden">
+  <!-- Background Effects -->
+  <div class="absolute inset-0">
+    <div class="absolute top-0 left-0 w-full h-full bg-black/50"></div>
+    <div class="absolute inset-0">
+      <div class="absolute top-20 left-20 w-96 h-96 bg-purple-600 rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
+      <div class="absolute bottom-20 right-20 w-96 h-96 bg-blue-600 rounded-full filter blur-3xl opacity-20 animate-pulse" style="animation-delay: 2s"></div>
+      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-green-600 rounded-full filter blur-3xl opacity-10 animate-pulse" style="animation-delay: 4s"></div>
+    </div>
+    
+    <!-- Grid Pattern -->
+    <div class="absolute inset-0 opacity-5">
+      <div class="h-full w-full" style="background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.4"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+    </div>
+  </div>
+
+  <div class="container mx-auto px-6 relative z-10">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center bg-white/10 backdrop-blur-md text-white rounded-full px-4 py-2 mb-6">
+        <i class="fas fa-chart-line text-green-400 mr-2"></i>
+        <span class="text-sm font-semibold">Real-time Analytics</span>
+      </div>
+      <h2 class="text-4xl lg:text-5xl font-bold text-white mb-6">
+        Distrust by <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">10,000+</span> Businesses
+      </h2>
+      <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+        Bergabunglah dengan ribuan perusahaan yang sudah meningkatkan efisiensi komunikasi dengan platform kami
+      </p>
+    </div>
+
+    <!-- Main Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <!-- Stat Card 1 -->
+      <div class="stat-card group">
+        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-105 hover:border-purple-400/50">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+              <i class="fas fa-users text-white text-xl"></i>
+            </div>
+            <div class="flex items-center text-green-400 text-sm">
+              <i class="fas fa-arrow-up mr-1"></i>
+              <span class="font-medium">+12%</span>
+            </div>
+          </div>
+          <div class="mb-2">
+            <span class="text-4xl font-bold text-white counter" data-target="10234">0</span>
+            <span class="text-xl text-gray-400">+</span>
+          </div>
+          <p class="text-gray-300 text-sm font-medium">Pengguna Aktif</p>
+          <div class="mt-4 h-1 bg-gray-700 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-green-400 to-green-600 rounded-full progress-bar" data-width="85"></div>
+          </div>
+          <p class="text-xs text-gray-400 mt-2">85% dari target bulanan</p>
+        </div>
+      </div>
+
+      <!-- Stat Card 2 -->
+      <div class="stat-card group">
+        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-105 hover:border-blue-400/50">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+              <i class="fas fa-paper-plane text-white text-xl"></i>
+            </div>
+            <div class="flex items-center text-green-400 text-sm">
+              <i class="fas fa-arrow-up mr-1"></i>
+              <span class="font-medium">+28%</span>
+            </div>
+          </div>
+          <div class="mb-2">
+            <span class="text-4xl font-bold text-white counter" data-target="50200000">0</span>
+          </div>
+          <p class="text-gray-300 text-sm font-medium">Pesan Terkirim</p>
+          <div class="mt-4 h-1 bg-gray-700 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full progress-bar" data-width="92"></div>
+          </div>
+          <p class="text-xs text-gray-400 mt-2">92% dari target bulanan</p>
+        </div>
+      </div>
+
+      <!-- Stat Card 3 -->
+      <div class="stat-card group">
+        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-105 hover:border-yellow-400/50">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+              <i class="fas fa-chart-line text-white text-xl"></i>
+            </div>
+            <div class="flex items-center text-green-400 text-sm">
+              <i class="fas fa-arrow-up mr-1"></i>
+              <span class="font-medium">+45%</span>
+            </div>
+          </div>
+          <div class="mb-2">
+            <span class="text-4xl font-bold text-white"><span class="counter" data-target="98.5">0</span>%</span>
+          </div>
+          <p class="text-gray-300 text-sm font-medium">Tingkat Buka</p>
+          <div class="mt-4 h-1 bg-gray-700 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full progress-bar" data-width="98"></div>
+          </div>
+          <p class="text-xs text-gray-400 mt-2">98% dari target bulanan</p>
+        </div>
+      </div>
+
+      <!-- Stat Card 4 -->
+      <div class="stat-card group">
+        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-105 hover:border-purple-400/50">
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+              <i class="fas fa-headset text-white text-xl"></i>
+            </div>
+            <div class="flex items-center text-green-400 text-sm">
+              <i class="fas fa-check mr-1"></i>
+              <span class="font-medium">24/7</span>
+            </div>
+          </div>
+          <div class="mb-2">
+            <span class="text-4xl font-bold text-white">&lt; 1<span class="text-xl">min</span></span>
+          </div>
+          <p class="text-gray-300 text-sm font-medium">Respon Rata-rata</p>
+          <div class="mt-4 h-1 bg-gray-700 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-purple-400 to-purple-600 rounded-full progress-bar" data-width="100"></div>
+          </div>
+          <p class="text-xs text-gray-400 mt-2">100% dari target SLA</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Metrics -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+      <!-- Customer Satisfaction -->
+      <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold text-white">Kepuasan Pelanggan</h3>
+          <div class="flex text-yellow-400">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+        </div>
+        <div class="flex items-end justify-between">
+          <div>
+            <span class="text-3xl font-bold text-white">4.9</span>
+            <span class="text-gray-400">/5.0</span>
+          </div>
+          <div class="text-right">
+            <p class="text-sm text-gray-400">Berdasarkan</p>
+            <p class="text-lg font-semibold text-white">5,234 Review</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Global Reach -->
+      <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold text-white">Jangkauan Global</h3>
+          <i class="fas fa-globe text-blue-400 text-xl"></i>
+        </div>
+        <div class="flex items-end justify-between">
+          <div>
+            <span class="text-3xl font-bold text-white">47</span>
+            <span class="text-gray-400">Negara</span>
+          </div>
+          <div class="text-right">
+            <p class="text-sm text-gray-400">Aktif di</p>
+            <p class="text-lg font-semibold text-white">6 Benua</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Uptime -->
+      <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold text-white">Uptime</h3>
+          <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+        </div>
+        <div class="flex items-end justify-between">
+          <div>
+            <span class="text-3xl font-bold text-white">99.99</span>
+            <span class="text-gray-400">%</span>
+          </div>
+          <div class="text-right">
+            <p class="text-sm text-gray-400">Last 30 days</p>
+            <p class="text-lg font-semibold text-green-400">Excellent</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Activity Feed -->
+    <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="text-xl font-semibold text-white">Aktivitas Real-time</h3>
+        <div class="flex items-center text-green-400 text-sm">
+          <div class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+          <span>Live</span>
+        </div>
+      </div>
+      
+      <div class="space-y-3" id="activityFeed">
+        <!-- Activity items will be dynamically added here -->
+      </div>
+    </div>
+  </div>
+
+  <style>
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    .activity-item {
+      animation: slideIn 0.5s ease-out;
+    }
+  </style>
+
+  <script>
+    // Animated Counter
+    function animateCounter(element) {
+      const target = parseFloat(element.dataset.target);
+      const duration = 2000;
+      const step = target / (duration / 16);
+      let current = 0;
+      
+      const timer = setInterval(() => {
+        current += step;
+        if (current >= target) {
+          current = target;
+          clearInterval(timer);
+        }
+        
+        if (element.dataset.target.includes('.')) {
+          element.textContent = current.toFixed(1);
+        } else {
+          element.textContent = Math.floor(current).toLocaleString();
+        }
+      }, 16);
+    }
+
+    // Progress Bar Animation
+    function animateProgressBar(element) {
+      const width = element.dataset.width;
+      setTimeout(() => {
+        element.style.width = width + '%';
+        element.style.transition = 'width 2s ease-out';
+      }, 100);
+    }
+
+    // Initialize counters and progress bars when in view
+    const observerOptions = {
+      threshold: 0.5,
+      rootMargin: '0px'
+    };
+
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Animate counters
+          entry.target.querySelectorAll('.counter').forEach(counter => {
+            animateCounter(counter);
+          });
+          
+          // Animate progress bars
+          entry.target.querySelectorAll('.progress-bar').forEach(bar => {
+            animateProgressBar(bar);
+          });
+          
+          statsObserver.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    // Observe the stats section
+    const statsSection = document.querySelector('.stat-card').closest('section');
+    statsObserver.observe(statsSection);
+
+    // Live Activity Feed
+    const activities = [
+      { user: 'PT. Maju Bersama', action: 'mengirim 1,000 pesan broadcast', time: '2 menit yang lalu', icon: 'fa-paper-plane', color: 'blue' },
+      { user: 'Toko Sejahtera', action: 'integrasi API berhasil', time: '5 menit yang lalu', icon: 'fa-plug', color: 'green' },
+      { user: 'CV. Sukses Jaya', action: 'mencapai 500 pelanggan baru', time: '8 menit yang lalu', icon: 'fa-users', color: 'purple' },
+      { user: 'PT. Digital Indonesia', action: 'upgrade ke Professional Plan', time: '12 menit yang lalu', icon: 'fa-crown', color: 'yellow' },
+      { user: 'Warung Nusantara', action: 'mengirim 2,345 pesan', time: '15 menit yang lalu', icon: 'fa-chart-line', color: 'red' }
+    ];
+
+    function addActivityItem(activity) {
+      const feed = document.getElementById('activityFeed');
+      const item = document.createElement('div');
+      item.className = 'activity-item flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10';
+      
+      const colorClasses = {
+        blue: 'text-blue-400 bg-blue-400/20',
+        green: 'text-green-400 bg-green-400/20',
+        purple: 'text-purple-400 bg-purple-400/20',
+        yellow: 'text-yellow-400 bg-yellow-400/20',
+        red: 'text-red-400 bg-red-400/20'
+      };
+      
+      item.innerHTML = `
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 ${colorClasses[activity.color]} rounded-lg flex items-center justify-center">
+            <i class="fas ${activity.icon}"></i>
+          </div>
+          <div>
+            <p class="text-white font-medium">${activity.user}</p>
+            <p class="text-gray-400 text-sm">${activity.action}</p>
+          </div>
+        </div>
+        <span class="text-gray-500 text-sm">${activity.time}</span>
+      `;
+      
+      feed.insertBefore(item, feed.firstChild);
+      
+      // Keep only last 5 activities
+      while (feed.children.length > 5) {
+        feed.removeChild(feed.lastChild);
+      }
+    }
+
+    // Initialize activity feed
+    activities.forEach((activity, index) => {
+      setTimeout(() => addActivityItem(activity), index * 500);
+    });
+
+    // Add new activity every 10 seconds
+    setInterval(() => {
+      const randomActivity = activities[Math.floor(Math.random() * activities.length)];
+      addActivityItem(randomActivity);
+    }, 10000);
+  </script>
+</section>
+
+    <!-- Enhanced Features Section -->
+    <section
+      id="features"
+      class="py-24 bg-gradient-to-br from-gray-50 via-white to-purple-50 relative overflow-hidden"
+    >
+      <!-- Background Decorations -->
+      <div class="absolute inset-0 opacity-5">
+        <div
+          class="absolute top-20 left-20 w-72 h-72 bg-purple-500 rounded-full filter blur-3xl"
+        ></div>
+        <div
+          class="absolute bottom-20 right-20 w-96 h-96 bg-blue-500 rounded-full filter blur-3xl"
+        ></div>
+      </div>
+
+      <div class="container mx-auto px-6 relative z-10">
+        <!-- Section Header -->
+        <div class="text-center mb-20">
+          <div
+            class="inline-flex items-center bg-purple-100 text-purple-700 rounded-full px-4 py-2 mb-6"
+          >
+            <i class="fas fa-star text-yellow-500 mr-2"></i>
+            <span class="text-sm font-semibold">Fitur Unggulan</span>
+          </div>
+          <h2 class="text-4xl lg:text-5xl font-bold text-gray-800 mb-6">
+            Solusi Lengkap untuk
+            <span class="gradient-text">Bisnis Modern</span>
+          </h2>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Tingkatkan efisiensi komunikasi bisnis Anda dengan fitur-fitur
+            canggih yang dirancang khusus untuk kebutuhan WhatsApp Business API
+          </p>
+        </div>
+
+        <!-- Feature Categories -->
+        <div class="flex flex-wrap justify-center gap-3 mb-12">
+          <button
+            class="category-btn active px-6 py-2.5 rounded-full bg-purple-600 text-white font-medium transition-all duration-300 transform hover:scale-105"
+            data-category="all"
+          >
+            Semua Fitur
+          </button>
+          <button
+            class="category-btn px-6 py-2.5 rounded-full bg-white text-gray-700 font-medium border border-gray-200 hover:border-purple-300 hover:text-purple-600 transition-all duration-300 transform hover:scale-105"
+            data-category="automation"
+          >
+            <i class="fas fa-robot mr-2"></i>Otomasi
+          </button>
+          <button
+            class="category-btn px-6 py-2.5 rounded-full bg-white text-gray-700 font-medium border border-gray-200 hover:border-purple-300 hover:text-purple-600 transition-all duration-300 transform hover:scale-105"
+            data-category="communication"
+          >
+            <i class="fas fa-comments mr-2"></i>Komunikasi
+          </button>
+          <button
+            class="category-btn px-6 py-2.5 rounded-full bg-white text-gray-700 font-medium border border-gray-200 hover:border-purple-300 hover:text-purple-600 transition-all duration-300 transform hover:scale-105"
+            data-category="analytics"
+          >
+            <i class="fas fa-chart-line mr-2"></i>Analytics
+          </button>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Feature Card 1 - Chatbot AI -->
+          <div class="feature-card group relative" data-category="automation">
+            <div
+              class="absolute inset-0 bg-gradient-to-br from-purple-600 to-blue-600 rounded-3xl opacity-0 group-hover:opacity-10 transition-opacity duration-300"
+            ></div>
+            <div
+              class="relative bg-white rounded-3xl p-8 h-full border border-gray-100 hover:border-purple-200 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+            >
+              <div class="relative mb-6">
+                <div
+                  class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+                >
+                  <i class="fas fa-robot text-white text-2xl"></i>
+                </div>
+                <div
+                  class="absolute -top-2 -right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center"
+                >
+                  <i class="fas fa-check text-white text-xs"></i>
+                </div>
+              </div>
+              <h3
+                class="text-xl font-bold text-gray-800 mb-3 group-hover:text-purple-600 transition-colors"
+              >
+                Chatbot AI Cerdas
+              </h3>
+              <p class="text-gray-600 mb-6 leading-relaxed">
+                Sistem kecerdasan buatan yang mampu memahami konteks percakapan
+                dan memberikan respons yang personal dan relevan
+              </p>
+              <div class="space-y-3 mb-6">
+                <div class="flex items-center text-sm text-gray-600">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span>NLP Processing</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span>Multi-language Support</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span>24/7 Availability</span>
+                </div>
+              </div>
+              <div
+                class="flex items-center justify-between pt-4 border-t border-gray-100"
+              >
+                <span class="text-sm font-medium text-purple-600"
+                  >Pelajari lebih lanjut</span
+                >
+                <i
+                  class="fas fa-arrow-right text-purple-600 group-hover:translate-x-2 transition-transform"
+                ></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Feature Card 2 - Broadcast -->
+          <div
+            class="feature-card group relative"
+            data-category="communication"
+          >
+            <div
+              class="absolute inset-0 bg-gradient-to-br from-green-600 to-teal-600 rounded-3xl opacity-0 group-hover:opacity-10 transition-opacity duration-300"
+            ></div>
+            <div
+              class="relative bg-white rounded-3xl p-8 h-full border border-gray-100 hover:border-green-200 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+            >
+              <div class="relative mb-6">
+                <div
+                  class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-700 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+                >
+                  <i class="fas fa-broadcast-tower text-white text-2xl"></i>
+                </div>
+                <div
+                  class="absolute -top-2 -right-2 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center"
+                >
+                  <span class="text-white text-xs font-bold">NEW</span>
+                </div>
+              </div>
+              <h3
+                class="text-xl font-bold text-gray-800 mb-3 group-hover:text-green-600 transition-colors"
+              >
+                Broadcast Message
+              </h3>
+              <p class="text-gray-600 mb-6 leading-relaxed">
+                Kirim pesan ke ribuan kontak sekaligus dengan personalisasi
+                otomatis dan tracking real-time
+              </p>
+              <div class="space-y-3 mb-6">
+                <div class="flex items-center text-sm text-gray-600">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span>Personalized Messages</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span>Schedule Campaigns</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span>Delivery Reports</span>
+                </div>
+              </div>
+              <div
+                class="flex items-center justify-between pt-4 border-t border-gray-100"
+              >
+                <span class="text-sm font-medium text-green-600"
+                  >Pelajari lebih lanjut</span
+                >
+                <i
+                  class="fas fa-arrow-right text-green-600 group-hover:translate-x-2 transition-transform"
+                ></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Feature Card 3 - API Documentation -->
+          <div class="feature-card group relative" data-category="automation">
+            <div
+              class="absolute inset-0 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-3xl opacity-0 group-hover:opacity-10 transition-opacity duration-300"
+            ></div>
+            <div
+              class="relative bg-white rounded-3xl p-8 h-full border border-gray-100 hover:border-blue-200 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+            >
+              <div class="relative mb-6">
+                <div
+                  class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+                >
+                  <i class="fas fa-code text-white text-2xl"></i>
+                </div>
+              </div>
+              <h3
+                class="text-xl font-bold text-gray-800 mb-3 group-hover:text-blue-600 transition-colors"
+              >
+                API Documentation
+              </h3>
+              <p class="text-gray-600 mb-6 leading-relaxed">
+                Dokumentasi API lengkap dengan contoh kode untuk integrasi yang
+                mudah dan cepat
+              </p>
+              <div class="space-y-3 mb-6">
+                <div class="flex items-center text-sm text-gray-600">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span>RESTful API</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span>Webhook Support</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span>SDK Available</span>
+                </div>
+              </div>
+              <div
+                class="flex items-center justify-between pt-4 border-t border-gray-100"
+              >
+                <span class="text-sm font-medium text-blue-600"
+                  >Pelajari lebih lanjut</span
+                >
+                <i
+                  class="fas fa-arrow-right text-blue-600 group-hover:translate-x-2 transition-transform"
+                ></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Feature Card 4 - Analytics Dashboard -->
+          <div class="feature-card group relative" data-category="analytics">
+            <div
+              class="absolute inset-0 bg-gradient-to-br from-yellow-600 to-orange-600 rounded-3xl opacity-0 group-hover:opacity-10 transition-opacity duration-300"
+            ></div>
+            <div
+              class="relative bg-white rounded-3xl p-8 h-full border border-gray-100 hover:border-yellow-200 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+            >
+              <div class="relative mb-6">
+                <div
+                  class="w-16 h-16 bg-gradient-to-br from-yellow-500 to-yellow-700 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+                >
+                  <i class="fas fa-chart-line text-white text-2xl"></i>
+                </div>
+                <div
+                  class="absolute -top-2 -right-2 w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center"
+                >
+                  <i class="fas fa-fire text-white text-xs"></i>
+                </div>
+              </div>
+              <h3
+                class="text-xl font-bold text-gray-800 mb-3 group-hover:text-yellow-600 transition-colors"
+              >
+                Analytics Dashboard
+              </h3>
+              <p class="text-gray-600 mb-6 leading-relaxed">
+                Pantau performa pesan, tingkat respons, dan metrik penting
+                lainnya dengan visualisasi data yang interaktif
+              </p>
+              <div class="space-y-3 mb-6">
+                <div class="flex items-center text-sm text-gray-600">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span>Real-time Analytics</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span>Custom Reports</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span>Data Export</span>
+                </div>
+              </div>
+              <div
+                class="flex items-center justify-between pt-4 border-t border-gray-100"
+              >
+                <span class="text-sm font-medium text-yellow-600"
+                  >Pelajari lebih lanjut</span
+                >
+                <i
+                  class="fas fa-arrow-right text-yellow-600 group-hover:translate-x-2 transition-transform"
+                ></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Feature Card 5 - Security -->
+          <div class="feature-card group relative" data-category="automation">
+            <div
+              class="absolute inset-0 bg-gradient-to-br from-red-600 to-pink-600 rounded-3xl opacity-0 group-hover:opacity-10 transition-opacity duration-300"
+            ></div>
+            <div
+              class="relative bg-white rounded-3xl p-8 h-full border border-gray-100 hover:border-red-200 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+            >
+              <div class="relative mb-6">
+                <div
+                  class="w-16 h-16 bg-gradient-to-br from-red-500 to-red-700 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+                >
+                  <i class="fas fa-shield-alt text-white text-2xl"></i>
+                </div>
+              </div>
+              <h3
+                class="text-xl font-bold text-gray-800 mb-3 group-hover:text-red-600 transition-colors"
+              >
+                Keamanan Terjamin
+              </h3>
+              <p class="text-gray-600 mb-6 leading-relaxed">
+                Enkripsi end-to-end dan kepatuhan terhadap regulasi data privasi
+                untuk melindungi informasi pelanggan
+              </p>
+              <div class="space-y-3 mb-6">
+                <div class="flex items-center text-sm text-gray-600">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span>End-to-end Encryption</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span>GDPR Compliant</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span>ISO 27001 Certified</span>
+                </div>
+              </div>
+              <div
+                class="flex items-center justify-between pt-4 border-t border-gray-100"
+              >
+                <span class="text-sm font-medium text-red-600"
+                  >Pelajari lebih lanjut</span
+                >
+                <i
+                  class="fas fa-arrow-right text-red-600 group-hover:translate-x-2 transition-transform"
+                ></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Feature Card 6 - Integration -->
+          <div class="feature-card group relative" data-category="automation">
+            <div
+              class="absolute inset-0 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-3xl opacity-0 group-hover:opacity-10 transition-opacity duration-300"
+            ></div>
+            <div
+              class="relative bg-white rounded-3xl p-8 h-full border border-gray-100 hover:border-indigo-200 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+            >
+              <div class="relative mb-6">
+                <div
+                  class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-700 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+                >
+                  <i class="fas fa-plug text-white text-2xl"></i>
+                </div>
+                <div
+                  class="absolute -top-2 -right-2 w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center"
+                >
+                  <i class="fas fa-infinity text-white text-xs"></i>
+                </div>
+              </div>
+              <h3
+                class="text-xl font-bold text-gray-800 mb-3 group-hover:text-indigo-600 transition-colors"
+              >
+                Multi-Platform Integration
+              </h3>
+              <p class="text-gray-600 mb-6 leading-relaxed">
+                Integrasi mudah dengan CRM, e-commerce, dan aplikasi bisnis
+                lainnya melalui API yang fleksibel
+              </p>
+              <div class="space-y-3 mb-6">
+                <div class="flex items-center text-sm text-gray-600">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span>CRM Integration</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span>E-commerce Platforms</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-600">
+                  <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                  <span>Custom Webhooks</span>
+                </div>
+              </div>
+              <div
+                class="flex items-center justify-between pt-4 border-t border-gray-100"
+              >
+                <span class="text-sm font-medium text-indigo-600"
+                  >Pelajari lebih lanjut</span
+                >
+                <i
+                  class="fas fa-arrow-right text-indigo-600 group-hover:translate-x-2 transition-transform"
+                ></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom CTA -->
+        <div class="mt-20 text-center">
+          <div
+            class="bg-gradient-to-r from-purple-600 to-blue-600 rounded-3xl p-12 relative overflow-hidden"
+          >
+            <div class="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
+            <div class="relative z-10">
+              <h3 class="text-3xl font-bold text-white mb-4">
+                Siap untuk Transformasi Digital?
+              </h3>
+              <p class="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
+                Bergabung dengan ribuan bisnis yang sudah meningkatkan efisiensi
+                komunikasi dengan WAConnect
+              </p>
+              <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button
+                  class="bg-white text-purple-600 px-8 py-4 rounded-full font-bold hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                >
+                  <i class="fas fa-rocket mr-2"></i> Mulai Gratis Sekarang
+                </button>
+                <button
+                  class="bg-transparent text-white border-2 border-white px-8 py-4 rounded-full font-bold hover:bg-white hover:text-purple-600 transition-all duration-300 transform hover:scale-105"
+                >
+                  <i class="fas fa-calendar mr-2"></i> Jadwalkan Demo
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <style>
+        .feature-card {
+          opacity: 0;
+          transform: translateY(30px);
+          animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .feature-card:nth-child(1) {
+          animation-delay: 0.1s;
+        }
+        .feature-card:nth-child(2) {
+          animation-delay: 0.2s;
+        }
+        .feature-card:nth-child(3) {
+          animation-delay: 0.3s;
+        }
+        .feature-card:nth-child(4) {
+          animation-delay: 0.4s;
+        }
+        .feature-card:nth-child(5) {
+          animation-delay: 0.5s;
+        }
+        .feature-card:nth-child(6) {
+          animation-delay: 0.6s;
+        }
+
+        @keyframes fadeInUp {
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .feature-card.hidden {
+          display: none;
+        }
+      </style>
+
+      <script>
+        // Category Filter Functionality
+        const categoryBtns = document.querySelectorAll(".category-btn");
+        const featureCards = document.querySelectorAll(".feature-card");
+
+        categoryBtns.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            // Update active button
+            categoryBtns.forEach((b) => {
+              b.classList.remove("active", "bg-purple-600", "text-white");
+              b.classList.add(
+                "bg-white",
+                "text-gray-700",
+                "border",
+                "border-gray-200"
+              );
+            });
+            btn.classList.remove(
+              "bg-white",
+              "text-gray-700",
+              "border",
+              "border-gray-200"
+            );
+            btn.classList.add("active", "bg-purple-600", "text-white");
+
+            // Filter cards
+            const category = btn.dataset.category;
+            featureCards.forEach((card) => {
+              if (category === "all" || card.dataset.category === category) {
+                card.classList.remove("hidden");
+                card.style.animation = "none";
+                setTimeout(() => {
+                  card.style.animation = "";
+                }, 10);
+              } else {
+                card.classList.add("hidden");
+              }
+            });
+          });
+        });
+      </script>
+    </section>
+
+<!-- Enhanced How It Works Section -->
+<section id="how-it-works" class="py-24 bg-gradient-to-br from-white via-purple-50 to-white relative overflow-hidden">
+  <!-- Background Decorations -->
+  <div class="absolute inset-0 opacity-5">
+    <div class="absolute top-10 left-10 w-64 h-64 bg-purple-500 rounded-full filter blur-3xl"></div>
+    <div class="absolute bottom-10 right-10 w-64 h-64 bg-blue-500 rounded-full filter blur-3xl"></div>
+  </div>
+  
+  <!-- Grid Pattern -->
+  <div class="absolute inset-0 opacity-5">
+    <div class="h-full w-full" style="background-image: url('data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%239C27B0" fill-opacity="0.4"%3E%3Cpath d="M0 40L40 0H20L0 20M40 40V20L20 40"/%3E%3C/g%3E%3C/svg%3E');"></div>
+  </div>
+
+  <div class="container mx-auto px-6 relative z-10">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center bg-purple-100 text-purple-700 rounded-full px-4 py-2 mb-6">
+        <i class="fas fa-magic text-purple-600 mr-2"></i>
+        <span class="text-sm font-semibold">Cara Kerja Sederhana</span>
+      </div>
+      <h2 class="text-4xl lg:text-5xl font-bold text-gray-800 mb-6">
+        Mulai dalam <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">3 Langkah Mudah</span>
+      </h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+        Platform kami dirancang untuk kemudahan. Dapatkan WhatsApp API Business Anda berjalan dalam hitungan menit
+      </p>
+    </div>
+
+    <!-- Main Steps Container -->
+    <div class="max-w-6xl mx-auto">
+      <!-- Progress Bar -->
+      <div class="mb-12">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center">
+            <div class="step-indicator active" data-step="1">
+              <span class="step-number">1</span>
+              <i class="fas fa-check step-check"></i>
+            </div>
+            <div class="step-connector active"></div>
+          </div>
+          <div class="flex items-center">
+            <div class="step-indicator" data-step="2">
+              <span class="step-number">2</span>
+              <i class="fas fa-check step-check"></i>
+            </div>
+            <div class="step-connector"></div>
+          </div>
+          <div class="flex items-center">
+            <div class="step-indicator" data-step="3">
+              <span class="step-number">3</span>
+              <i class="fas fa-check step-check"></i>
+            </div>
+          </div>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-2">
+          <div class="progress-fill bg-gradient-to-r from-purple-600 to-pink-600 h-2 rounded-full transition-all duration-500" style="width: 33.33%"></div>
+        </div>
+      </div>
+
+      <!-- Steps Grid -->
+      <div class="grid lg:grid-cols-3 gap-8 mb-16">
+        <!-- Step 1 -->
+        <div class="step-card group" data-step="1">
+          <div class="relative">
+            <!-- Step Number Badge -->
+            <div class="absolute -top-4 -left-4 w-16 h-16 bg-gradient-to-br from-purple-600 to-purple-700 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+              <span class="text-2xl font-bold text-white">1</span>
+            </div>
+            
+            <!-- Card Content -->
+            <div class="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-full">
+              <!-- Icon -->
+              <div class="w-20 h-20 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform">
+                <i class="fas fa-user-plus text-purple-600 text-3xl"></i>
+              </div>
+              
+              <!-- Title -->
+              <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center group-hover:text-purple-600 transition-colors">
+                Daftar & Verifikasi
+              </h3>
+              
+              <!-- Description -->
+              <p class="text-gray-600 text-center mb-6 leading-relaxed">
+                Buat akun gratis Anda dan verifikasi nomor WhatsApp Business dalam beberapa langkah sederhana
+              </p>
+              
+              <!-- Features List -->
+              <div class="space-y-3 mb-6">
+                <div class="flex items-center text-sm">
+                  <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <span class="text-gray-700">Pendaftaran gratis tanpa kartu kredit</span>
+                </div>
+                <div class="flex items-center text-sm">
+                  <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <span class="text-gray-700">Verifikasi nomor WhatsApp otomatis</span>
+                </div>
+                <div class="flex items-center text-sm">
+                  <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <span class="text-gray-700">Setup dashboard personal</span>
+                </div>
+              </div>
+              
+              <!-- Time Estimate -->
+              <div class="bg-purple-50 rounded-xl p-4 text-center">
+                <div class="flex items-center justify-center text-purple-600 mb-1">
+                  <i class="fas fa-clock mr-2"></i>
+                  <span class="font-semibold">Estimasi Waktu</span>
+                </div>
+                <p class="text-2xl font-bold text-purple-700">2 Menit</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-card group" data-step="2">
+          <div class="relative">
+            <!-- Step Number Badge -->
+            <div class="absolute -top-4 -left-4 w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+              <span class="text-2xl font-bold text-white">2</span>
+            </div>
+            
+            <!-- Card Content -->
+            <div class="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-full">
+              <!-- Icon -->
+              <div class="w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform">
+                <i class="fas fa-code text-blue-600 text-3xl"></i>
+              </div>
+              
+              <!-- Title -->
+              <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center group-hover:text-blue-600 transition-colors">
+                Integrasi API
+              </h3>
+              
+              <!-- Description -->
+              <p class="text-gray-600 text-center mb-6 leading-relaxed">
+                Gunakan API key untuk mengintegrasikan WhatsApp API dengan aplikasi atau sistem Anda
+              </p>
+              
+              <!-- Features List -->
+              <div class="space-y-3 mb-6">
+                <div class="flex items-center text-sm">
+                  <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <span class="text-gray-700">Dokumentasi API lengkap</span>
+                </div>
+                <div class="flex items-center text-sm">
+                  <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <span class="text-gray-700">SDK untuk berbagai bahasa</span>
+                </div>
+                <div class="flex items-center text-sm">
+                  <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <span class="text-gray-700">Webhook configuration</span>
+                </div>
+              </div>
+              
+              <!-- Time Estimate -->
+              <div class="bg-blue-50 rounded-xl p-4 text-center">
+                <div class="flex items-center justify-center text-blue-600 mb-1">
+                  <i class="fas fa-clock mr-2"></i>
+                  <span class="font-semibold">Estimasi Waktu</span>
+                </div>
+                <p class="text-2xl font-bold text-blue-700">5 Menit</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-card group" data-step="3">
+          <div class="relative">
+            <!-- Step Number Badge -->
+            <div class="absolute -top-4 -left-4 w-16 h-16 bg-gradient-to-br from-green-600 to-green-700 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+              <span class="text-2xl font-bold text-white">3</span>
+            </div>
+            
+            <!-- Card Content -->
+            <div class="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-full">
+              <!-- Icon -->
+              <div class="w-20 h-20 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform">
+                <i class="fas fa-rocket text-green-600 text-3xl"></i>
+              </div>
+              
+              <!-- Title -->
+              <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center group-hover:text-green-600 transition-colors">
+                Kirim Pesan
+              </h3>
+              
+              <!-- Description -->
+              <p class="text-gray-600 text-center mb-6 leading-relaxed">
+                Mulai kirim pesan otomatis dan monitor performa langsung dari dashboard analytics
+              </p>
+              
+              <!-- Features List -->
+              <div class="space-y-3 mb-6">
+                <div class="flex items-center text-sm">
+                  <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <span class="text-gray-700">Kirim pesan instantly</span>
+                </div>
+                <div class="flex items-center text-sm">
+                  <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <span class="text-gray-700">Monitor real-time analytics</span>
+                </div>
+                <div class="flex items-center text-sm">
+                  <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                    <i class="fas fa-check text-green-600 text-xs"></i>
+                  </div>
+                  <span class="text-gray-700">Automated workflows</span>
+                </div>
+              </div>
+              
+              <!-- Time Estimate -->
+              <div class="bg-green-50 rounded-xl p-4 text-center">
+                <div class="flex items-center justify-center text-green-600 mb-1">
+                  <i class="fas fa-clock mr-2"></i>
+                  <span class="font-semibold">Estimasi Waktu</span>
+                </div>
+                <p class="text-2xl font-bold text-green-700">1 Menit</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Demo Section -->
+      <div class="bg-gradient-to-r from-purple-600 to-blue-600 rounded-3xl p-12 relative overflow-hidden">
+        <div class="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
+        <div class="relative z-10 grid lg:grid-cols-2 gap-12 items-center">
+          <div class="text-white">
+            <h3 class="text-3xl font-bold mb-6">
+              Lihat Cara Kerja Platform
+            </h3>
+            <p class="text-white/90 text-lg mb-8">
+              Ikuti demo interaktif kami dan pelajari bagaimana WAConnect dapat mengubah cara Anda berkomunikasi dengan pelanggan
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+              <button class="bg-white text-purple-600 px-8 py-4 rounded-full font-bold hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center">
+                <i class="fas fa-play mr-2"></i>
+                Mulai Demo Interaktif
+              </button>
+              <button class="bg-transparent text-white border-2 border-white px-8 py-4 rounded-full font-bold hover:bg-white hover:text-purple-600 transition-all duration-300 transform hover:scale-105 flex items-center justify-center">
+                <i class="fas fa-book mr-2"></i>
+                Panduan Lengkap
+              </button>
+            </div>
+          </div>
+          
+          <!-- Demo Preview -->
+          <div class="relative">
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
+              <div class="space-y-4">
+                <div class="flex items-center space-x-3">
+                  <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                  <span class="text-white font-medium">Demo Terminal</span>
+                </div>
+                <div class="bg-black/30 rounded-lg p-4 font-mono text-sm text-green-400">
+                  <div class="mb-2">$ waconnect init</div>
+                  <div class="mb-2">✓ API Key generated: sk_live_...</div>
+                  <div class="mb-2">✓ Webhook configured</div>
+                  <div class="mb-2">✓ Phone number verified</div>
+                  <div class="animate-pulse">▍ Sending test message...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ Accordion -->
+      <div class="mt-16 max-w-4xl mx-auto">
+        <h3 class="text-2xl font-bold text-center text-gray-800 mb-8">
+          Pertanyaan Umum
+        </h3>
+        <div class="space-y-4">
+          <div class="faq-item bg-white rounded-2xl border border-gray-200 overflow-hidden">
+            <button class="faq-question w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition">
+              <span class="font-semibold text-gray-800">Apakah saya perlu pengalaman coding?</span>
+              <i class="fas fa-chevron-down text-gray-600 transition-transform"></i>
+            </button>
+            <div class="faq-answer hidden px-6 pb-4">
+              <p class="text-gray-600">Tidak! Platform kami dirancang untuk user-friendly. Kami menyediakan dashboard yang mudah digunakan dan dokumentasi lengkap untuk membantu Anda memulai.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item bg-white rounded-2xl border border-gray-200 overflow-hidden">
+            <button class="faq-question w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition">
+              <span class="font-semibold text-gray-800">Berapa lama waktu setup?</span>
+              <i class="fas fa-chevron-down text-gray-600 transition-transform"></i>
+            </button>
+            <div class="faq-answer hidden px-6 pb-4">
+              <p class="text-gray-600">Rata-rata pengguna dapat setup dalam 10 menit. Proses pendaftaran 2 menit, integrasi API 5 menit, dan Anda siap mengirim pesan!</p>
+            </div>
+          </div>
+          
+          <div class="faq-item bg-white rounded-2xl border border-gray-200 overflow-hidden">
+            <button class="faq-question w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition">
+              <span class="font-semibold text-gray-800">Apakah ada uji coba gratis?</span>
+              <i class="fas fa-chevron-down text-gray-600 transition-transform"></i>
+            </button>
+            <div class="faq-answer hidden px-6 pb-4">
+              <p class="text-gray-600">Ya! Kami menawarkan uji coba gratis 7 hari dengan fitur lengkap. Tidak perlu kartu kredit untuk memulai.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .step-indicator {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .step-indicator.active {
+      background: linear-gradient(135deg, #9333ea, #ec4899);
+    }
+    
+    .step-number {
+      font-weight: bold;
+      color: #6b7280;
+      transition: all 0.3s ease;
+    }
+    
+    .step-indicator.active .step-number {
+      color: white;
+    }
+    
+    .step-check {
+      position: absolute;
+      color: white;
+      opacity: 0;
+      transform: scale(0);
+      transition: all 0.3s ease;
+    }
+    
+    .step-indicator.completed .step-check {
+      opacity: 1;
+      transform: scale(1);
+    }
+    
+    .step-indicator.completed .step-number {
+      opacity: 0;
+      transform: scale(0);
+    }
+    
+    .step-connector {
+      width: 80px;
+      height: 2px;
+      background: #e5e7eb;
+      transition: all 0.3s ease;
+    }
+    
+    .step-connector.active {
+      background: linear-gradient(90deg, #9333ea, #ec4899);
+    }
+    
+    .step-card {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.6s ease forwards;
+    }
+    
+    .step-card:nth-child(1) { animation-delay: 0.1s; }
+    .step-card:nth-child(2) { animation-delay: 0.2s; }
+    .step-card:nth-child(3) { animation-delay: 0.3s; }
+    
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    
+    .faq-answer.show {
+      max-height: 200px;
+    }
+  </style>
+
+  <script>
+    // Step Progress Animation
+    let currentStep = 1;
+    const totalSteps = 3;
+    
+    function updateProgress(step) {
+      // Update step indicators
+      document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
+        if (index < step) {
+          indicator.classList.add('completed', 'active');
+        } else if (index === step - 1) {
+          indicator.classList.add('active');
+          indicator.classList.remove('completed');
+        } else {
+          indicator.classList.remove('active', 'completed');
+        }
+      });
+      
+      // Update connectors
+      document.querySelectorAll('.step-connector').forEach((connector, index) => {
+        if (index < step - 1) {
+          connector.classList.add('active');
+        } else {
+          connector.classList.remove('active');
+        }
+      });
+      
+      // Update progress bar
+      const progressFill = document.querySelector('.progress-fill');
+      const progress = (step / totalSteps) * 100;
+      progressFill.style.width = progress + '%';
+    }
+    
+    // Auto-advance steps
+    setInterval(() => {
+      currentStep = currentStep >= totalSteps ? 1 : currentStep + 1;
+      updateProgress(currentStep);
+    }, 3000);
+    
+    // FAQ Accordion
+    document.querySelectorAll('.faq-question').forEach(button => {
+      button.addEventListener('click', () => {
+        const answer = button.nextElementSibling;
+        const icon = button.querySelector('i');
+        
+        // Toggle current answer
+        answer.classList.toggle('hidden');
+        answer.classList.toggle('show');
+        icon.classList.toggle('rotate-180');
+        
+        // Close other answers
+        document.querySelectorAll('.faq-answer').forEach(otherAnswer => {
+          if (otherAnswer !== answer && !otherAnswer.classList.contains('hidden')) {
+            otherAnswer.classList.add('hidden');
+            otherAnswer.classList.remove('show');
+            otherAnswer.previousElementSibling.querySelector('i').classList.remove('rotate-180');
+          }
+        });
+      });
+    });
+    
+    // Intersection Observer for step cards
+    const stepObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animationPlayState = 'running';
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    document.querySelectorAll('.step-card').forEach(card => {
+      card.style.animationPlayState = 'paused';
+      stepObserver.observe(card);
+    });
+  </script>
+</section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 bg-gray-50">
+      <div class="container mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl lg:text-4xl font-bold text-gray-800 mb-4">
+            Harga yang <span class="gradient-text">Terjangkau</span>
+          </h2>
+          <p class="text-xl text-gray-600">
+            Pilih paket yang sesuai dengan kebutuhan bisnis Anda
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <!-- Starter Plan -->
+          <div class="bg-white rounded-2xl p-8 card-hover">
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">Starter</h3>
+            <p class="text-gray-600 mb-6">Cocok untuk bisnis kecil</p>
+            <div class="mb-6">
+              <span class="text-4xl font-bold text-gray-800">Rp299K</span>
+              <span class="text-gray-600">/bulan</span>
+            </div>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-3"></i>
+                <span class="text-gray-600">1,000 pesan/bulan</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-3"></i>
+                <span class="text-gray-600">Basic Chatbot</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-3"></i>
+                <span class="text-gray-600">Email Support</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-3"></i>
+                <span class="text-gray-600">Basic Analytics</span>
+              </li>
+            </ul>
+            <button
+              class="w-full bg-gray-100 text-gray-800 py-3 rounded-full font-semibold hover:bg-gray-200 transition"
+            >
+              Pilih Paket
+            </button>
+          </div>
+
+          <!-- Professional Plan -->
+          <div
+            class="bg-gradient-to-br from-purple-600 to-purple-800 rounded-2xl p-8 text-white transform scale-105 shadow-2xl"
+          >
+            <div
+              class="bg-yellow-400 text-purple-800 text-sm font-semibold px-3 py-1 rounded-full inline-block mb-4"
+            >
+              POPULER
+            </div>
+            <h3 class="text-2xl font-bold mb-2">Professional</h3>
+            <p class="text-purple-100 mb-6">Untuk bisnis yang berkembang</p>
+            <div class="mb-6">
+              <span class="text-4xl font-bold">Rp799K</span>
+              <span class="text-purple-100">/bulan</span>
+            </div>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center">
+                <i class="fas fa-check text-white mr-3"></i>
+                <span>10,000 pesan/bulan</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check text-white mr-3"></i>
+                <span>Advanced Chatbot AI</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check text-white mr-3"></i>
+                <span>Priority Support 24/7</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check text-white mr-3"></i>
+                <span>Advanced Analytics</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check text-white mr-3"></i>
+                <span>Multi-User Access</span>
+              </li>
+            </ul>
+            <button
+              class="w-full bg-white text-purple-600 py-3 rounded-full font-semibold hover:bg-gray-100 transition"
+            >
+              Pilih Paket
+            </button>
+          </div>
+
+          <!-- Enterprise Plan -->
+          <div class="bg-white rounded-2xl p-8 card-hover">
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">Enterprise</h3>
+            <p class="text-gray-600 mb-6">Solusi untuk perusahaan besar</p>
+            <div class="mb-6">
+              <span class="text-4xl font-bold text-gray-800">Custom</span>
+            </div>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-3"></i>
+                <span class="text-gray-600">Unlimited pesan</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-3"></i>
+                <span class="text-gray-600">Custom AI Training</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-3"></i>
+                <span class="text-gray-600">Dedicated Support</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-3"></i>
+                <span class="text-gray-600">Custom Integration</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-check text-green-500 mr-3"></i>
+                <span class="text-gray-600">SLA Guarantee</span>
+              </li>
+            </ul>
+            <button
+              class="w-full bg-gray-100 text-gray-800 py-3 rounded-full font-semibold hover:bg-gray-200 transition"
+            >
+              Hubungi Sales
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-20 bg-white">
+      <div class="container mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl lg:text-4xl font-bold text-gray-800 mb-4">
+            Apa Kata <span class="gradient-text">Pelanggan Kami</span>
+          </h2>
+          <p class="text-xl text-gray-600">
+            Bergabung dengan ribuan bisnis yang sudah mempercayai kami
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="bg-gray-50 p-8 rounded-2xl">
+            <div class="flex mb-4">
+              <i class="fas fa-star text-yellow-400"></i>
+              <i class="fas fa-star text-yellow-400"></i>
+              <i class="fas fa-star text-yellow-400"></i>
+              <i class="fas fa-star text-yellow-400"></i>
+              <i class="fas fa-star text-yellow-400"></i>
+            </div>
+            <p class="text-gray-600 mb-6">
+              "WAConnect mengubah cara kami berkomunikasi dengan pelanggan.
+              Respons rate meningkat 300%!"
+            </p>
+            <div class="flex items-center">
+              <img
+                src="https://picsum.photos/seed/user1/50/50"
+                alt="User"
+                class="w-12 h-12 rounded-full mr-4"
+              />
+              <div>
+                <div class="font-semibold text-gray-800">Andi Pratama</div>
+                <div class="text-sm text-gray-600">CEO, TokoKu</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gray-50 p-8 rounded-2xl">
+            <div class="flex mb-4">
+              <i class="fas fa-star text-yellow-400"></i>
+              <i class="fas fa-star text-yellow-400"></i>
+              <i class="fas fa-star text-yellow-400"></i>
+              <i class="fas fa-star text-yellow-400"></i>
+              <i class="fas fa-star text-yellow-400"></i>
+            </div>
+            <p class="text-gray-600 mb-6">
+              "Integrasi API sangat mudah dan dokumentasinya lengkap. Highly
+              recommended!"
+            </p>
+            <div class="flex items-center">
+              <img
+                src="https://picsum.photos/seed/user2/50/50"
+                alt="User"
+                class="w-12 h-12 rounded-full mr-4"
+              />
+              <div>
+                <div class="font-semibold text-gray-800">Sarah Wijaya</div>
+                <div class="text-sm text-gray-600">CTO, E-Commerce Pro</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gray-50 p-8 rounded-2xl">
+            <div class="flex mb-4">
+              <i class="fas fa-star text-yellow-400"></i>
+              <i class="fas fa-star text-yellow-400"></i>
+              <i class="fas fa-star text-yellow-400"></i>
+              <i class="fas fa-star text-yellow-400"></i>
+              <i class="fas fa-star text-yellow-400"></i>
+            </div>
+            <p class="text-gray-600 mb-6">
+              "Support team sangat responsif dan helpful. Solusi terbaik untuk
+              WhatsApp Business API!"
+            </p>
+            <div class="flex items-center">
+              <img
+                src="https://picsum.photos/seed/user3/50/50"
+                alt="User"
+                class="w-12 h-12 rounded-full mr-4"
+              />
+              <div>
+                <div class="font-semibold text-gray-800">Budi Santoso</div>
+                <div class="text-sm text-gray-600">Marketing Manager</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-20 bg-gray-50">
+      <div class="container mx-auto px-6 max-w-4xl">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl lg:text-4xl font-bold text-gray-800 mb-4">
+            Pertanyaan yang <span class="gradient-text">Sering Diajukan</span>
+          </h2>
+          <p class="text-xl text-gray-600">
+            Jawaban untuk pertanyaan umum tentang layanan kami
+          </p>
+        </div>
+
+        <div class="space-y-4">
+          <div class="bg-white rounded-xl overflow-hidden">
+            <button
+              onclick="toggleFAQ(1)"
+              class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition"
+            >
+              <span class="font-semibold text-gray-800"
+                >Apakah saya perlu nomor WhatsApp Business?</span
+              >
+              <i
+                id="faq-icon-1"
+                class="fas fa-chevron-down text-gray-600 transition-transform"
+              ></i>
+            </button>
+            <div id="faq-content-1" class="hidden px-6 pb-4">
+              <p class="text-gray-600">
+                Ya, Anda memerlukan nomor WhatsApp Business yang telah
+                diverifikasi untuk menggunakan API kami. Kami akan membantu
+                proses verifikasi jika Anda belum memilikinya.
+              </p>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl overflow-hidden">
+            <button
+              onclick="toggleFAQ(2)"
+              class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition"
+            >
+              <span class="font-semibold text-gray-800"
+                >Berapa lama setup integrasi API?</span
+              >
+              <i
+                id="faq-icon-2"
+                class="fas fa-chevron-down text-gray-600 transition-transform"
+              ></i>
+            </button>
+            <div id="faq-content-2" class="hidden px-6 pb-4">
+              <p class="text-gray-600">
+                Setup dasar dapat dilakukan dalam 5-10 menit. Kami menyediakan
+                dokumentasi lengkap dan contoh kode untuk berbagai bahasa
+                pemrograman.
+              </p>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl overflow-hidden">
+            <button
+              onclick="toggleFAQ(3)"
+              class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition"
+            >
+              <span class="font-semibold text-gray-800"
+                >Apakah ada batasan pengiriman pesan?</span
+              >
+              <i
+                id="faq-icon-3"
+                class="fas fa-chevron-down text-gray-600 transition-transform"
+              ></i>
+            </button>
+            <div id="faq-content-3" class="hidden px-6 pb-4">
+              <p class="text-gray-600">
+                Setiap paket memiliki batasan pesan bulanan yang berbeda. Anda
+                dapat upgrade paket kapan saja atau membeli tambahan kuota
+                pesan.
+              </p>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl overflow-hidden">
+            <button
+              onclick="toggleFAQ(4)"
+              class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition"
+            >
+              <span class="font-semibold text-gray-800"
+                >Apakah data pelanggan aman?</span
+              >
+              <i
+                id="faq-icon-4"
+                class="fas fa-chevron-down text-gray-600 transition-transform"
+              ></i>
+            </button>
+            <div id="faq-content-4" class="hidden px-6 pb-4">
+              <p class="text-gray-600">
+                Ya, kami menggunakan enkripsi end-to-end dan mematuhi GDPR serta
+                regulasi privasi data lainnya. Data pelanggan Anda aman bersama
+                kami.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-r from-purple-600 to-purple-800">
+      <div class="container mx-auto px-6 text-center">
+        <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">
+          Siap Meningkatkan Komunikasi Bisnis Anda?
+        </h2>
+        <p class="text-xl text-purple-100 mb-8 max-w-2xl mx-auto">
+          Bergabunglah dengan ribuan bisnis yang sudah menggunakan WAConnect
+          untuk mengotomasi komunikasi WhatsApp mereka.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <button
+            class="bg-white text-purple-600 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition"
+          >
+            <i class="fas fa-rocket mr-2"></i> Mulai Gratis 7 Hari
+          </button>
+          <button
+            class="bg-transparent text-white border-2 border-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-purple-600 transition"
+          >
+            <i class="fas fa-calendar mr-2"></i> Jadwalkan Demo
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-12">
+      <div class="container mx-auto px-6">
+        <div class="grid md:grid-cols-4 gap-8 mb-8">
+          <div>
+            <div class="flex items-center space-x-2 mb-4">
+              <div
+                class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center"
+              >
+                <i class="fab fa-whatsapp text-white text-xl"></i>
+              </div>
+              <span class="text-xl font-bold text-white">WAConnect</span>
+            </div>
+            <p class="text-sm">
+              Solusi WhatsApp API Business terpercaya untuk mengotomasi
+              komunikasi bisnis Anda.
+            </p>
+          </div>
+
+          <div>
+            <h4 class="text-white font-semibold mb-4">Produk</h4>
+            <ul class="space-y-2 text-sm">
+              <li>
+                <a href="#" class="hover:text-white transition">WhatsApp API</a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition">Chatbot AI</a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition">Broadcast</a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-white transition">Analytics</a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="text-white font-semibold mb-4">Perusahaan</h4>
+            <ul class="space-y-2 text-sm">
+              <li>
+                <a href="#" class="hover:text-white transition">Tentang Kami</a>
+              </li>
+              <li><a href="#" class="hover:text-white transition">Karir</a></li>
+              <li><a href="#" class="hover:text-white transition">Blog</a></li>
+              <li>
+                <a href="#" class="hover:text-white transition">Partner</a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="text-white font-semibold mb-4">Hubungi Kami</h4>
+            <ul class="space-y-2 text-sm">
+              <li class="flex items-center">
+                <i class="fas fa-envelope mr-2"></i>
+                support@waconnect.id
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-phone mr-2"></i>
+                +62 812-3456-7890
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-map-marker-alt mr-2"></i>
+                Jakarta, Indonesia
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div
+          class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center"
+        >
+          <p class="text-sm mb-4 md:mb-0">
+            © 2024 WAConnect. All rights reserved.
+          </p>
+          <div class="flex space-x-4">
+            <a href="#" class="hover:text-white transition"
+              ><i class="fab fa-facebook text-xl"></i
+            ></a>
+            <a href="#" class="hover:text-white transition"
+              ><i class="fab fa-twitter text-xl"></i
+            ></a>
+            <a href="#" class="hover:text-white transition"
+              ><i class="fab fa-linkedin text-xl"></i
+            ></a>
+            <a href="#" class="hover:text-white transition"
+              ><i class="fab fa-instagram text-xl"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Enhanced Navigation Scripts
+      const navbar = document.getElementById("navbar");
+      const mobileMenuToggle = document.getElementById("mobileMenuToggle");
+      const mobileMenuOverlay = document.getElementById("mobileMenuOverlay");
+      const closeMobileMenu = document.getElementById("closeMobileMenu");
+      const hamburger = mobileMenuToggle.querySelector(".hamburger");
+
+      // Mobile Menu Toggle
+      mobileMenuToggle.addEventListener("click", () => {
+        hamburger.classList.toggle("active");
+        mobileMenuOverlay.classList.toggle("hidden");
+        document.body.style.overflow = mobileMenuOverlay.classList.contains(
+          "hidden"
+        )
+          ? "auto"
+          : "hidden";
+      });
+
+      closeMobileMenu.addEventListener("click", () => {
+        hamburger.classList.remove("active");
+        mobileMenuOverlay.classList.add("hidden");
+        document.body.style.overflow = "auto";
+      });
+
+      // Close mobile menu when clicking outside
+      mobileMenuOverlay.addEventListener("click", (e) => {
+        if (e.target === mobileMenuOverlay) {
+          hamburger.classList.remove("active");
+          mobileMenuOverlay.classList.add("hidden");
+          document.body.style.overflow = "auto";
+        }
+      });
+
+      // Mobile Dropdown Toggle
+      function toggleMobileDropdown(id) {
+        const dropdown = document.getElementById(`mobile-${id}`);
+        dropdown.classList.toggle("hidden");
+      }
+
+      // Navbar scroll effect
+      let lastScrollTop = 0;
+      window.addEventListener("scroll", () => {
+        const scrollTop =
+          window.pageYOffset || document.documentElement.scrollTop;
+
+        if (scrollTop > 100) {
+          navbar.classList.add("shadow-lg");
+          if (scrollTop > lastScrollTop && scrollTop > 500) {
+            navbar.style.transform = "translateY(-100%)";
+          } else {
+            navbar.style.transform = "translateY(0)";
+          }
+        } else {
+          navbar.classList.remove("shadow-lg");
+          navbar.style.transform = "translateY(0)";
+        }
+
+        lastScrollTop = scrollTop;
+      });
+
+      // FAQ Toggle
+      function toggleFAQ(id) {
+        const content = document.getElementById(`faq-content-${id}`);
+        const icon = document.getElementById(`faq-icon-${id}`);
+
+        content.classList.toggle("hidden");
+        icon.classList.toggle("rotate-180");
+      }
+
+      // Smooth Scroll
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+            // Close mobile menu if open
+            hamburger.classList.remove("active");
+            mobileMenuOverlay.classList.add("hidden");
+            document.body.style.overflow = "auto";
+          }
+        });
+      });
+
+      // Add animation on scroll
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("slide-in");
+          }
+        });
+      }, observerOptions);
+
+      // Observe all cards
+      document.querySelectorAll(".card-hover").forEach((card) => {
+        observer.observe(card);
+      });
+
+      // Typing Effect
+      const typingTexts = [
+        "API Terbaik",
+        "AI Chatbot",
+        "Otomatisasi",
+        "Analytics",
+      ];
+      let textIndex = 0;
+      let charIndex = 0;
+      let isDeleting = false;
+      const typingElement = document.getElementById("typingText");
+
+      function typeEffect() {
+        const currentText = typingTexts[textIndex];
+
+        if (isDeleting) {
+          typingElement.textContent = currentText.substring(0, charIndex - 1);
+          charIndex--;
+        } else {
+          typingElement.textContent = currentText.substring(0, charIndex + 1);
+          charIndex++;
+        }
+
+        if (!isDeleting && charIndex === currentText.length) {
+          isDeleting = true;
+          setTimeout(typeEffect, 2000);
+        } else if (isDeleting && charIndex === 0) {
+          isDeleting = false;
+          textIndex = (textIndex + 1) % typingTexts.length;
+          setTimeout(typeEffect, 500);
+        } else {
+          setTimeout(typeEffect, isDeleting ? 50 : 100);
+        }
+      }
+
+      // Start typing effect
+      typeEffect();
+
+      // Animated Counter
+      function animateCounter(element, target, duration = 2000) {
+        let start = 0;
+        const increment = target / (duration / 16);
+
+        const timer = setInterval(() => {
+          start += increment;
+          if (start >= target) {
+            element.textContent = target.toLocaleString();
+            clearInterval(timer);
+          } else {
+            element.textContent = Math.floor(start).toLocaleString();
+          }
+        }, 16);
+      }
+
+      // Trigger counter animation when in view
+      const counterObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (
+              entry.isIntersecting &&
+              !entry.target.classList.contains("counted")
+            ) {
+              entry.target.classList.add("counted");
+              const text = entry.target.textContent;
+              const number = parseFloat(text.replace(/[^0-9.]/g, ""));
+              animateCounter(entry.target, number);
+            }
+          });
+        },
+        { threshold: 0.5 }
+      );
+
+      document.querySelectorAll(".stats-card .text-3xl").forEach((counter) => {
+        counterObserver.observe(counter);
+      });
+    </script>
+  </body>
+</html>
