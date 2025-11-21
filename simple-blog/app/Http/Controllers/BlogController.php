@@ -41,7 +41,12 @@ class BlogController extends Controller
             ->limit(5)
             ->get();
 
-        return view('blog.index', compact('posts', 'popularPosts', 'feed'));
+        // Get hot categories this week (cached for 1 hour)
+        $hotCategories = cache()->remember('hot_categories_weekly', 3600, function () {
+            return \App\Models\Category::hotThisWeek(5)->get();
+        });
+
+        return view('blog.index', compact('posts', 'popularPosts', 'hotCategories', 'feed'));
     }
 
     public function show($slug)

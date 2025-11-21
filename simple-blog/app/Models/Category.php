@@ -20,4 +20,33 @@ class Category extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Scope to get hot categories based on this week's activity
+     */
+    public function scopeHotThisWeek($query, $limit = 5)
+    {
+        $oneWeekAgo = now()->subWeek();
+
+        return $query->withCount([
+            'posts as posts_this_week' => function ($query) use ($oneWeekAgo) {
+                $query->where('is_published', true)
+                      ->where('created_at', '>=', $oneWeekAgo);
+            },
+            'posts as total_views' => function ($query) use ($oneWeekAgo) {
+                $query->where('is_published', true)
+                      ->where('created_at', '>=', $oneWeekAgo);
+            }
+        ])
+        ->withSum([
+            'posts as views_sum' => function ($query) use ($oneWeekAgo) {
+                $query->where('is_published', true)
+                      ->where('created_at', '>=', $oneWeekAgo);
+            }
+        ], 'views')
+        ->having('posts_this_week', '>', 0)
+        ->orderByDesc('posts_this_week')
+        ->orderByDesc('views_sum')
+        ->limit($limit);
+    }
 }

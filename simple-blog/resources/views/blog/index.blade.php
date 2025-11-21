@@ -113,6 +113,28 @@
                         </div>
                     </div>
 
+                    <!-- Hot Categories This Week -->
+                    @if($hotCategories->isNotEmpty())
+                        <div class="border-t border-gray-200 pt-8">
+                            <h3 class="font-sans font-bold text-sm text-gray-900 uppercase tracking-wide mb-4 flex items-center gap-2">
+                                <span>🔥</span>
+                                <span>Hot This Week</span>
+                            </h3>
+                            <div class="space-y-2">
+                                @foreach($hotCategories as $index => $category)
+                                    <a href="{{ route('blog.category', $category->slug) }}" class="group flex items-center gap-3 py-2 hover:bg-gray-50 rounded-lg transition-colors">
+                                        <span class="flex-shrink-0 w-6 h-6 flex items-center justify-center text-xs font-bold text-gray-400 group-hover:text-gray-900 transition-colors">
+                                            {{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}
+                                        </span>
+                                        <span class="font-medium text-sm text-gray-700 group-hover:text-gray-900 transition-colors font-sans">
+                                            {{ $category->name }}
+                                        </span>
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
                     <!-- Popular Posts This Week -->
                     @if($popularPosts->isNotEmpty())
                         <div class="border-t border-gray-200 pt-8">
