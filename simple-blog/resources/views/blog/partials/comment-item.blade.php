@@ -95,9 +95,14 @@
                         @csrf
                         <input type="hidden" name="parent_id" value="{{ $comment->id }}">
                         <div class="mb-2">
+                            @if($errors->has('content'))
+                                <div class="mb-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                                    {{ $errors->first('content') }}
+                                </div>
+                            @endif
                             <textarea name="content" 
                                       rows="3" 
-                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent transition text-sm" 
+                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent transition text-sm @error('content') border-red-500 @enderror" 
                                       placeholder="Write your reply..." 
                                       required></textarea>
                         </div>

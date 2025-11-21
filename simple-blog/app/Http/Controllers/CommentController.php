@@ -20,11 +20,28 @@ class CommentController extends Controller
             'parent_id' => 'nullable|exists:comments,id',
         ]);
 
-        // If parent_id is provided, verify it belongs to the same post
+        // If parent_id is provided, verify it exists and belongs to the same post
         if ($request->parent_id) {
-            $parentComment = Comment::findOrFail($request->parent_id);
+            $parentComment = Comment::with('post')->find($request->parent_id);
+            
+            if (!$parentComment) {
+                if ($request->wantsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'The comment you are replying to no longer exists.'
+                    ], 404);
+                }
+                return back()->withErrors(['content' => 'The comment you are replying to no longer exists.'])->withInput();
+            }
+            
             if ($parentComment->post_id !== $post->id) {
-                abort(403, 'Invalid parent comment.');
+                if ($request->wantsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Invalid parent comment.'
+                    ], 403);
+                }
+                return back()->withErrors(['content' => 'Invalid parent comment.'])->withInput();
             }
         }
 
