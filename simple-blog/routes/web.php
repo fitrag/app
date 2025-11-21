@@ -15,6 +15,7 @@ Route::get('/tag/{slug}', [BlogController::class, 'tag'])->name('blog.tag');
 Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
 Route::get('/pages', [PageController::class, 'index'])->name('pages.index');
 Route::get('/page/{slug}', [PageController::class, 'show'])->name('page.show');
+Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
