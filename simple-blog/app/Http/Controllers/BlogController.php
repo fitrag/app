@@ -14,13 +14,39 @@ class BlogController extends Controller
             ->withCount('comments')
             ->where('is_published', true);
 
+        $showInterestModal = false;
+
         if ($feed === 'followed' && auth()->check()) {
             $followingIds = auth()->user()->following()->pluck('users.id');
             $query->whereIn('user_id', $followingIds);
+            $query->latest();
+        } elseif ($feed === 'foryou' && auth()->check()) {
+            // Check if user has interests
+            $userInterests = auth()->user()->interests()->pluck('categories.id');
+            
+            if ($userInterests->isNotEmpty()) {
+                $query->whereIn('category_id', $userInterests);
+            } else {
+                // If user has no interests, show the modal
+                $showInterestModal = true;
+            }
+
+            // Randomize with session seed for consistent pagination
+            $page = $request->input('page', 1);
+            if ($page == 1) {
+                $seed = rand();
+                session(['foryou_seed' => $seed]);
+            } else {
+                $seed = session('foryou_seed', rand());
+            }
+            $query->inRandomOrder($seed);
+        } elseif ($feed === 'latest') {
+            $query->latest();
+        } else {
+            $query->latest();
         }
 
-        $posts = $query->latest()
-            ->paginate(\App\Models\Setting::get('posts_per_page', 10))
+        $posts = $query->paginate(\App\Models\Setting::get('posts_per_page', 10))
             ->withQueryString();
 
         if ($request->ajax()) {
@@ -46,7 +72,7 @@ class BlogController extends Controller
             return \App\Models\Category::hotThisWeek(5)->get();
         });
 
-        return view('blog.index', compact('posts', 'popularPosts', 'hotCategories', 'feed'));
+        return view('blog.index', compact('posts', 'popularPosts', 'hotCategories', 'feed', 'showInterestModal'));
     }
 
     public function show($slug)

@@ -158,4 +158,12 @@ class User extends Authenticatable
 
         return $this->menus()->where('label', $menuLabel)->exists();
     }
+
+    /**
+     * The categories that the user is interested in.
+     */
+    public function interests()
+    {
+        return $this->belongsToMany(Category::class, 'category_user')->withTimestamps();
+    }
 }

@@ -22,6 +22,10 @@
         </div>
     @endif
 
+    @if(isset($showInterestModal) && $showInterestModal)
+        <x-interest-modal :show="true" />
+    @endif
+
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="flex flex-col lg:flex-row gap-12">
@@ -30,6 +34,10 @@
                 <!-- Feed Tabs -->
                 @auth
                     <div class="flex items-center border-b border-gray-200 mb-8">
+                        <a href="{{ route('blog.index', ['feed' => 'latest']) }}" 
+                           class="pb-4 px-4 text-sm font-medium border-b-2 transition-colors {{ ($feed ?? '') === 'latest' ? 'border-gray-900 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                            Latest
+                        </a>
                         <a href="{{ route('blog.index', ['feed' => 'foryou']) }}" 
                            class="pb-4 px-4 text-sm font-medium border-b-2 transition-colors {{ ($feed ?? 'foryou') === 'foryou' ? 'border-gray-900 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
                             For You

@@ -22,6 +22,14 @@ class Category extends Model
     }
 
     /**
+     * The users that are interested in this category.
+     */
+    public function interestedUsers()
+    {
+        return $this->belongsToMany(User::class, 'category_user')->withTimestamps();
+    }
+
+    /**
      * Scope to get hot categories based on this week's activity
      */
     public function scopeHotThisWeek($query, $limit = 5)
