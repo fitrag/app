@@ -67,6 +67,10 @@ class Notification extends Model
             case 'comment_love':
                 return "{$actorName} loved your comment";
             
+            case 'post_comment':
+                $postTitle = $this->notifiable->title ?? 'your post';
+                return "{$actorName} commented on your post \"{$postTitle}\"";
+            
             default:
                 return "{$actorName} interacted with your content";
         }
@@ -74,7 +78,7 @@ class Notification extends Model
 
     public function getLinkAttribute()
     {
-        if ($this->type === 'post_love' && $this->notifiable_type === 'App\\Models\\Post') {
+        if (in_array($this->type, ['post_love', 'post_comment']) && $this->notifiable_type === 'App\\Models\\Post') {
             return route('blog.show', $this->notifiable->slug);
         }
         

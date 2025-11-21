@@ -47,6 +47,17 @@ class CommentController extends Controller
                 ]);
             }
         }
+        
+        // Create notification for post owner when someone comments (not a reply)
+        if (!$request->parent_id && $post->user_id !== Auth::id()) {
+            \App\Models\Notification::create([
+                'user_id' => $post->user_id,
+                'type' => 'post_comment',
+                'notifiable_type' => 'App\\Models\\Post',
+                'notifiable_id' => $post->id,
+                'actor_id' => Auth::id(),
+            ]);
+        }
 
         return back()->with('success', 'Comment added successfully.');
     }
