@@ -7,6 +7,8 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\PageController;
 
 Route::get('/', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/search', [BlogController::class, 'search'])->name('blog.search');
+Route::get('/api/search-suggestions', [BlogController::class, 'searchSuggestions'])->name('api.search.suggestions');
 Route::get('/posts/{slug}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/category/{slug}', [BlogController::class, 'category'])->name('blog.category');
 Route::get('/tag/{slug}', [BlogController::class, 'tag'])->name('blog.tag');
@@ -22,15 +24,37 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    // Become a Writer
+    Route::post('/become-writer', [\App\Http\Controllers\UserController::class, 'becomeWriter'])->name('user.become-writer');
+
+    // Follow System Routes
+    Route::post('/users/{user}/follow', [\App\Http\Controllers\FollowController::class, 'store'])->name('users.follow');
+    Route::delete('/users/{user}/unfollow', [\App\Http\Controllers\FollowController::class, 'destroy'])->name('users.unfollow');
+    Route::get('/users/{user}/followers', [\App\Http\Controllers\FollowController::class, 'followers'])->name('users.followers');
+    Route::get('/users/{user}/following', [\App\Http\Controllers\FollowController::class, 'following'])->name('users.following');
+
+    // Bookmark Routes
+    Route::post('/posts/{post}/bookmark', [\App\Http\Controllers\BookmarkController::class, 'store'])->name('posts.bookmark');
+    Route::get('/bookmarks', [\App\Http\Controllers\BookmarkController::class, 'index'])->name('bookmarks.index');
+
+    // Love Routes
+    Route::post('/posts/{post}/love', [\App\Http\Controllers\PostLoveController::class, 'store'])->name('posts.love');
+
+    // Comment Routes
+    Route::post('/posts/{post}/comments', [\App\Http\Controllers\CommentController::class, 'store'])->name('comments.store');
 });
 
 // Editor routes
-Route::middleware(['auth', 'admin'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('editor/monetization', [\App\Http\Controllers\Editor\MonetizationController::class, 'index'])->name('editor.monetization.index');
+    Route::get('editor/monetization/apply', [\App\Http\Controllers\Editor\MonetizationController::class, 'apply'])->name('editor.monetization.apply');
+    Route::post('editor/monetization/apply', [\App\Http\Controllers\Editor\MonetizationController::class, 'submitApplication'])->name('editor.monetization.submit');
 });
 
 Route::middleware(['auth', 'admin', 'menu.permission'])->group(function () {
     Route::resource('admin/posts', \App\Http\Controllers\Admin\PostController::class)->names('admin.posts');
+    Route::post('admin/posts/bulk-action', [\App\Http\Controllers\Admin\PostController::class, 'bulkAction'])->name('admin.posts.bulk-action');
     Route::get('admin/posts/{post}/analytics', [\App\Http\Controllers\Admin\PostController::class, 'analytics'])->name('admin.posts.analytics');
     Route::resource('admin/categories', \App\Http\Controllers\Admin\CategoryController::class)->names('admin.categories');
     Route::resource('admin/tags', \App\Http\Controllers\Admin\TagController::class)->names('admin.tags');
@@ -41,6 +65,14 @@ Route::middleware(['auth', 'admin', 'menu.permission'])->group(function () {
     Route::put('admin/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('admin.settings.update');
     Route::get('admin/analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('admin.analytics.index');
     Route::resource('admin/users', \App\Http\Controllers\Admin\UserController::class)->names('admin.users');
+    
+    // Monetization Applications - Strict Admin Only
+    Route::middleware('strict.admin')->group(function () {
+        Route::get('admin/monetization-applications', [\App\Http\Controllers\Admin\MonetizationApplicationController::class, 'index'])->name('admin.monetization-applications.index');
+        Route::get('admin/monetization-applications/{id}', [\App\Http\Controllers\Admin\MonetizationApplicationController::class, 'show'])->name('admin.monetization-applications.show');
+        Route::post('admin/monetization-applications/{id}/approve', [\App\Http\Controllers\Admin\MonetizationApplicationController::class, 'approve'])->name('admin.monetization-applications.approve');
+        Route::post('admin/monetization-applications/{id}/reject', [\App\Http\Controllers\Admin\MonetizationApplicationController::class, 'reject'])->name('admin.monetization-applications.reject');
+    });
 });
 
 require __DIR__.'/auth.php';

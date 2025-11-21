@@ -61,12 +61,14 @@
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="{{ route('admin.categories.edit', $category) }}" class="text-gray-600 hover:text-gray-900 mr-3">Edit</a>
-                                        <form action="{{ route('admin.categories.destroy', $category) }}" method="POST" class="inline-block delete-form">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
-                                        </form>
+                                        @if(auth()->user()->isAdmin() || auth()->id() === $category->user_id)
+                                            <a href="{{ route('admin.categories.edit', $category) }}" class="text-gray-600 hover:text-gray-900 mr-3">Edit</a>
+                                            <form action="{{ route('admin.categories.destroy', $category) }}" method="POST" class="inline-block delete-form">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
+                                            </form>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

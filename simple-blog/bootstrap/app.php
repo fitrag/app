@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
             'menu.permission' => \App\Http\Middleware\CheckMenuPermission::class,
+            'strict.admin' => \App\Http\Middleware\StrictAdminMiddleware::class,
         ]);
         
         // Add visitor analytics tracking to web routes

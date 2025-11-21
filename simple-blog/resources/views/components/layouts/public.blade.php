@@ -10,6 +10,8 @@
     <meta name="keywords" content="{{ $metaKeywords ?? \App\Models\Setting::get('site_keywords', 'blog') }}">
     <meta name="author" content="{{ \App\Models\Setting::get('meta_author', '') }}">
 
+    @stack('meta')
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,6 +19,7 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
 
     <style>
         body {
@@ -84,10 +87,181 @@
                         @endif
                     @endforeach
 
+                    <!-- Live Search Box -->
+                    <div class="relative" x-data="{
+                        query: '{{ request('q') }}',
+                        suggestions: [],
+                        showSuggestions: false,
+                        selectedIndex: -1,
+                        loading: false,
+                        
+                        async fetchSuggestions() {
+                            if (this.query.length < 2) {
+                                this.suggestions = [];
+                                this.showSuggestions = false;
+                                return;
+                            }
+                            
+                            this.loading = true;
+                            try {
+                                const response = await fetch(`{{ route('api.search.suggestions') }}?q=${encodeURIComponent(this.query)}`);
+                                this.suggestions = await response.json();
+                                this.showSuggestions = this.suggestions.length > 0;
+                                this.selectedIndex = -1;
+                            } catch (error) {
+                                console.error('Search error:', error);
+                            } finally {
+                                this.loading = false;
+                            }
+                        },
+                        
+                        selectSuggestion(url) {
+                            window.location.href = url;
+                        },
+                        
+                        handleKeydown(event) {
+                            if (!this.showSuggestions) return;
+                            
+                            if (event.key === 'ArrowDown') {
+                                event.preventDefault();
+                                this.selectedIndex = Math.min(this.selectedIndex + 1, this.suggestions.length - 1);
+                            } else if (event.key === 'ArrowUp') {
+                                event.preventDefault();
+                                this.selectedIndex = Math.max(this.selectedIndex - 1, -1);
+                            } else if (event.key === 'Enter' && this.selectedIndex >= 0) {
+                                event.preventDefault();
+                                this.selectSuggestion(this.suggestions[this.selectedIndex].url);
+                            }
+                        },
+                        
+                        getTypeIcon(type) {
+                            const icons = {
+                                post: '📄',
+                                user: '👤',
+                                category: '📁',
+                                tag: '🏷️'
+                            };
+                            return icons[type] || '•';
+                        },
+                        
+                        getTypeLabel(type) {
+                            const labels = {
+                                post: 'Post',
+                                user: 'People',
+                                category: 'Category',
+                                tag: 'Tag'
+                            };
+                            return labels[type] || type;
+                        }
+                    }" @click.away="showSuggestions = false">
+                        <form action="{{ route('blog.search') }}" method="GET">
+                            <input type="text" 
+                                   name="q" 
+                                   x-model="query"
+                                   @input.debounce.300ms="fetchSuggestions()"
+                                   @keydown="handleKeydown($event)"
+                                   @focus="if (query.length >= 2 && suggestions.length > 0) showSuggestions = true"
+                                   placeholder="Search posts..." 
+                                   autocomplete="off"
+                                   class="w-64 px-4 py-2 pl-10 text-sm border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent">
+                            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                            
+                            <!-- Loading Spinner -->
+                            <svg x-show="loading" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 animate-spin" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </form>
+                        
+                        <!-- Suggestions Dropdown -->
+                        <div x-show="showSuggestions" 
+                             x-transition:enter="transition ease-out duration-100"
+                             x-transition:enter-start="opacity-0 scale-95"
+                             x-transition:enter-end="opacity-100 scale-100"
+                             x-transition:leave="transition ease-in duration-75"
+                             x-transition:leave-start="opacity-100 scale-100"
+                             x-transition:leave-end="opacity-0 scale-95"
+                             class="absolute top-full mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50 max-h-96 overflow-y-auto"
+                             style="display: none;">
+                            <template x-for="(suggestion, index) in suggestions" :key="index">
+                                <a :href="suggestion.url"
+                                   @mouseenter="selectedIndex = index"
+                                   :class="selectedIndex === index ? 'bg-gray-50' : ''"
+                                   class="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors cursor-pointer">
+                                    <span class="text-lg" x-text="getTypeIcon(suggestion.type)"></span>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-900 truncate" x-text="suggestion.title"></p>
+                                        <p class="text-xs text-gray-500" x-text="getTypeLabel(suggestion.type)"></p>
+                                    </div>
+                                    <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </a>
+                            </template>
+                            
+                            <!-- View All Results -->
+                            <div class="border-t border-gray-100 mt-2 pt-2">
+                                <a :href="`{{ route('blog.search') }}?q=${encodeURIComponent(query)}`"
+                                   class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                                    View all results
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Auth Buttons -->
                     <div class="flex items-center pl-6 space-x-4">
                         @auth
-                            <a href="{{ url('/dashboard') }}" class="text-sm text-gray-600 hover:text-gray-900">Dashboard</a>
+                            <!-- User Dropdown -->
+                            <div class="relative ml-3" x-data="{ open: false }" @click.away="open = false">
+                                <div>
+                                    <button @click="open = !open" type="button" class="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                                        <span class="sr-only">Open user menu</span>
+                                        @if(Auth::user()->avatar)
+                                            <img class="h-8 w-8 rounded-full object-cover" src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}">
+                                        @else
+                                            <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-bold">
+                                                {{ substr(Auth::user()->name, 0, 1) }}
+                                            </div>
+                                        @endif
+                                    </button>
+                                </div>
+                                <div x-show="open" 
+                                     x-transition:enter="transition ease-out duration-100"
+                                     x-transition:enter-start="transform opacity-0 scale-95"
+                                     x-transition:enter-end="transform opacity-100 scale-100"
+                                     x-transition:leave="transition ease-in duration-75"
+                                     x-transition:leave-start="transform opacity-100 scale-100"
+                                     x-transition:leave-end="transform opacity-0 scale-95"
+                                     class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50" 
+                                     role="menu" 
+                                     aria-orientation="vertical" 
+                                     aria-labelledby="user-menu-button" 
+                                     tabindex="-1"
+                                     style="display: none;">
+                                    
+                                    <div class="px-4 py-2 border-b border-gray-100">
+                                        <p class="text-sm font-medium text-gray-900 truncate">{{ Auth::user()->name }}</p>
+                                        <p class="text-xs text-gray-500 truncate">{{ Auth::user()->email }}</p>
+                                    </div>
+
+                                    <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-0">Dashboard</a>
+                                    <a href="{{ route('profile.show', Auth::id()) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-1">My Profile</a>
+                                    <a href="{{ route('bookmarks.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-2">My Bookmarks</a>
+                                    
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-3">
+                                            Sign out
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         @else
                             <a href="{{ route('login') }}" class="text-sm text-gray-600 hover:text-gray-900">Sign in</a>
                             @if (Route::has('register'))
@@ -139,6 +313,20 @@
                         </a>
                     @endif
                 @endforeach
+                
+                <!-- Mobile Search -->
+                <div class="pt-4 pb-2">
+                    <form action="{{ route('blog.search') }}" method="GET" class="relative px-3">
+                        <input type="text" 
+                               name="q" 
+                               value="{{ request('q') }}"
+                               placeholder="Search..." 
+                               class="w-full px-4 py-2 pl-10 text-sm border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent">
+                        <svg class="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </form>
+                </div>
                 
                 <div class="border-t border-gray-100 mt-4 pt-4 space-y-3 px-3">
                     @auth

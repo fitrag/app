@@ -38,6 +38,7 @@ class CategoryController extends Controller
         Category::create([
             'name' => $request->name,
             'slug' => $slug,
+            'user_id' => auth()->id(),
         ]);
 
         return redirect()->route('admin.categories.index')
@@ -51,6 +52,10 @@ class CategoryController extends Controller
 
     public function update(Request $request, Category $category)
     {
+        if (!auth()->user()->isAdmin() && auth()->id() !== $category->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $request->validate([
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
         ]);
@@ -77,6 +82,10 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
+        if (!auth()->user()->isAdmin() && auth()->id() !== $category->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
+
         // Check if category has posts
         if ($category->posts()->count() > 0) {
             return redirect()->route('admin.categories.index')

@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ \App\Models\Setting::get('site_title', config('app.name', 'Laravel')) }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -21,7 +21,7 @@
                 <div class="mx-auto w-full max-w-sm lg:w-96">
                     <div class="mb-8">
                         <a href="/" class="text-2xl font-bold text-gray-900 tracking-tight">
-                            My Blog
+                            {{ \App\Models\Setting::get('site_title', 'My Blog') }}
                         </a>
                     </div>
 
@@ -33,9 +33,9 @@
             <div class="hidden lg:block relative flex-1 bg-gray-50">
                 <div class="absolute inset-0 flex items-center justify-center">
                     <div class="max-w-md text-center px-8">
-                        <h2 class="text-4xl font-bold text-gray-900 mb-4">Welcome to My Blog</h2>
+                        <h2 class="text-4xl font-bold text-gray-900 mb-4">{{ \App\Models\Setting::get('site_title', 'Welcome to My Blog') }}</h2>
                         <p class="text-lg text-gray-600">
-                            Discover stories, thinking, and expertise from writers on any topic.
+                            {{ \App\Models\Setting::get('site_description', 'Discover stories, thinking, and expertise from writers on any topic.') }}
                         </p>
                     </div>
                 </div>

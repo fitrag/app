@@ -22,7 +22,7 @@
             </div>
 
             <!-- Tags Table -->
-            <div class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200">
+            <div class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200" x-data="tagList()">
                 @if($tags->isEmpty())
                     <div class="text-center py-12">
                         <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -47,38 +47,76 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @foreach($tags as $tag)
-                                <tr class="hover:bg-gray-50 transition">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm font-medium text-gray-900">{{ $tag->name }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-500">{{ $tag->slug }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                            {{ $tag->posts_count }} {{ Str::plural('post', $tag->posts_count) }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="{{ route('admin.tags.edit', $tag) }}" class="text-gray-600 hover:text-gray-900 mr-3">Edit</a>
-                                        <form action="{{ route('admin.tags.destroy', $tag) }}" method="POST" class="inline-block delete-form">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
+                            @include('admin.tags.partials.tag-rows', ['tags' => $tags])
                         </tbody>
                     </table>
 
-                    <!-- Pagination -->
-                    <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
-                        {{ $tags->links() }}
-                    </div>
+                    <!-- Load More -->
+                    @if($tags->hasMorePages())
+                        <div id="load-more-container" class="border-t border-gray-200">
+                            <button @click="loadMore" 
+                                    :disabled="loading"
+                                    class="w-full group relative flex justify-center py-4 text-sm font-medium text-gray-500 hover:text-indigo-600 hover:bg-gray-50 transition-colors duration-200 focus:outline-none disabled:opacity-50">
+                                <span x-show="!loading" class="flex items-center">
+                                    Load More Tags
+                                    <svg class="ml-2 w-4 h-4 transform group-hover:translate-y-0.5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </span>
+                                <span x-show="loading" class="flex items-center text-indigo-600">
+                                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Loading...
+                                </span>
+                            </button>
+                        </div>
+                    @endif
                 @endif
             </div>
         </div>
     </div>
+
+    <script>
+        function tagList() {
+            return {
+                loading: false,
+                page: 1,
+                hasMore: {{ $tags->hasMorePages() ? 'true' : 'false' }},
+                
+                loadMore() {
+                    if (this.loading || !this.hasMore) return;
+                    
+                    this.loading = true;
+                    this.page++;
+                    
+                    const searchParams = new URLSearchParams(window.location.search);
+                    searchParams.set('page', this.page);
+                    
+                    fetch(`{{ route('admin.tags.index') }}?${searchParams.toString()}`, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => response.text())
+                    .then(html => {
+                        if (html.trim() === '') {
+                            this.hasMore = false;
+                            document.getElementById('load-more-container').remove();
+                        } else {
+                            const tbody = document.querySelector('tbody');
+                            tbody.insertAdjacentHTML('beforeend', html);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error loading more tags:', error);
+                    })
+                    .finally(() => {
+                        this.loading = false;
+                    });
+                }
+            }
+        }
+    </script>
 </x-app-layout>

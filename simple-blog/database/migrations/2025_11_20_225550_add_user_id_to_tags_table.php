@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->boolean('monetization_enabled')->default(false)->after('coins');
+        Schema::table('tags', function (Blueprint $table) {
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
         });
     }
 
@@ -21,8 +21,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('monetization_enabled');
+        Schema::table('tags', function (Blueprint $table) {
+            $table->dropForeign(['user_id']);
+            $table->dropColumn('user_id');
         });
     }
 };

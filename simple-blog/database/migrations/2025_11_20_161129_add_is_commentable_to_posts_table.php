@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->boolean('monetization_enabled')->default(false)->after('coins');
+        Schema::table('posts', function (Blueprint $table) {
+            $table->boolean('is_commentable')->default(true)->after('content');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('monetization_enabled');
+        Schema::table('posts', function (Blueprint $table) {
+            $table->dropColumn('is_commentable');
         });
     }
 };

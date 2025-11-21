@@ -1,253 +1,385 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-2xl text-gray-900 leading-tight">
-            Monetization
-        </h2>
+        <div class="px-0">
+            <h1 class="text-3xl font-serif font-bold text-gray-900 tracking-tight">Monetization</h1>
+            <p class="mt-1 text-base text-gray-600">Earn from your creative work</p>
+        </div>
     </x-slot>
 
-    <div class="py-8">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- Monetization Status -->
-            <div class="mb-6">
-                @if($monetizationEnabled)
-                    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
-                        <div class="flex items-center">
-                            <svg class="w-6 h-6 text-green-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                            </svg>
-                            <div>
-                                <h3 class="text-lg font-semibold text-green-900">Monetization Enabled</h3>
-                                <p class="text-sm text-green-700">Your account is eligible to earn coins from posts and views.</p>
+    <div class="py-8 px-8">
+        
+        <!-- Status Card -->
+        <div class="mb-8">
+            @if($monetizationEnabled)
+                <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 border border-green-100">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
                             </div>
                         </div>
-                    </div>
-                @else
-                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                        <div class="flex items-center">
-                            <svg class="w-6 h-6 text-yellow-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                            </svg>
-                            <div>
-                                <h3 class="text-lg font-semibold text-yellow-900">Monetization Disabled</h3>
-                                <p class="text-sm text-yellow-700">Your account is not currently earning coins. Contact admin for assistance.</p>
-                            </div>
+                        <div class="ml-4">
+                            <h3 class="text-xl font-semibold text-gray-900">Monetization Active</h3>
+                            <p class="mt-1 text-gray-700">Your account is earning coins from posts and views</p>
                         </div>
                     </div>
-                @endif
-            </div>
+                </div>
+            @else
+                <div class="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl p-8 border border-amber-100">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
+                                <svg class="w-6 h-6 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-xl font-semibold text-gray-900">Monetization Inactive</h3>
+                            <p class="mt-1 text-gray-700">Complete the requirements below to start earning</p>
+                        </div>
+                    </div>
+                </div>
+            @endif
+        </div>
 
-            <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                    <div class="flex items-center">
-                        <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+        <!-- Stats Overview -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-serif font-bold text-gray-900 mb-6">Your Earnings</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Total Coins -->
+                <div class="bg-white rounded-xl p-6 border border-gray-100 hover:shadow-lg transition-shadow duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Total Coins</span>
+                        <div class="w-10 h-10 bg-yellow-50 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
                             </svg>
                         </div>
-                        <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-500">Total Coins</p>
-                            <p class="text-2xl font-bold text-gray-900">{{ number_format($totalCoins, 2) }}</p>
-                        </div>
                     </div>
+                    <p class="text-3xl font-bold text-gray-900">{{ number_format($totalCoins, 2) }}</p>
                 </div>
 
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                    <div class="flex items-center">
-                        <div class="p-3 rounded-full bg-blue-100 text-blue-600">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <!-- Total Posts -->
+                <div class="bg-white rounded-xl p-6 border border-gray-100 hover:shadow-lg transition-shadow duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Posts</span>
+                        <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
                         </div>
-                        <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-500">Total Posts</p>
-                            <p class="text-2xl font-bold text-gray-900">{{ number_format($totalPosts) }}</p>
-                        </div>
                     </div>
+                    <p class="text-3xl font-bold text-gray-900">{{ number_format($totalPosts) }}</p>
                 </div>
 
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                    <div class="flex items-center">
-                        <div class="p-3 rounded-full bg-green-100 text-green-600">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <!-- Total Views -->
+                <div class="bg-white rounded-xl p-6 border border-gray-100 hover:shadow-lg transition-shadow duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm font-medium text-gray-500 uppercase tracking-wide">Views</span>
+                        <div class="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                             </svg>
                         </div>
-                        <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-500">Total Views</p>
-                            <p class="text-2xl font-bold text-gray-900">{{ number_format($totalViews) }}</p>
-                        </div>
                     </div>
-                </div>
-
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                    <div class="flex items-center">
-                        <div class="p-3 rounded-full bg-purple-100 text-purple-600">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-                            </svg>
-                        </div>
-                        <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-500">Earnings</p>
-                            <p class="text-2xl font-bold text-gray-900">{{ number_format($earningsFromPosts + $earningsFromViews, 2) }}</p>
-                        </div>
-                    </div>
+                    <p class="text-3xl font-bold text-gray-900">{{ number_format($totalViews) }}</p>
                 </div>
             </div>
+        </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                <!-- Monetization Requirements -->
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Monetization Requirements</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Requirements Section OR Earnings Breakdown (2/3 width) -->
+            <div class="lg:col-span-2">
+                @if($monetizationEnabled)
+                    <!-- Earnings Breakdown (when monetization is active) -->
+                    <h2 class="text-2xl font-serif font-bold text-gray-900 mb-6">Earnings Breakdown</h2>
                     
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                            <div class="flex items-center">
-                                @if($totalPosts >= $requirements['min_posts'])
-                                    <svg class="w-5 h-5 text-green-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                    </svg>
-                                @else
-                                    <svg class="w-5 h-5 text-gray-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-                                    </svg>
-                                @endif
+                    <div class="bg-white rounded-xl border border-gray-100 overflow-hidden mb-6">
+                        <div class="p-8">
+                            <div class="space-y-6">
+                                <!-- From Creating Posts -->
                                 <div>
-                                    <p class="text-sm font-medium text-gray-900">Minimum Posts</p>
-                                    <p class="text-xs text-gray-500">At least {{ $requirements['min_posts'] }} published posts</p>
+                                    <div class="flex justify-between items-center mb-3">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center mr-3">
+                                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <p class="text-base font-semibold text-gray-900">From Creating Posts</p>
+                                                <p class="text-sm text-gray-600">Coins earned from publishing content</p>
+                                            </div>
+                                        </div>
+                                        <span class="text-2xl font-bold text-blue-600">{{ number_format($earningsFromPosts, 2) }}</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        @php
+                                            $total = $earningsFromPosts + $earningsFromViews;
+                                            $postPercentage = $total > 0 ? ($earningsFromPosts / $total) * 100 : 0;
+                                        @endphp
+                                        <div class="bg-blue-500 h-2 rounded-full transition-all duration-500" style="width: {{ $postPercentage }}%"></div>
+                                    </div>
+                                </div>
+
+                                <!-- From View Milestones -->
+                                <div>
+                                    <div class="flex justify-between items-center mb-3">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center mr-3">
+                                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <p class="text-base font-semibold text-gray-900">From View Milestones</p>
+                                                <p class="text-sm text-gray-600">Coins earned from reader engagement</p>
+                                            </div>
+                                        </div>
+                                        <span class="text-2xl font-bold text-green-600">{{ number_format($earningsFromViews, 2) }}</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        @php
+                                            $viewPercentage = $total > 0 ? ($earningsFromViews / $total) * 100 : 0;
+                                        @endphp
+                                        <div class="bg-green-500 h-2 rounded-full transition-all duration-500" style="width: {{ $viewPercentage }}%"></div>
+                                    </div>
                                 </div>
                             </div>
-                            <span class="text-sm font-semibold {{ $totalPosts >= $requirements['min_posts'] ? 'text-green-600' : 'text-gray-500' }}">
-                                {{ $totalPosts }} / {{ $requirements['min_posts'] }}
-                            </span>
                         </div>
 
-                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                            <div class="flex items-center">
-                                @if($totalViews >= $requirements['min_views'])
-                                    <svg class="w-5 h-5 text-green-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                    </svg>
-                                @else
-                                    <svg class="w-5 h-5 text-gray-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-                                    </svg>
-                                @endif
+                        <!-- Total Summary -->
+                        <div class="px-8 py-6 bg-gradient-to-r from-yellow-50 to-amber-50 border-t border-yellow-100">
+                            <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm font-medium text-gray-900">Minimum Views</p>
-                                    <p class="text-xs text-gray-500">At least {{ number_format($requirements['min_views']) }} total views</p>
+                                    <p class="text-sm font-medium text-gray-900">Total Lifetime Earnings</p>
+                                    <p class="text-xs text-gray-600 mt-0.5">All coins earned since activation</p>
                                 </div>
-                            </div>
-                            <span class="text-sm font-semibold {{ $totalViews >= $requirements['min_views'] ? 'text-green-600' : 'text-gray-500' }}">
-                                {{ number_format($totalViews) }} / {{ number_format($requirements['min_views']) }}
-                            </span>
-                        </div>
-                    </div>
-
-                    @if($meetsRequirements && !$monetizationEnabled)
-                        <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                            <p class="text-sm text-blue-800">
-                                <span class="font-medium">Good news!</span> You meet all requirements. Contact admin to enable monetization for your account.
-                            </p>
-                        </div>
-                    @elseif(!$meetsRequirements)
-                        <div class="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
-                            <p class="text-sm text-gray-700">
-                                Keep creating quality content to meet the requirements and start earning coins!
-                            </p>
-                        </div>
-                    @endif
-                </div>
-
-                <!-- Earnings Breakdown -->
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Earnings Breakdown</h3>
-                    
-                    <div class="space-y-4">
-                        <div>
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-sm font-medium text-gray-700">From Creating Posts</span>
-                                <span class="text-sm font-semibold text-gray-900">{{ number_format($earningsFromPosts, 2) }}</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                @php
-                                    $total = $earningsFromPosts + $earningsFromViews;
-                                    $postPercentage = $total > 0 ? ($earningsFromPosts / $total) * 100 : 0;
-                                @endphp
-                                <div class="bg-blue-500 h-2 rounded-full" style="width: {{ $postPercentage }}%"></div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-sm font-medium text-gray-700">From View Milestones</span>
-                                <span class="text-sm font-semibold text-gray-900">{{ number_format($earningsFromViews, 2) }}</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                @php
-                                    $viewPercentage = $total > 0 ? ($earningsFromViews / $total) * 100 : 0;
-                                @endphp
-                                <div class="bg-green-500 h-2 rounded-full" style="width: {{ $viewPercentage }}%"></div>
+                                <p class="text-3xl font-bold text-yellow-900">{{ number_format($total, 2) }}</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="mt-6 p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 border border-yellow-200 rounded-lg">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-yellow-900">Total Earnings</p>
-                                <p class="text-xs text-yellow-700">All-time coins earned</p>
+                    <!-- Performance Tips -->
+                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100 p-6">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
                             </div>
-                            <p class="text-2xl font-bold text-yellow-900">{{ number_format($total, 2) }}</p>
+                            <div class="ml-3">
+                                <h3 class="text-base font-semibold text-gray-900">Tips to Maximize Earnings</h3>
+                                <ul class="mt-2 space-y-1 text-sm text-gray-700">
+                                    <li class="flex items-start">
+                                        <span class="text-blue-600 mr-2">•</span>
+                                        <span>Publish consistently to earn more post creation bonuses</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-blue-600 mr-2">•</span>
+                                        <span>Create engaging content to reach view milestones faster</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-blue-600 mr-2">•</span>
+                                        <span>Share your posts to increase visibility and views</span>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Recent Transactions -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Transactions</h3>
-                
-                @if($recentTransactions->isEmpty())
-                    <p class="text-gray-500 text-center py-8">No transactions yet</p>
                 @else
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                @foreach($recentTransactions as $transaction)
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ $transaction->created_at->format('M d, Y H:i') }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                                {{ $transaction->type === 'create_post' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800' }}">
-                                                {{ $transaction->type === 'create_post' ? 'Post Created' : 'View Milestone' }}
-                                            </span>
-                                        </td>
-                                        <td class="px-6 py-4 text-sm text-gray-500">
-                                            {{ $transaction->description }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-green-600">
-                                            +{{ number_format($transaction->amount, 2) }}
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                    <!-- Monetization Requirements (when monetization is inactive) -->
+                    <h2 class="text-2xl font-serif font-bold text-gray-900 mb-6">Monetization Requirements</h2>
+                    
+                    <div class="bg-white rounded-xl border border-gray-100 overflow-hidden">
+                        <div class="p-8">
+                            <div class="space-y-6">
+                                <!-- Posts Requirement -->
+                                <div class="flex items-center justify-between pb-6 border-b border-gray-100">
+                                    <div class="flex items-center flex-1">
+                                        <div class="flex-shrink-0">
+                                            @if($totalPosts >= $requirements['min_posts'])
+                                                <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                                    <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            @else
+                                                <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                                                    <div class="w-3 h-3 bg-gray-400 rounded-full"></div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="ml-4 flex-1">
+                                            <p class="text-base font-semibold text-gray-900">Minimum Posts</p>
+                                            <p class="text-sm text-gray-600 mt-1">Publish at least {{ $requirements['min_posts'] }} quality posts</p>
+                                        </div>
+                                    </div>
+                                    <div class="ml-4">
+                                        <span class="text-2xl font-bold {{ $totalPosts >= $requirements['min_posts'] ? 'text-green-600' : 'text-gray-400' }}">
+                                            {{ $totalPosts }}<span class="text-base font-normal text-gray-400">/{{ $requirements['min_posts'] }}</span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Views Requirement -->
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center flex-1">
+                                        <div class="flex-shrink-0">
+                                            @if($totalViews >= $requirements['min_views'])
+                                                <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                                    <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            @else
+                                                <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                                                    <div class="w-3 h-3 bg-gray-400 rounded-full"></div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="ml-4 flex-1">
+                                            <p class="text-base font-semibold text-gray-900">Minimum Views</p>
+                                            <p class="text-sm text-gray-600 mt-1">Reach {{ number_format($requirements['min_views']) }} total views across all posts</p>
+                                        </div>
+                                    </div>
+                                    <div class="ml-4">
+                                        <span class="text-2xl font-bold {{ $totalViews >= $requirements['min_views'] ? 'text-green-600' : 'text-gray-400' }}">
+                                            {{ number_format($totalViews) }}<span class="text-base font-normal text-gray-400">/{{ number_format($requirements['min_views']) }}</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Application Status / Action -->
+                        @if($latestApplication)
+                            <div class="px-8 py-6 bg-gray-50 border-t border-gray-100">
+                                @if($latestApplication->isPending())
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0">
+                                            <div class="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
+                                        </div>
+                                        <div class="ml-3 flex-1">
+                                            <p class="text-sm font-medium text-gray-900">Application Under Review</p>
+                                            <p class="text-sm text-gray-600 mt-0.5">Our team is reviewing your application. You'll be notified soon.</p>
+                                        </div>
+                                    </div>
+                                @elseif($latestApplication->isApproved())
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0">
+                                            <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="ml-3 flex-1">
+                                            <p class="text-sm font-medium text-gray-900">Application Approved</p>
+                                            <p class="text-sm text-gray-600 mt-0.5">Approved on {{ $latestApplication->reviewed_at->format('M d, Y') }}</p>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="flex items-start">
+                                        <div class="flex-shrink-0">
+                                            <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="ml-3 flex-1">
+                                            <p class="text-sm font-medium text-gray-900">Application Not Approved</p>
+                                            @if($latestApplication->admin_notes)
+                                                <p class="text-sm text-gray-600 mt-1">{{ $latestApplication->admin_notes }}</p>
+                                            @endif
+                                            @if($meetsRequirements)
+                                                <a href="{{ route('editor.monetization.apply') }}" class="inline-flex items-center mt-3 text-sm font-medium text-blue-600 hover:text-blue-700">
+                                                    Apply again
+                                                    <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                                    </svg>
+                                                </a>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        @elseif($meetsRequirements && !$monetizationEnabled)
+                            <div class="px-8 py-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-t border-blue-100">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex-1">
+                                        <p class="text-sm font-semibold text-gray-900">You're eligible for monetization!</p>
+                                        <p class="text-sm text-gray-600 mt-0.5">Submit your application to start earning from your content</p>
+                                    </div>
+                                    <a href="{{ route('editor.monetization.apply') }}" class="ml-4 inline-flex items-center px-6 py-3 bg-gray-900 text-white text-sm font-medium rounded-full hover:bg-gray-800 transition-colors duration-200 whitespace-nowrap">
+                                        Apply Now
+                                        <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        @elseif(!$meetsRequirements)
+                            <div class="px-8 py-6 bg-gray-50 border-t border-gray-100">
+                                <p class="text-sm text-gray-600">Keep creating quality content to meet the requirements and unlock monetization.</p>
+                            </div>
+                        @endif
+                    </div>
+                @endif
+            </div>
+
+            <!-- Recent Transactions Sidebar (1/3 width) -->
+            <div class="lg:col-span-1">
+                <h2 class="text-2xl font-serif font-bold text-gray-900 mb-6">Recent Activity</h2>
+                
+                @if(!$recentTransactions->isEmpty())
+                    <div class="bg-white rounded-xl border border-gray-100 overflow-hidden">
+                        <div class="divide-y divide-gray-100">
+                            @foreach($recentTransactions->take(8) as $transaction)
+                                <div class="p-4 hover:bg-gray-50 transition-colors duration-150">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex items-start flex-1 min-w-0">
+                                            <div class="flex-shrink-0">
+                                                <div class="w-8 h-8 {{ $transaction->type === 'create_post' ? 'bg-blue-50' : 'bg-green-50' }} rounded-lg flex items-center justify-center">
+                                                    @if($transaction->type === 'create_post')
+                                                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                        </svg>
+                                                    @else
+                                                        <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                                        </svg>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="ml-3 flex-1 min-w-0">
+                                                <p class="text-xs font-medium text-gray-900 truncate">{{ Str::limit($transaction->description, 40) }}</p>
+                                                <p class="text-xs text-gray-500 mt-0.5">{{ $transaction->created_at->diffForHumans() }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="ml-2 flex-shrink-0">
+                                            <span class="text-sm font-semibold text-green-600">+{{ number_format($transaction->amount, 2) }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @else
+                    <div class="bg-white rounded-xl border border-gray-100 p-8 text-center">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                        </svg>
+                        <p class="mt-2 text-sm text-gray-500">No transactions yet</p>
                     </div>
                 @endif
             </div>
         </div>
+
     </div>
 </x-app-layout>
+

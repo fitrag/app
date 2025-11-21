@@ -27,6 +27,20 @@
         <div class="flex flex-col lg:flex-row gap-12">
             <!-- Left Column: Post List -->
             <div class="lg:w-2/3">
+                <!-- Feed Tabs -->
+                @auth
+                    <div class="flex items-center border-b border-gray-200 mb-8">
+                        <a href="{{ route('blog.index', ['feed' => 'foryou']) }}" 
+                           class="pb-4 px-4 text-sm font-medium border-b-2 transition-colors {{ ($feed ?? 'foryou') === 'foryou' ? 'border-gray-900 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                            For You
+                        </a>
+                        <a href="{{ route('blog.index', ['feed' => 'followed']) }}" 
+                           class="pb-4 px-4 text-sm font-medium border-b-2 transition-colors {{ ($feed ?? '') === 'followed' ? 'border-gray-900 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                            Following
+                        </a>
+                    </div>
+                @endauth
+
                 @if($posts->isEmpty())
                     <div class="text-center py-20">
                         <p class="text-gray-500 font-sans">No posts published yet.</p>
@@ -99,6 +113,38 @@
                         </div>
                     </div>
 
+                    <!-- Popular Posts This Week -->
+                    @if($popularPosts->isNotEmpty())
+                        <div class="border-t border-gray-200 pt-8">
+                            <h3 class="font-sans font-bold text-sm text-gray-900 uppercase tracking-wide mb-4">Popular This Week</h3>
+                            <div class="space-y-4">
+                                @foreach($popularPosts as $index => $popularPost)
+                                    <a href="{{ route('blog.show', $popularPost->slug) }}" class="group block">
+                                        <div class="flex gap-4">
+                                            <span class="text-2xl font-bold text-gray-200 group-hover:text-gray-300 transition-colors font-serif flex-shrink-0">
+                                                {{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}
+                                            </span>
+                                            <div class="flex-1 min-w-0">
+                                                <div class="flex items-center gap-2 mb-1">
+                                                    <span class="text-xs font-medium text-gray-900 font-sans">{{ $popularPost->user->name }}</span>
+                                                </div>
+                                                <h4 class="font-bold text-sm text-gray-900 group-hover:text-gray-600 transition-colors line-clamp-2 font-serif leading-tight mb-1">
+                                                    {{ $popularPost->title }}
+                                                </h4>
+                                                <div class="flex items-center gap-2 text-xs text-gray-500 font-sans">
+                                                    <span>{{ $popularPost->created_at->format('M d') }}</span>
+                                                    <span>•</span>
+                                                    <span>{{ ceil(str_word_count($popularPost->content) / 200) }} min read</span>
+                                                    <span>•</span>
+                                                    <span>{{ number_format($popularPost->views) }} views</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
 
                 </div>
             </div>

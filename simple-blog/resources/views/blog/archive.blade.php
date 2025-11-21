@@ -67,8 +67,9 @@
                                 <!-- Thumbnail (Right Side) -->
                                 @if($post->image)
                                     <a href="{{ route('blog.show', $post->slug) }}" class="flex-shrink-0 w-full sm:w-40 h-40 sm:h-28 bg-gray-100 rounded-md overflow-hidden order-first sm:order-last">
-                                        <img src="{{ asset('storage/' . $post->image) }}" 
+                                        <img src="{{ str_starts_with($post->image, 'http') ? $post->image : asset('storage/' . $post->image) }}" 
                                              alt="{{ $post->title }}" 
+                                             loading="lazy"
                                              class="w-full h-full object-cover">
                                     </a>
                                 @endif

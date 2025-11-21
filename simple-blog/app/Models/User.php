@@ -76,6 +76,70 @@ class User extends Authenticatable
         return $this->hasMany(CoinTransaction::class);
     }
 
+    public function monetizationApplications()
+    {
+        return $this->hasMany(MonetizationApplication::class);
+    }
+
+    /**
+     * The users that follow this user.
+     */
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'following_id', 'follower_id')->withTimestamps();
+    }
+
+    /**
+     * The users that this user is following.
+     */
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'follower_id', 'following_id')->withTimestamps();
+    }
+
+    /**
+     * Check if user is following another user.
+     */
+    public function isFollowing(User $user)
+    {
+        return $this->following()->where('following_id', $user->id)->exists();
+    }
+
+    /**
+     * Follow another user.
+     */
+    public function follow(User $user)
+    {
+        if ($this->id === $user->id) {
+            return;
+        }
+        
+        if (!$this->isFollowing($user)) {
+            $this->following()->attach($user->id);
+        }
+    }
+
+    /**
+     * Unfollow another user.
+     */
+    public function unfollow(User $user)
+    {
+        $this->following()->detach($user->id);
+    }
+
+    /**
+     * The posts that the user has bookmarked.
+     */
+    public function bookmarks()
+    {
+        return $this->belongsToMany(Post::class, 'bookmarks')->withTimestamps();
+    }
+
+    public function loves()
+    {
+        return $this->belongsToMany(Post::class, 'loves')->withTimestamps();
+    }
+
     public function canAccessMenu($menuLabel)
     {
         // Admin has access to everything by default? Or specific menus?

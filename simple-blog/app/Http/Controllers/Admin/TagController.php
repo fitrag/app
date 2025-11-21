@@ -9,9 +9,14 @@ use Illuminate\Support\Str;
 
 class TagController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $tags = Tag::withCount('posts')->latest()->paginate(15);
+        $tags = Tag::withCount('posts')->latest()->paginate(15)->withQueryString();
+        
+        if ($request->ajax()) {
+            return view('admin.tags.partials.tag-rows', compact('tags'))->render();
+        }
+        
         return view('admin.tags.index', compact('tags'));
     }
 
@@ -38,6 +43,7 @@ class TagController extends Controller
         $tag = Tag::create([
             'name' => $request->name,
             'slug' => $slug,
+            'user_id' => auth()->id(),
         ]);
 
         if ($request->wantsJson()) {
@@ -59,6 +65,9 @@ class TagController extends Controller
 
     public function update(Request $request, Tag $tag)
     {
+        if (!auth()->user()->isAdmin() && auth()->id() !== $tag->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
         $request->validate([
             'name' => 'required|string|max:255|unique:tags,name,' . $tag->id,
         ]);
@@ -85,6 +94,10 @@ class TagController extends Controller
 
     public function destroy(Tag $tag)
     {
+        if (!auth()->user()->isAdmin() && auth()->id() !== $tag->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $tag->posts()->detach();
         $tag->delete();
 

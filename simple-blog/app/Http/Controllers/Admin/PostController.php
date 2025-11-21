@@ -12,9 +12,17 @@ use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $query = Post::with(['category', 'tags']);
+        
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
         
         // Editors can only see their own posts
         if (auth()->user()->isEditor()) {
@@ -22,7 +30,12 @@ class PostController extends Controller
         }
         // Admins can see all posts
         
-        $posts = $query->latest()->paginate(10);
+        $posts = $query->latest()->paginate(10)->withQueryString();
+        
+        if ($request->ajax()) {
+            return view('admin.posts.partials.post-rows', compact('posts'))->render();
+        }
+        
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -67,6 +80,7 @@ class PostController extends Controller
             'content' => $request->content,
             'image' => $imagePath,
             'is_published' => $request->has('is_published'),
+            'is_commentable' => $request->has('is_commentable'),
             'user_id' => auth()->id(),
             'category_id' => $request->category_id,
         ]);
@@ -146,6 +160,7 @@ class PostController extends Controller
             'content' => $request->content,
             'image' => $imagePath,
             'is_published' => $request->has('is_published'),
+            'is_commentable' => $request->has('is_commentable'),
             'category_id' => $request->category_id,
         ]);
 
@@ -179,6 +194,8 @@ class PostController extends Controller
         // Get analytics data
         $totalViews = $post->views;
         $uniqueVisitors = $post->analytics()->distinct('ip_address')->count('ip_address');
+        $lovesCount = $post->loves()->count();
+        $commentsCount = $post->comments()->count();
         
         // Calculate total coins earned from this post
         $totalCoinsEarned = \App\Models\CoinTransaction::where('post_id', $post->id)
@@ -238,6 +255,8 @@ class PostController extends Controller
             'post',
             'totalViews',
             'uniqueVisitors',
+            'lovesCount',
+            'commentsCount',
             'totalCoinsEarned',
             'trafficSources',
             'topReferrers',
@@ -246,5 +265,44 @@ class PostController extends Controller
             'browserBreakdown',
             'countryBreakdown'
         ));
+    }
+
+    public function bulkAction(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'exists:posts,id',
+            'action' => 'required|in:publish,draft,delete',
+        ]);
+
+        $ids = $request->ids;
+        $action = $request->action;
+        
+        // Security: Ensure editors can only touch their own posts
+        $query = Post::whereIn('id', $ids);
+        if (auth()->user()->isEditor()) {
+            $query->where('user_id', auth()->id());
+        }
+
+        $count = 0;
+
+        if ($action === 'delete') {
+            $posts = $query->get();
+            $count = $posts->count();
+            foreach ($posts as $post) {
+                if ($post->image && !str_starts_with($post->image, 'http')) {
+                    Storage::disk('public')->delete($post->image);
+                }
+                $post->delete();
+            }
+            $message = "$count posts deleted successfully.";
+        } else {
+            $isPublished = $action === 'publish';
+            $count = $query->update(['is_published' => $isPublished]);
+            $status = $isPublished ? 'published' : 'reverted to draft';
+            $message = "$count posts $status successfully.";
+        }
+
+        return response()->json(['success' => true, 'message' => $message]);
     }
 }
