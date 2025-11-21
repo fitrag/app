@@ -8,12 +8,12 @@
     <div class="py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Header with Create Button -->
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
                 <div>
                     <h3 class="text-lg font-medium text-gray-900">All Tags</h3>
                     <p class="text-sm text-gray-500 mt-1">Manage your blog tags</p>
                 </div>
-                <a href="{{ route('admin.tags.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-full hover:bg-gray-800 transition">
+                <a href="{{ route('admin.tags.create') }}" class="inline-flex justify-center items-center px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-full hover:bg-gray-800 transition w-full md:w-auto">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                     </svg>
@@ -22,7 +22,7 @@
             </div>
 
             <!-- Tags Table -->
-            <div class="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200" x-data="tagList()">
+            <div class="bg-white shadow-sm rounded-lg overflow-x-auto border border-gray-200" x-data="tagList()">
                 @if($tags->isEmpty())
                     <div class="text-center py-12">
                         <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -37,8 +37,8 @@
                         </div>
                     </div>
                 @else
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
+                    <table class="min-w-full divide-y divide-gray-200 md:table block">
+                        <thead class="bg-gray-50 md:table-header-group hidden">
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Slug</th>
@@ -46,7 +46,7 @@
                                 <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
+                        <tbody class="bg-white divide-y divide-gray-200 md:table-row-group block space-y-4 md:space-y-0 p-4 md:p-0">
                             @include('admin.tags.partials.tag-rows', ['tags' => $tags])
                         </tbody>
                     </table>

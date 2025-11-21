@@ -277,7 +277,10 @@
                 </div>
 
                 <!-- Mobile Menu Button -->
-                <div class="md:hidden flex items-center">
+                <div class="md:hidden flex items-center gap-2">
+                    @auth
+                        @include('components.notification-bell')
+                    @endauth
                     <button @click="mobileOpen = !mobileOpen" class="text-gray-600 hover:text-gray-900 focus:outline-none">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path x-show="!mobileOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -333,7 +336,32 @@
                 
                 <div class="border-t border-gray-100 mt-4 pt-4 space-y-3 px-3">
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="block text-center w-full px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded">Dashboard</a>
+                        <div class="flex items-center gap-3 px-2 mb-4 pb-4 border-b border-gray-100">
+                            @if(Auth::user()->avatar)
+                                <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}" class="h-10 w-10 rounded-full object-cover">
+                            @else
+                                <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-lg">
+                                    {{ substr(Auth::user()->name, 0, 1) }}
+                                </div>
+                            @endif
+                            <div class="flex-1 min-w-0">
+                                <div class="font-medium text-base text-gray-800 truncate">{{ Auth::user()->name }}</div>
+                                <div class="font-medium text-sm text-gray-500 truncate">{{ Auth::user()->email }}</div>
+                            </div>
+                        </div>
+
+
+                        
+                        <a href="{{ route('profile.show', Auth::id()) }}" class="block px-3 py-2 text-base text-gray-700 hover:bg-gray-50 rounded-md">My Profile</a>
+                        <a href="{{ route('bookmarks.index') }}" class="block px-3 py-2 text-base text-gray-700 hover:bg-gray-50 rounded-md">My Bookmarks</a>
+                        <a href="{{ route('dashboard') }}" class="block px-3 py-2 text-base text-gray-700 hover:bg-gray-50 rounded-md">Dashboard</a>
+                        
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="block w-full text-left px-3 py-2 text-base text-gray-700 hover:bg-gray-50 rounded-md">
+                                Sign out
+                            </button>
+                        </form>
                     @else
                         <a href="{{ route('login') }}" class="block text-center w-full px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded">Sign in</a>
                         @if (Route::has('register'))
