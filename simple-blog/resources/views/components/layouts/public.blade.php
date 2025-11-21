@@ -217,6 +217,9 @@
                     <!-- Auth Buttons -->
                     <div class="flex items-center pl-6 space-x-4">
                         @auth
+                            <!-- Notification Bell -->
+                            @include('components.notification-bell')
+                            
                             <!-- User Dropdown -->
                             <div class="relative ml-3" x-data="{ open: false }" @click.away="open = false">
                                 <div>

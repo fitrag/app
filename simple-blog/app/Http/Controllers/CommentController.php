@@ -28,11 +28,25 @@ class CommentController extends Controller
             }
         }
 
-        $post->comments()->create([
+        $comment = $post->comments()->create([
             'user_id' => Auth::id(),
             'content' => $request->content,
             'parent_id' => $request->parent_id,
         ]);
+
+        // Create notification for parent comment owner if this is a reply
+        if ($request->parent_id) {
+            $parentComment = Comment::find($request->parent_id);
+            if ($parentComment && $parentComment->user_id !== Auth::id()) {
+                \App\Models\Notification::create([
+                    'user_id' => $parentComment->user_id,
+                    'type' => 'comment_reply',
+                    'notifiable_type' => 'App\\Models\\Comment',
+                    'notifiable_id' => $comment->id,
+                    'actor_id' => Auth::id(),
+                ]);
+            }
+        }
 
         return back()->with('success', 'Comment added successfully.');
     }
