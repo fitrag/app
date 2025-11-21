@@ -50,7 +50,7 @@
                 </svg>
             </a>
             <a href="{{ route('admin.posts.edit', $post) }}" class="text-gray-600 hover:text-gray-900 mr-3">Edit</a>
-            <form action="{{ route('admin.posts.destroy', $post) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this post?');">
+            <form action="{{ route('admin.posts.destroy', $post) }}" method="POST" class="inline-block delete-form">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>

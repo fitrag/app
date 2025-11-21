@@ -75,6 +75,16 @@
                         Reply
                     </button>
                 @endif
+                
+                @if(Auth::id() === $comment->user_id || Auth::id() === $post->user_id)
+                    <form action="{{ route('comments.destroy', $comment) }}" method="POST" class="inline delete-form">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="text-sm text-red-500 hover:text-red-700 font-medium transition-colors">
+                            Delete
+                        </button>
+                    </form>
+                @endif
             @endauth
         </div>
         

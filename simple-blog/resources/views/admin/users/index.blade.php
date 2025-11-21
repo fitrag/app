@@ -114,7 +114,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <a href="{{ route('admin.users.edit', $user) }}" class="text-gray-600 hover:text-gray-900 mr-3">Edit</a>
                                         @if(auth()->id() !== $user->id)
-                                            <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline-block delete-form" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                            <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline-block delete-form">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>

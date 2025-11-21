@@ -46,4 +46,25 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
+    // Generic Confirmation Form
+    document.body.addEventListener('submit', function (e) {
+        if (e.target.classList.contains('confirm-form')) {
+            e.preventDefault();
+            const form = e.target;
+            
+            Swal.fire({
+                title: form.dataset.title || 'Are you sure?',
+                text: form.dataset.text || "You won't be able to revert this!",
+                icon: form.dataset.icon || 'warning',
+                showCancelButton: true,
+                confirmButtonColor: form.dataset.confirmColor || '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: form.dataset.confirmText || 'Yes, do it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        }
+    });
 });

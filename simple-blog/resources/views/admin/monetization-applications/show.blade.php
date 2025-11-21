@@ -184,7 +184,13 @@
                             <h3 class="text-lg font-serif font-bold text-gray-900 mb-4">Review Actions</h3>
                             
                             <!-- Approve Form -->
-                            <form action="{{ route('admin.monetization-applications.approve', $application->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to approve this application?')" class="mb-4">
+                            <form action="{{ route('admin.monetization-applications.approve', $application->id) }}" method="POST" 
+                                  class="mb-4 confirm-form"
+                                  data-title="Approve Application?"
+                                  data-text="Are you sure you want to approve this application?"
+                                  data-icon="question"
+                                  data-confirm-color="#10B981"
+                                  data-confirm-text="Yes, Approve it!">
                                 @csrf
                                 
                                 <label for="approve_notes" class="block text-sm font-medium text-gray-700 mb-2">
@@ -206,7 +212,13 @@
                             </form>
 
                             <!-- Reject Form -->
-                            <form action="{{ route('admin.monetization-applications.reject', $application->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to reject this application?')">
+                            <form action="{{ route('admin.monetization-applications.reject', $application->id) }}" method="POST" 
+                                  class="confirm-form"
+                                  data-title="Reject Application?"
+                                  data-text="Are you sure you want to reject this application?"
+                                  data-icon="warning"
+                                  data-confirm-color="#EF4444"
+                                  data-confirm-text="Yes, Reject it!">
                                 @csrf
                                 
                                 <label for="reject_notes" class="block text-sm font-medium text-gray-700 mb-2">

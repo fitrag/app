@@ -61,4 +61,16 @@ class CommentController extends Controller
 
         return back()->with('success', 'Comment added successfully.');
     }
+
+    public function destroy(Comment $comment)
+    {
+        // Authorization: Only comment owner or post owner can delete
+        if ($comment->user_id !== Auth::id() && $comment->post->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized to delete this comment.');
+        }
+
+        $comment->delete();
+
+        return back()->with('success', 'Comment deleted successfully.');
+    }
 }

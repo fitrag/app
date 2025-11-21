@@ -1,3 +1,4 @@
+
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-2xl text-gray-900 leading-tight">
@@ -182,10 +183,26 @@
                 },
 
                 performAction(action) {
-                    if (action === 'delete' && !confirm('Are you sure you want to delete the selected posts?')) {
-                        return;
+                    if (action === 'delete') {
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "You won't be able to revert this!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#3085d6',
+                            confirmButtonText: 'Yes, delete them!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                this.submitBulkAction(action);
+                            }
+                        });
+                    } else {
+                        this.submitBulkAction(action);
                     }
+                },
 
+                submitBulkAction(action) {
                     fetch('{{ route('admin.posts.bulk-action') }}', {
                         method: 'POST',
                         headers: {
@@ -203,12 +220,12 @@
                         if (data.success) {
                             window.location.reload();
                         } else {
-                            alert('An error occurred: ' + data.message);
+                            Swal.fire('Error', data.message, 'error');
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        alert('An error occurred while processing your request.');
+                        Swal.fire('Error', 'An error occurred while processing your request.', 'error');
                     });
                 }
             }

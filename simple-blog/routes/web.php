@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () {
 
     // Comment Routes
     Route::post('/posts/{post}/comments', [\App\Http\Controllers\CommentController::class, 'store'])->name('comments.store');
+    Route::delete('/comments/{comment}', [\App\Http\Controllers\CommentController::class, 'destroy'])->name('comments.destroy');
     Route::post('/comments/{comment}/love', [\App\Http\Controllers\CommentLoveController::class, 'toggle'])->name('comments.love');
     
     // Notification Routes

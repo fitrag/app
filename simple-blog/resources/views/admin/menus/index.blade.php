@@ -147,6 +147,8 @@
         </div>
     </div>
 
+
+
     @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script>
@@ -238,14 +240,7 @@
                 });
             }
 
-            // Delete confirmation
-            document.querySelectorAll('.delete-form').forEach(form => {
-                form.addEventListener('submit', function(e) {
-                    if (!confirm('Are you sure you want to delete this menu item?')) {
-                        e.preventDefault();
-                    }
-                });
-            });
+
         });
     </script>
     @endpush
