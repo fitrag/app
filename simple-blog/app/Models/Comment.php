@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
-    protected $fillable = ['post_id', 'user_id', 'content'];
+    protected $fillable = ['post_id', 'user_id', 'content', 'parent_id'];
 
     public function post()
     {
@@ -16,5 +16,31 @@ class Comment extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Comment::class, 'parent_id');
+    }
+
+    public function replies()
+    {
+        return $this->hasMany(Comment::class, 'parent_id')->with('user', 'replies');
+    }
+
+    public function scopeTopLevel($query)
+    {
+        return $query->whereNull('parent_id');
+    }
+
+    public function loves()
+    {
+        return $this->hasMany(CommentLove::class);
+    }
+
+    public function isLovedBy($user)
+    {
+        if (!$user) return false;
+        return $this->loves()->where('user_id', $user->id)->exists();
     }
 }

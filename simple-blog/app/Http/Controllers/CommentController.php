@@ -17,11 +17,21 @@ class CommentController extends Controller
 
         $request->validate([
             'content' => 'required|string|max:1000',
+            'parent_id' => 'nullable|exists:comments,id',
         ]);
+
+        // If parent_id is provided, verify it belongs to the same post
+        if ($request->parent_id) {
+            $parentComment = Comment::findOrFail($request->parent_id);
+            if ($parentComment->post_id !== $post->id) {
+                abort(403, 'Invalid parent comment.');
+            }
+        }
 
         $post->comments()->create([
             'user_id' => Auth::id(),
             'content' => $request->content,
+            'parent_id' => $request->parent_id,
         ]);
 
         return back()->with('success', 'Comment added successfully.');

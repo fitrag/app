@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () {
 
     // Comment Routes
     Route::post('/posts/{post}/comments', [\App\Http\Controllers\CommentController::class, 'store'])->name('comments.store');
+    Route::post('/comments/{comment}/love', [\App\Http\Controllers\CommentLoveController::class, 'toggle'])->name('comments.love');
 });
 
 // Editor routes

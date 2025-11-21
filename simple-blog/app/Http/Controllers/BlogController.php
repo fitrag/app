@@ -53,7 +53,9 @@ class BlogController extends Controller
     {
         $post = Post::where('slug', $slug)
             ->where('is_published', true)
-            ->with(['user', 'category', 'tags', 'comments.user'])
+            ->with(['user', 'category', 'tags', 'comments' => function($query) {
+                $query->topLevel()->with('user', 'replies.user', 'replies.replies.user');
+            }])
             ->firstOrFail();
 
         // Check if user has visited this post recently (e.g., last 60 minutes)

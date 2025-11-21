@@ -300,35 +300,9 @@
                 @endauth
 
                 <!-- Comments List -->
-                <div class="space-y-8">
+                <div x-data="{ replyingTo: null }" class="space-y-8">
                     @forelse($post->comments as $comment)
-                        <div class="flex gap-4">
-                            <div class="flex-shrink-0">
-                                <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-sm font-bold text-gray-600">
-                                    {{ substr($comment->user->name, 0, 1) }}
-                                </div>
-                            </div>
-                            <div class="flex-grow">
-                                <div class="flex items-center gap-2 mb-1">
-                                    <h4 class="font-bold text-gray-900">{{ $comment->user->name }}</h4>
-                                    
-                                    @if($comment->user->role === 'admin')
-                                        <span class="px-2 py-0.5 text-xs font-medium bg-red-100 text-red-700 rounded">Admin</span>
-                                    @endif
-                                    
-                                    @if($comment->user_id === $post->user_id)
-                                        <span class="px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-700 rounded">Author</span>
-                                    @endif
-                                    
-                                    <time datetime="{{ $comment->created_at->toIso8601String() }}" class="text-sm text-gray-500 ml-auto">
-                                        {{ $comment->created_at->diffForHumans() }}
-                                    </time>
-                                </div>
-                                <div class="prose prose-sm max-w-none text-gray-700">
-                                    <p>{{ $comment->content }}</p>
-                                </div>
-                            </div>
-                        </div>
+                        @include('blog.partials.comment-item', ['comment' => $comment, 'post' => $post, 'depth' => 0])
                     @empty
                         <p class="text-gray-500 italic">No comments yet. Be the first to share your thoughts!</p>
                     @endforelse
