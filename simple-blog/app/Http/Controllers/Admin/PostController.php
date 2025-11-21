@@ -81,6 +81,7 @@ class PostController extends Controller
             'image' => $imagePath,
             'is_published' => $request->has('is_published'),
             'is_commentable' => $request->has('is_commentable'),
+            'enable_font_adjuster' => $request->has('enable_font_adjuster'),
             'user_id' => auth()->id(),
             'category_id' => $request->category_id,
         ]);
@@ -161,6 +162,7 @@ class PostController extends Controller
             'image' => $imagePath,
             'is_published' => $request->has('is_published'),
             'is_commentable' => $request->has('is_commentable'),
+            'enable_font_adjuster' => $request->has('enable_font_adjuster'),
             'category_id' => $request->category_id,
         ]);
 

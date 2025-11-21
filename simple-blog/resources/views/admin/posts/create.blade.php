@@ -139,6 +139,18 @@
                                 </label>
                             </div>
 
+                            <div class="flex items-center mb-4">
+                                <input type="checkbox" 
+                                       name="enable_font_adjuster" 
+                                       id="enable_font_adjuster" 
+                                       class="h-4 w-4 text-gray-900 focus:ring-gray-900 border-gray-300 rounded" 
+                                       value="1" 
+                                       {{ old('enable_font_adjuster', true) ? 'checked' : '' }}>
+                                <label for="enable_font_adjuster" class="ml-2 block text-sm text-gray-700">
+                                    Enable Font Size Adjuster
+                                </label>
+                            </div>
+
                             <button type="submit" class="w-full inline-flex justify-center items-center px-6 py-3 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>

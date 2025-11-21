@@ -17,9 +17,64 @@
          class="fixed top-0 left-0 h-1 bg-gray-900 z-50 transition-all duration-150 ease-out"
          :style="'width: ' + width"></div>
 
-    <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
+    @if($post->enable_font_adjuster)
+    <style>
+        .font-size-small .prose { font-size: 1rem; line-height: 1.75; }
+        .font-size-normal .prose { font-size: 1.125rem; line-height: 1.75; }
+        .font-size-large .prose { font-size: 1.25rem; line-height: 1.8; }
+    </style>
+
+    <script>
+        function fontSizeAdjuster() {
+            return {
+                size: localStorage.getItem('post_font_size') || 'normal',
+                setSize(newSize) {
+                    this.size = newSize;
+                    localStorage.setItem('post_font_size', newSize);
+                    this.applySize();
+                },
+                applySize() {
+                    const article = document.querySelector('article');
+                    if (article) {
+                        article.className = article.className.replace(/font-size-\w+/g, '');
+                        article.classList.add('font-size-' + this.size);
+                    }
+                },
+                init() {
+                    this.$nextTick(() => this.applySize());
+                }
+            }
+        }
+    </script>
+    @endif
+
+    <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 font-size-normal">
         <!-- Header -->
         <header class="mb-10 text-center mx-auto">
+            @if($post->enable_font_adjuster)
+            <!-- Font Size Adjuster -->
+            <div x-data="fontSizeAdjuster()" class="fixed top-20 right-4 z-30 bg-white rounded-lg shadow-lg border border-gray-200 p-2 flex flex-col gap-1">
+                <button @click="setSize('small')" 
+                        :class="size === 'small' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+                        class="px-3 py-1.5 rounded text-xs font-medium transition-colors"
+                        title="Small font">
+                    A-
+                </button>
+                <button @click="setSize('normal')" 
+                        :class="size === 'normal' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+                        class="px-3 py-1.5 rounded text-sm font-medium transition-colors"
+                        title="Normal font">
+                    A
+                </button>
+                <button @click="setSize('large')" 
+                        :class="size === 'large' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+                        class="px-3 py-1.5 rounded text-base font-medium transition-colors"
+                        title="Large font">
+                    A+
+                </button>
+            </div>
+            @endif
+
             <div class="flex items-center justify-center gap-3 text-sm sm:text-base text-gray-500 font-sans mb-6">
                 <a href="{{ route('blog.category', $post->category->slug) }}" class="text-gray-900 font-medium hover:underline uppercase tracking-wider text-xs sm:text-sm">
                     {{ $post->category->name }}

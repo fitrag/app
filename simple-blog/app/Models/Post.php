@@ -19,6 +19,7 @@ class Post extends Model
         'image',
         'is_published',
         'is_commentable',
+        'enable_font_adjuster',
         'published_at',
         'views',
         'user_id',
@@ -29,6 +30,7 @@ class Post extends Model
         'published_at' => 'datetime',
         'is_published' => 'boolean',
         'is_commentable' => 'boolean',
+        'enable_font_adjuster' => 'boolean',
     ];
 
     public function user(): BelongsTo
