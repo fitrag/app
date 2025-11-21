@@ -53,7 +53,7 @@
         <header class="mb-10 text-center mx-auto">
             @if($post->enable_font_adjuster)
             <!-- Font Size Adjuster -->
-            <div x-data="fontSizeAdjuster()" class="fixed top-20 right-4 z-30 bg-white rounded-lg shadow-lg border border-gray-200 p-2 flex flex-col gap-1">
+            <div x-data="fontSizeAdjuster()" class="fixed bottom-6 right-6 sm:bottom-auto sm:top-24 sm:right-4 xl:right-auto xl:left-4 z-30 bg-white rounded-lg shadow-lg border border-gray-200 p-2 flex flex-row sm:flex-col gap-1">
                 <button @click="setSize('small')" 
                         :class="size === 'small' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
                         class="px-3 py-1.5 rounded text-xs font-medium transition-colors"
@@ -92,9 +92,9 @@
             </h1>
 
             <!-- Author & Actions Bar -->
-            <div class="flex items-center justify-between w-full mt-8 border-t border-b border-gray-100 py-6">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-6 w-full mt-8 border-t border-b border-gray-100 py-6">
                 <!-- Author Profile (Left) -->
-                <a href="{{ route('profile.show', $post->user->id) }}" class="group flex items-center gap-3 text-left">
+                <a href="{{ route('profile.show', $post->user->id) }}" class="group flex items-center gap-3 text-left w-full sm:w-auto justify-center sm:justify-start">
                     <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-200 flex items-center justify-center text-base sm:text-lg font-bold text-gray-600 group-hover:opacity-80 transition-opacity">
                         {{ substr($post->user->name, 0, 1) }}
                     </div>
@@ -105,7 +105,7 @@
                 </a>
 
                 <!-- Action Buttons (Right) -->
-                <div class="flex items-center gap-4 sm:gap-6">
+                <div class="flex items-center justify-center sm:justify-end gap-6 w-full sm:w-auto">
                     <!-- Love Button -->
                     <div x-data="{ 
                         loved: {{ Auth::check() && $post->isLovedBy(Auth::user()) ? 'true' : 'false' }},
@@ -228,7 +228,7 @@
         @endif
 
         <!-- Content -->
-        <div class="prose prose-lg sm:prose-xl max-w-none prose-gray font-serif prose-headings:font-sans prose-headings:font-bold prose-a:text-gray-900 prose-a:no-underline prose-a:border-b prose-a:border-gray-300 hover:prose-a:border-gray-900 prose-img:rounded-lg">
+        <div class="prose prose-base sm:prose-lg md:prose-xl max-w-none prose-gray font-serif prose-headings:font-sans prose-headings:font-bold prose-a:text-gray-900 prose-a:no-underline prose-a:border-b prose-a:border-gray-300 hover:prose-a:border-gray-900 prose-img:rounded-lg">
             <style>
                 /* CKEditor Image Caption Styling */
                 .prose figure.image {
@@ -316,7 +316,7 @@
 
         <!-- Footer / Author Bio -->
         <div class="mt-16 pt-8 border-t border-gray-200">
-            <div class="flex items-start gap-6 bg-gray-50 p-8 rounded-xl">
+            <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 bg-gray-50 p-6 sm:p-8 rounded-xl text-center sm:text-left">
                 <a href="{{ route('profile.show', $post->user->id) }}" class="group flex-shrink-0">
                     <div class="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center text-2xl font-bold text-gray-600 group-hover:opacity-80 transition-opacity">
                         {{ substr($post->user->name, 0, 1) }}

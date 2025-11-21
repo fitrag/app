@@ -185,11 +185,8 @@ class BlogController extends Controller
             ->limit(10)
             ->get();
 
-        // Search Users (who have published posts)
-        $users = \App\Models\User::whereHas('posts', function($q) {
-                $q->where('is_published', true);
-            })
-            ->where(function($q) use ($query) {
+        // Search Users
+        $users = \App\Models\User::where(function($q) use ($query) {
                 $q->where('name', 'like', "%{$query}%")
                   ->orWhere('bio', 'like', "%{$query}%");
             })
@@ -244,10 +241,7 @@ class BlogController extends Controller
             });
 
         // Get top 2 users
-        $users = \App\Models\User::whereHas('posts', function($q) {
-                $q->where('is_published', true);
-            })
-            ->where('name', 'like', "%{$query}%")
+        $users = \App\Models\User::where('name', 'like', "%{$query}%")
             ->select('id', 'name')
             ->limit(2)
             ->get()
