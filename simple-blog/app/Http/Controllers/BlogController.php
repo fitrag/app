@@ -17,9 +17,38 @@ class BlogController extends Controller
         $showInterestModal = false;
 
         if ($feed === 'followed' && auth()->check()) {
-            $followingIds = auth()->user()->following()->pluck('users.id');
-            $query->whereIn('user_id', $followingIds);
-            $query->latest();
+            $user = auth()->user();
+            
+            // Get followed user IDs
+            $followedUserIds = $user->following()->pluck('users.id');
+            
+            // Get followed category IDs
+            $followedCategoryIds = $user->interests()->pluck('categories.id');
+            
+            // Get followed tag IDs
+            $followedTagIds = $user->followedTags()->pluck('tags.id');
+            
+            // Build query to get posts from all followed sources
+            $query->where(function($q) use ($followedUserIds, $followedCategoryIds, $followedTagIds) {
+                // Posts from followed users
+                if ($followedUserIds->isNotEmpty()) {
+                    $q->whereIn('user_id', $followedUserIds);
+                }
+                
+                // Posts from followed categories
+                if ($followedCategoryIds->isNotEmpty()) {
+                    $q->orWhereIn('category_id', $followedCategoryIds);
+                }
+                
+                // Posts with followed tags
+                if ($followedTagIds->isNotEmpty()) {
+                    $q->orWhereHas('tags', function($tagQuery) use ($followedTagIds) {
+                        $tagQuery->whereIn('tags.id', $followedTagIds);
+                    });
+                }
+            });
+            
+            $query->distinct()->latest();
         } elseif ($feed === 'foryou' && auth()->check()) {
             // Check if user has interests
             $userInterests = auth()->user()->interests()->pluck('categories.id');
@@ -172,7 +201,9 @@ class BlogController extends Controller
         return view('blog.archive', [
             'title' => $category->name,
             'subtitle' => 'Category',
-            'posts' => $posts
+            'posts' => $posts,
+            'model' => $category,
+            'type' => 'category'
         ]);
     }
 
@@ -188,7 +219,9 @@ class BlogController extends Controller
         return view('blog.archive', [
             'title' => '#' . $tag->name,
             'subtitle' => 'Tag',
-            'posts' => $posts
+            'posts' => $posts,
+            'model' => $tag,
+            'type' => 'tag'
         ]);
     }
 

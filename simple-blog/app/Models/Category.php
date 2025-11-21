@@ -30,6 +30,14 @@ class Category extends Model
     }
 
     /**
+     * Alias for interestedUsers (followers).
+     */
+    public function followers()
+    {
+        return $this->interestedUsers();
+    }
+
+    /**
      * Scope to get hot categories based on this week's activity
      */
     public function scopeHotThisWeek($query, $limit = 5)

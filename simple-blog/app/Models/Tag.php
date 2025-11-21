@@ -20,4 +20,12 @@ class Tag extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * The users that are following this tag.
+     */
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'tag_user')->withTimestamps();
+    }
 }

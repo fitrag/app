@@ -9,6 +9,54 @@
                 <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 font-serif tracking-tight">
                     {{ $title }}
                 </h1>
+                
+                @auth
+                    @if(isset($model) && isset($type))
+                        <div x-data="{
+                            following: {{ auth()->user()->interests()->where('category_id', $type === 'category' ? $model->id : null)->exists() || auth()->user()->followedTags()->where('tag_id', $type === 'tag' ? $model->id : null)->exists() ? 'true' : 'false' }},
+                            followersCount: {{ $model->followers()->count() }},
+                            toggleFollow() {
+                                const url = this.following 
+                                    ? '{{ $type === 'category' ? route('categories.unfollow', $model) : route('tags.unfollow', $model) }}'
+                                    : '{{ $type === 'category' ? route('categories.follow', $model) : route('tags.follow', $model) }}';
+                                const method = this.following ? 'DELETE' : 'POST';
+                                
+                                fetch(url, {
+                                    method: method,
+                                    headers: {
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                        'Content-Type': 'application/json',
+                                        'Accept': 'application/json'
+                                    }
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        this.following = data.is_following;
+                                        this.followersCount = data.followers_count;
+                                        window.Toast.fire({
+                                            icon: 'success',
+                                            title: data.message
+                                        });
+                                    }
+                                });
+                            }
+                        }" class="mt-6">
+                            <button @click="toggleFollow()" 
+                                    class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-medium text-sm transition-all duration-200 font-sans"
+                                    :class="following ? 'bg-gray-200 text-gray-900 hover:bg-gray-300' : 'bg-gray-900 text-white hover:bg-gray-800'">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path x-show="!following" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                    <path x-show="following" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span x-text="following ? 'Following' : 'Follow'"></span>
+                            </button>
+                            <p class="text-sm text-gray-500 mt-2 font-sans">
+                                <span x-text="followersCount"></span> <span x-text="followersCount === 1 ? 'follower' : 'followers'"></span>
+                            </p>
+                        </div>
+                    @endif
+                @endauth
             </div>
         </div>
     </div>

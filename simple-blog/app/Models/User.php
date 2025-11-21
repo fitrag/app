@@ -166,4 +166,12 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Category::class, 'category_user')->withTimestamps();
     }
+
+    /**
+     * The tags that the user is following.
+     */
+    public function followedTags()
+    {
+        return $this->belongsToMany(Tag::class, 'tag_user')->withTimestamps();
+    }
 }

@@ -249,6 +249,40 @@
                     font-family: system-ui, -apple-system, sans-serif;
                     font-style: italic;
                 }
+
+                /* List Styling */
+                .prose ul {
+                    list-style-type: disc;
+                    padding-left: 1.5rem;
+                    margin: 1.25rem 0;
+                }
+
+                .prose ol {
+                    list-style-type: decimal;
+                    padding-left: 1.5rem;
+                    margin: 1.25rem 0;
+                }
+
+                .prose ul ul,
+                .prose ol ul {
+                    list-style-type: circle;
+                    margin: 0.5rem 0;
+                }
+
+                .prose ul ol,
+                .prose ol ol {
+                    list-style-type: lower-alpha;
+                    margin: 0.5rem 0;
+                }
+
+                .prose li {
+                    margin: 0.5rem 0;
+                    line-height: 1.75;
+                }
+
+                .prose li > p {
+                    margin: 0.5rem 0;
+                }
             </style>
             {!! $post->content !!}
         </div>

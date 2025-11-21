@@ -55,6 +55,14 @@ Route::middleware('auth')->group(function () {
 
     // User Interests
     Route::post('/interests', [\App\Http\Controllers\InterestController::class, 'store'])->name('interests.store');
+
+    // Category Follow Routes
+    Route::post('/categories/{category}/follow', [\App\Http\Controllers\CategoryFollowController::class, 'store'])->name('categories.follow');
+    Route::delete('/categories/{category}/unfollow', [\App\Http\Controllers\CategoryFollowController::class, 'destroy'])->name('categories.unfollow');
+
+    // Tag Follow Routes
+    Route::post('/tags/{tag}/follow', [\App\Http\Controllers\TagFollowController::class, 'store'])->name('tags.follow');
+    Route::delete('/tags/{tag}/unfollow', [\App\Http\Controllers\TagFollowController::class, 'destroy'])->name('tags.unfollow');
 });
 
 // Editor routes
