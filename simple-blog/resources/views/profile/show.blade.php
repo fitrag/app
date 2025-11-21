@@ -137,14 +137,30 @@
                     <h2 class="text-xl font-bold text-gray-900 font-sans">Latest from {{ $user->name }}</h2>
                 </div>
 
-                @if($posts->isEmpty())
+                @if($posts->isEmpty() && !isset($pinnedPost))
                     <div class="py-12 text-center">
                         <p class="text-gray-500 font-sans">No posts published yet.</p>
                     </div>
                 @else
                     <div class="space-y-12">
+                        <!-- Pinned Post -->
+                        @if(isset($pinnedPost) && $pinnedPost)
+                            <div class="relative bg-white border border-gray-200/60 rounded-2xl p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] mb-12 group hover:border-gray-300 transition-all duration-300">
+                                <div class="flex items-center justify-between mb-6">
+                                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-900 text-white shadow-sm">
+                                        <svg class="w-3 h-3 transform rotate-45" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 15v2m-6 4h12a1 1 0 001-1v-6.586a1 1 0 00-.293-.707L14 8.414V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v3.414L5.293 12.707A1 1 0 005 13.414V19a1 1 0 001 1z" />
+                                        </svg>
+                                        <span class="text-[10px] font-bold tracking-widest uppercase font-sans">Pinned</span>
+                                    </div>
+                                </div>
+                                @include('blog.partials.post-item', ['post' => $pinnedPost, 'showPinButton' => true, 'hideBorder' => true])
+                            </div>
+                        @endif
+
+                        <!-- Regular Posts -->
                         @foreach($posts as $post)
-                            @include('blog.partials.post-item')
+                            @include('blog.partials.post-item', ['post' => $post, 'showPinButton' => true])
                         @endforeach
                     </div>
 

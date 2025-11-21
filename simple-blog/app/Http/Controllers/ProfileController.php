@@ -17,14 +17,25 @@ class ProfileController extends Controller
     public function show($id): View
     {
         $user = \App\Models\User::findOrFail($id);
+        
+        // Get pinned post
+        $pinnedPost = \App\Models\Post::where('user_id', $id)
+            ->where('is_published', true)
+            ->where('is_pinned', true)
+            ->with(['category', 'user'])
+            ->withCount(['comments', 'loves'])
+            ->first();
+
+        // Get other posts
         $posts = \App\Models\Post::where('user_id', $id)
             ->where('is_published', true)
+            ->where('is_pinned', false)
             ->with(['category', 'user'])
             ->withCount(['comments', 'loves'])
             ->latest()
             ->paginate(10);
         
-        return view('profile.show', compact('user', 'posts'));
+        return view('profile.show', compact('user', 'posts', 'pinnedPost'));
     }
 
     /**

@@ -198,12 +198,25 @@ class BlogController extends Controller
             ->latest()
             ->paginate(10);
             
+        $postsCount = $category->posts()->where('is_published', true)->count();
+        
+        // Get popular post this week
+        $popularPost = $category->posts()
+            ->where('is_published', true)
+            ->where('posts.created_at', '>=', now()->subDays(7))
+            ->orderBy('views', 'desc')
+            ->with(['user', 'category'])
+            ->withCount(['loves', 'comments'])
+            ->first();
+            
         return view('blog.archive', [
             'title' => $category->name,
             'subtitle' => 'Category',
             'posts' => $posts,
             'model' => $category,
-            'type' => 'category'
+            'type' => 'category',
+            'postsCount' => $postsCount,
+            'popularPost' => $popularPost
         ]);
     }
 
@@ -216,12 +229,25 @@ class BlogController extends Controller
             ->latest()
             ->paginate(10);
             
+        $postsCount = $tag->posts()->where('is_published', true)->count();
+        
+        // Get popular post this week
+        $popularPost = $tag->posts()
+            ->where('is_published', true)
+            ->where('posts.created_at', '>=', now()->subDays(7))
+            ->orderBy('views', 'desc')
+            ->with(['user', 'category'])
+            ->withCount(['loves', 'comments'])
+            ->first();
+            
         return view('blog.archive', [
             'title' => '#' . $tag->name,
             'subtitle' => 'Tag',
             'posts' => $posts,
             'model' => $tag,
-            'type' => 'tag'
+            'type' => 'tag',
+            'postsCount' => $postsCount,
+            'popularPost' => $popularPost
         ]);
     }
 

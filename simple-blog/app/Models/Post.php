@@ -18,6 +18,7 @@ class Post extends Model
         'content',
         'image',
         'is_published',
+        'is_pinned',
         'is_commentable',
         'enable_font_adjuster',
         'published_at',
@@ -29,6 +30,7 @@ class Post extends Model
     protected $casts = [
         'published_at' => 'datetime',
         'is_published' => 'boolean',
+        'is_pinned' => 'boolean',
         'is_commentable' => 'boolean',
         'enable_font_adjuster' => 'boolean',
     ];

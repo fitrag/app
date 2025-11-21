@@ -89,43 +89,84 @@
             </div>
             
             <!-- Bookmark Icon -->
-            <div x-data="{ 
-                bookmarked: {{ Auth::check() && $post->isBookmarkedBy(Auth::user()) ? 'true' : 'false' }},
-                toggleBookmark() {
-                    if (!{{ Auth::check() ? 'true' : 'false' }}) {
-                        window.location.href = '{{ route('login') }}';
-                        return;
-                    }
-                    
-                    fetch('{{ route('posts.bookmark', $post) }}', {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            this.bookmarked = data.is_bookmarked;
-                            window.Toast.fire({
-                                icon: 'success',
-                                title: data.message
+            <div class="flex items-center gap-3">
+                <!-- Pin Button (Owner Only) -->
+                @if(isset($showPinButton) && $showPinButton && Auth::id() === $post->user_id)
+                    <div x-data="{ 
+                        pinned: {{ $post->is_pinned ? 'true' : 'false' }},
+                        togglePin() {
+                            fetch('{{ route('posts.pin', $post) }}', {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json'
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    this.pinned = data.is_pinned;
+                                    window.Toast.fire({
+                                        icon: 'success',
+                                        title: data.message
+                                    });
+                                    // Reload page to update order if needed, or just toggle state
+                                    setTimeout(() => window.location.reload(), 1000);
+                                }
                             });
                         }
-                    });
-                }
-            }">
-                <button @click.prevent="toggleBookmark()" 
-                        class="transition-colors duration-200" 
-                        :class="{ 'text-yellow-500': bookmarked, 'text-gray-400 hover:text-gray-900': !bookmarked }"
-                        title="Bookmark this post">
-                    <span class="sr-only">Bookmark</span>
-                    <svg class="w-5 h-5" :fill="bookmarked ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
-                    </svg>
-                </button>
+                    }">
+                        <button @click.prevent="togglePin()" 
+                                class="transition-colors duration-200" 
+                                :class="{ 'text-blue-600': pinned, 'text-gray-400 hover:text-gray-900': !pinned }"
+                                title="Pin this post">
+                            <span class="sr-only">Pin</span>
+                            <svg class="w-5 h-5 transform rotate-45" :fill="pinned ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a1 1 0 001-1v-6.586a1 1 0 00-.293-.707L14 8.414V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v3.414L5.293 12.707A1 1 0 005 13.414V19a1 1 0 001 1z" />
+                            </svg>
+                        </button>
+                    </div>
+                @endif
+
+                <div x-data="{ 
+                    bookmarked: {{ Auth::check() && $post->isBookmarkedBy(Auth::user()) ? 'true' : 'false' }},
+                    toggleBookmark() {
+                        if (!{{ Auth::check() ? 'true' : 'false' }}) {
+                            window.location.href = '{{ route('login') }}';
+                            return;
+                        }
+                        
+                        fetch('{{ route('posts.bookmark', $post) }}', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                this.bookmarked = data.is_bookmarked;
+                                window.Toast.fire({
+                                    icon: 'success',
+                                    title: data.message
+                                });
+                            }
+                        });
+                    }
+                }">
+                    <button @click.prevent="toggleBookmark()" 
+                            class="transition-colors duration-200" 
+                            :class="{ 'text-yellow-500': bookmarked, 'text-gray-400 hover:text-gray-900': !bookmarked }"
+                            title="Bookmark this post">
+                        <span class="sr-only">Bookmark</span>
+                        <svg class="w-5 h-5" :fill="bookmarked ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -140,4 +181,6 @@
         </a>
     @endif
 </article>
-<hr class="border-gray-100">
+@unless(isset($hideBorder) && $hideBorder)
+    <hr class="border-gray-100">
+@endunless

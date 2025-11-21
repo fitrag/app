@@ -40,6 +40,9 @@ Route::middleware('auth')->group(function () {
 
     // Love Routes
     Route::post('/posts/{post}/love', [\App\Http\Controllers\PostLoveController::class, 'store'])->name('posts.love');
+    
+    // Pin Post Route
+    Route::post('/posts/{post}/pin', [\App\Http\Controllers\PinnedPostController::class, 'toggle'])->name('posts.pin');
 
     // Comment Routes
     Route::post('/posts/{post}/comments', [\App\Http\Controllers\CommentController::class, 'store'])->name('comments.store');
