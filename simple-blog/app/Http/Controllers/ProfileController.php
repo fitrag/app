@@ -19,6 +19,8 @@ class ProfileController extends Controller
         $user = \App\Models\User::findOrFail($id);
         $posts = \App\Models\Post::where('user_id', $id)
             ->where('is_published', true)
+            ->with(['category', 'user'])
+            ->withCount(['comments', 'loves'])
             ->latest()
             ->paginate(10);
         

@@ -19,7 +19,22 @@
             </div>
         @else
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                    <a href="{{ route('blog.category', $post->category->slug) }}" class="hover:underline">
+                @foreach($bookmarks as $post)
+                    <article class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow">
+                        @if($post->image)
+                            <a href="{{ route('blog.show', $post->slug) }}" class="block h-48 overflow-hidden">
+                                <img src="{{ str_starts_with($post->image, 'http') ? $post->image : asset('storage/' . $post->image) }}" 
+                                     alt="{{ $post->title }}" 
+                                     class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+                            </a>
+                        @endif
+                        
+                        <div class="p-6 flex flex-col flex-1">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="text-xs text-gray-500 font-sans">{{ $post->created_at->format('M d, Y') }}</span>
+                                @if($post->category)
+                                    <span class="text-gray-300">&middot;</span>
+                                    <a href="{{ route('blog.category', $post->category->slug) }}" class="text-xs font-medium text-indigo-600 hover:text-indigo-800 uppercase tracking-wide">
                                         {{ $post->category->name }}
                                     </a>
                                 @endif
@@ -59,7 +74,7 @@
                                             if (data.success) {
                                                 this.bookmarked = data.is_bookmarked;
                                                 if (!this.bookmarked) {
-                                                    window.location.reload(); // Reload to remove from list
+                                                    window.location.reload();
                                                 }
                                             }
                                         });

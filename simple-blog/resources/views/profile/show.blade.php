@@ -144,43 +144,7 @@
                 @else
                     <div class="space-y-12">
                         @foreach($posts as $post)
-                            <article class="flex flex-col sm:flex-row gap-8 items-start group">
-                                <div class="flex-1 min-w-0">
-                                    <div class="flex items-center gap-2 text-sm text-gray-500 font-sans mb-2">
-                                        <time datetime="{{ $post->created_at->toDateString() }}">
-                                            {{ $post->created_at->format('M d, Y') }}
-                                        </time>
-                                    </div>
-
-                                    <a href="{{ route('blog.show', $post->slug) }}" class="block group-hover:opacity-90 transition-opacity">
-                                        <h3 class="text-xl font-bold text-gray-900 mb-2 font-serif leading-tight">
-                                            {{ $post->title }}
-                                        </h3>
-                                        <p class="text-gray-500 font-serif text-base leading-relaxed line-clamp-2 mb-3">
-                                            {{ Str::limit(strip_tags($post->content), 140) }}
-                                        </p>
-                                    </a>
-
-                                    <div class="flex items-center gap-4">
-                                        @if($post->category)
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 font-sans">
-                                                {{ $post->category->name }}
-                                            </span>
-                                        @endif
-                                        <span class="text-xs text-gray-500 font-sans">{{ ceil(str_word_count($post->content) / 200) }} min read</span>
-                                    </div>
-                                </div>
-
-                                @if($post->image)
-                                    <a href="{{ route('blog.show', $post->slug) }}" class="flex-shrink-0 w-full sm:w-32 h-32 sm:h-24 bg-gray-100 rounded-md overflow-hidden order-first sm:order-last">
-                                        <img src="{{ str_starts_with($post->image, 'http') ? $post->image : asset('storage/' . $post->image) }}" 
-                                             alt="{{ $post->title }}" 
-                                             loading="lazy"
-                                             class="w-full h-full object-cover">
-                                    </a>
-                                @endif
-                            </article>
-                            <hr class="border-gray-100">
+                            @include('blog.partials.post-item')
                         @endforeach
                     </div>
 
