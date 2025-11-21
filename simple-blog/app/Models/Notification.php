@@ -54,7 +54,15 @@ class Notification extends Model
 
     public function getMessageAttribute()
     {
+        if (!$this->actor) {
+            return "Someone interacted with your content";
+        }
+
         $actorName = $this->actor->name;
+        
+        if (!$this->notifiable) {
+            return "{$actorName} interacted with deleted content";
+        }
         
         switch ($this->type) {
             case 'post_love':
@@ -78,11 +86,19 @@ class Notification extends Model
 
     public function getLinkAttribute()
     {
+        if (!$this->notifiable) {
+            return '#';
+        }
+
         if (in_array($this->type, ['post_love', 'post_comment']) && $this->notifiable_type === 'App\\Models\\Post') {
             return route('blog.show', $this->notifiable->slug);
         }
         
         if (in_array($this->type, ['comment_reply', 'comment_love']) && $this->notifiable_type === 'App\\Models\\Comment') {
+            // Check if the post still exists
+            if (!$this->notifiable->post) {
+                return '#';
+            }
             return route('blog.show', $this->notifiable->post->slug) . '#comment-' . $this->notifiable->id;
         }
         

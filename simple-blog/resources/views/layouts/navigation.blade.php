@@ -26,6 +26,11 @@
                 </div>
             </div>
 
+            <!-- Notification Bell -->
+            <div class="hidden sm:flex sm:items-center sm:ms-6">
+                <x-notification-bell />
+            </div>
+
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">
@@ -96,6 +101,10 @@
             </div>
 
             <div class="mt-3 space-y-1">
+                <x-responsive-nav-link :href="route('notifications.index')">
+                    {{ __('Notifications') }}
+                </x-responsive-nav-link>
+
                 <x-responsive-nav-link :href="route('profile.edit')">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
