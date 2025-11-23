@@ -350,6 +350,123 @@
                             .custom-scrollbar::-webkit-scrollbar-thumb:hover {
                                 background: #9ca3af;
                             }
+
+                            /* CKEditor 5 Custom Styling */
+                            .ck.ck-editor {
+                                border: none !important;
+                            }
+
+                            .ck.ck-editor__main > .ck-editor__editable {
+                                border: none !important;
+                                border-radius: 0 !important;
+                                box-shadow: none !important;
+                                min-height: 400px;
+                                padding: 1.5rem 0 !important;
+                                font-size: 1rem;
+                                line-height: 1.75;
+                                color: #111827;
+                            }
+
+                            .ck.ck-editor__main > .ck-editor__editable:focus {
+                                box-shadow: none !important;
+                                border: none !important;
+                            }
+
+                            .ck.ck-toolbar {
+                                border: none !important;
+                                border-bottom: 2px solid #f3f4f6 !important;
+                                border-radius: 0 !important;
+                                background: #ffffff !important;
+                                padding: 0.75rem 0 !important;
+                            }
+
+                            .ck.ck-toolbar .ck-toolbar__items {
+                                gap: 0.25rem;
+                            }
+
+                            .ck.ck-button {
+                                border-radius: 0.5rem !important;
+                                transition: all 0.2s !important;
+                            }
+
+                            .ck.ck-button:hover {
+                                background: #f9fafb !important;
+                            }
+
+                            .ck.ck-button.ck-on {
+                                background: #111827 !important;
+                                color: #ffffff !important;
+                            }
+
+                            .ck.ck-button.ck-on:hover {
+                                background: #1f2937 !important;
+                            }
+
+                            .ck.ck-toolbar__separator {
+                                background: #e5e7eb !important;
+                            }
+
+                            .ck.ck-dropdown__panel {
+                                border: 1px solid #e5e7eb !important;
+                                border-radius: 0.75rem !important;
+                                box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
+                            }
+
+                            .ck.ck-list__item {
+                                border-radius: 0.5rem !important;
+                            }
+
+                            .ck.ck-list__item:hover {
+                                background: #f9fafb !important;
+                            }
+
+                            .ck.ck-list__item_active {
+                                background: #f3f4f6 !important;
+                            }
+
+                            /* CKEditor Content Styling */
+                            .ck-content h2 {
+                                font-size: 1.875rem;
+                                font-weight: 700;
+                                margin-top: 2rem;
+                                margin-bottom: 1rem;
+                                color: #111827;
+                            }
+
+                            .ck-content h3 {
+                                font-size: 1.5rem;
+                                font-weight: 600;
+                                margin-top: 1.5rem;
+                                margin-bottom: 0.75rem;
+                                color: #111827;
+                            }
+
+                            .ck-content p {
+                                margin-bottom: 1rem;
+                            }
+
+                            .ck-content ul,
+                            .ck-content ol {
+                                margin-left: 1.5rem;
+                                margin-bottom: 1rem;
+                            }
+
+                            .ck-content blockquote {
+                                border-left: 4px solid #e5e7eb;
+                                padding-left: 1rem;
+                                margin: 1.5rem 0;
+                                font-style: italic;
+                                color: #6b7280;
+                            }
+
+                            .ck-content a {
+                                color: #111827;
+                                text-decoration: underline;
+                            }
+
+                            .ck-content a:hover {
+                                color: #374151;
+                            }
                         </style>
                     </div>
                 </div>
