@@ -1,12 +1,13 @@
 @extends('components.layouts.public', [
     'title' => $post->title . ' - ' . \App\Models\Setting::get('site_title'),
     'metaDescription' => Str::limit(strip_tags($post->content), 160),
-    'metaKeywords' => $post->tags->pluck('name')->implode(', ')
+    'metaKeywords' => $post->tags->pluck('name')->implode(', '),
+    'ogTitle' => $post->title,
+    'ogDescription' => Str::limit(strip_tags($post->content), 160),
+    'ogImage' => $post->image ? (str_starts_with($post->image, 'http') ? $post->image : asset('storage/' . $post->image)) : null,
+    'ogType' => 'article',
+    'canonicalUrl' => route('blog.show', $post->slug)
 ])
-
-@push('meta')
-    @include('blog.partials.seo', ['post' => $post])
-@endpush
 
 
 

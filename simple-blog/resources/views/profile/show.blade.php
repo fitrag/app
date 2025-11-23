@@ -1,4 +1,12 @@
-@extends('components.layouts.public')
+@extends('components.layouts.public', [
+    'title' => $user->name . ' - ' . \App\Models\Setting::get('site_title'),
+    'metaDescription' => $user->bio ?? 'Profile of ' . $user->name,
+    'ogTitle' => $user->name,
+    'ogDescription' => $user->bio ?? 'Profile of ' . $user->name,
+    'ogImage' => $user->avatar ? asset('storage/' . $user->avatar) : null,
+    'ogType' => 'profile',
+    'canonicalUrl' => route('profile.show', $user->id)
+])
 
 @section('content')
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16" 

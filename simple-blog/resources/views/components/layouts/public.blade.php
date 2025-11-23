@@ -10,7 +10,26 @@
     <meta name="keywords" content="{{ $metaKeywords ?? \App\Models\Setting::get('site_keywords', 'blog') }}">
     <meta name="author" content="{{ \App\Models\Setting::get('meta_author', '') }}">
 
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ $canonicalUrl ?? url()->current() }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="{{ $ogType ?? 'website' }}">
+    <meta property="og:url" content="{{ $canonicalUrl ?? url()->current() }}">
+    <meta property="og:title" content="{{ $ogTitle ?? ($title ?? \App\Models\Setting::get('site_title')) }}">
+    <meta property="og:description" content="{{ $ogDescription ?? ($metaDescription ?? \App\Models\Setting::get('site_description')) }}">
+    <meta property="og:image" content="{{ $ogImage ?? asset('storage/logo.png') }}">
+    <meta property="og:site_name" content="{{ \App\Models\Setting::get('site_title') }}">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ $canonicalUrl ?? url()->current() }}">
+    <meta name="twitter:title" content="{{ $ogTitle ?? ($title ?? \App\Models\Setting::get('site_title')) }}">
+    <meta name="twitter:description" content="{{ $ogDescription ?? ($metaDescription ?? \App\Models\Setting::get('site_description')) }}">
+    <meta name="twitter:image" content="{{ $ogImage ?? asset('storage/logo.png') }}">
+
     @stack('meta')
+    @include('components.schema')
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

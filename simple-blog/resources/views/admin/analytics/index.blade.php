@@ -91,6 +91,14 @@
                     </div>
                 </div>
 
+                <!-- Daily Visits Chart -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Visitor Trends (Last 7 Days)</h3>
+                    <div class="h-80">
+                        <canvas id="dailyVisitsChart"></canvas>
+                    </div>
+                </div>
+
                 <!-- Charts Row -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <!-- Device Distribution -->
@@ -183,26 +191,52 @@
                     </div>
                 </div>
 
-                <!-- Country Statistics -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Top Countries</h3>
-                    <div class="space-y-3">
-                        @forelse($countryStats->take(10) as $country)
-                            @php
-                                $percentage = $totalVisitors > 0 ? ($country->count / $totalVisitors) * 100 : 0;
-                            @endphp
-                            <div>
-                                <div class="flex items-center justify-between mb-1">
-                                    <span class="text-sm font-medium text-gray-700">{{ $country->country ?? 'Unknown' }}</span>
-                                    <span class="text-sm text-gray-600">{{ number_format($country->count) }} ({{ number_format($percentage, 1) }}%)</span>
+                <!-- Location Statistics -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Top Countries -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Top Countries</h3>
+                        <div class="space-y-3">
+                            @forelse($countryStats->take(10) as $country)
+                                @php
+                                    $percentage = $totalVisitors > 0 ? ($country->count / $totalVisitors) * 100 : 0;
+                                @endphp
+                                <div>
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-sm font-medium text-gray-700">{{ $country->country ?? 'Unknown' }}</span>
+                                        <span class="text-sm text-gray-600">{{ number_format($country->count) }} ({{ number_format($percentage, 1) }}%)</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-indigo-500 h-2 rounded-full" style="width: {{ $percentage }}%"></div>
+                                    </div>
                                 </div>
-                                <div class="w-full bg-gray-200 rounded-full h-2">
-                                    <div class="bg-indigo-500 h-2 rounded-full" style="width: {{ $percentage }}%"></div>
+                            @empty
+                                <p class="text-sm text-gray-500 text-center py-4">No country data available</p>
+                            @endforelse
+                        </div>
+                    </div>
+
+                    <!-- Top Cities -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Top Cities</h3>
+                        <div class="space-y-3">
+                            @forelse($cityStats->take(10) as $city)
+                                @php
+                                    $percentage = $totalVisitors > 0 ? ($city->count / $totalVisitors) * 100 : 0;
+                                @endphp
+                                <div>
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-sm font-medium text-gray-700">{{ $city->city ?? 'Unknown' }} <span class="text-gray-400 text-xs">({{ $city->country }})</span></span>
+                                        <span class="text-sm text-gray-600">{{ number_format($city->count) }} ({{ number_format($percentage, 1) }}%)</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-teal-500 h-2 rounded-full" style="width: {{ $percentage }}%"></div>
+                                    </div>
                                 </div>
-                            </div>
-                        @empty
-                            <p class="text-sm text-gray-500 text-center py-4">No country data available</p>
-                        @endforelse
+                            @empty
+                                <p class="text-sm text-gray-500 text-center py-4">No city data available</p>
+                            @endforelse
+                        </div>
                     </div>
                 </div>
 
@@ -217,6 +251,7 @@
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Country</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">City</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Device</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Browser</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">OS</th>
@@ -234,9 +269,10 @@
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
                                                     {{ $visitor->country }}
                                                 </span>
-                                            @else
-                                                <span class="text-gray-400">-</span>
                                             @endif
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                            {{ $visitor->city ?? '-' }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize
@@ -258,7 +294,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="px-6 py-12 text-center text-gray-500">
+                                        <td colspan="8" class="px-6 py-12 text-center text-gray-500">
                                             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                                             </svg>
@@ -274,4 +310,111 @@
             </div>
         </div>
     </div>
+    @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('dailyVisitsChart').getContext('2d');
+            
+            // Prepare data
+            const dates = @json($dailyVisits->pluck('date'));
+            const totalVisits = @json($dailyVisits->pluck('total_visits'));
+            const uniqueVisits = @json($dailyVisits->pluck('unique_visits'));
+            
+            // Format dates to be more readable (e.g., "Mon, 22 Nov")
+            const formattedDates = dates.map(date => {
+                const d = new Date(date);
+                return d.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' });
+            });
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: formattedDates,
+                    datasets: [
+                        {
+                            label: 'Total Visitors',
+                            data: totalVisits,
+                            backgroundColor: 'rgba(59, 130, 246, 0.5)', // Blue-500 with opacity
+                            borderColor: 'rgb(59, 130, 246)',
+                            borderWidth: 1,
+                            borderRadius: 4,
+                            barPercentage: 0.6,
+                            categoryPercentage: 0.8,
+                            stack: 'combined'
+                        },
+                        {
+                            label: 'Unique Visitors',
+                            data: uniqueVisits,
+                            backgroundColor: 'rgba(16, 185, 129, 0.5)', // Green-500 with opacity
+                            borderColor: 'rgb(16, 185, 129)',
+                            borderWidth: 1,
+                            borderRadius: 4,
+                            barPercentage: 0.6,
+                            categoryPercentage: 0.8,
+                            stack: 'combined'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            align: 'end',
+                            labels: {
+                                usePointStyle: true,
+                                boxWidth: 8
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                            titleColor: '#1f2937',
+                            bodyColor: '#4b5563',
+                            borderColor: '#e5e7eb',
+                            borderWidth: 1,
+                            padding: 10,
+                            displayColors: true,
+                            callbacks: {
+                                labelColor: function(context) {
+                                    return {
+                                        borderColor: context.dataset.borderColor,
+                                        backgroundColor: context.dataset.backgroundColor
+                                    };
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            grid: {
+                                borderDash: [2, 2],
+                                drawBorder: false,
+                            },
+                            ticks: {
+                                precision: 0
+                            }
+                        },
+                        x: {
+                            stacked: true,
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    interaction: {
+                        mode: 'nearest',
+                        axis: 'x',
+                        intersect: false
+                    }
+                }
+            });
+        });
+    </script>
+    @endpush
 </x-app-layout>

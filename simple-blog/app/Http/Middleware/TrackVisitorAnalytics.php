@@ -23,6 +23,8 @@ class TrackVisitorAnalytics
             !$request->is('api/*') && 
             !$request->is('login') &&
             !$request->is('register') &&
+            !$request->is('notifications/recent') &&
+            !$request->is('notifications/unread-count') &&
             !str_contains($request->path(), '.')) {
             
             try {

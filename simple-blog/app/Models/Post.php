@@ -19,6 +19,7 @@ class Post extends Model
         'image',
         'is_published',
         'is_pinned',
+        'show_read_also',
         'is_commentable',
         'enable_font_adjuster',
         'published_at',
@@ -31,6 +32,7 @@ class Post extends Model
         'published_at' => 'datetime',
         'is_published' => 'boolean',
         'is_pinned' => 'boolean',
+        'show_read_also' => 'boolean',
         'is_commentable' => 'boolean',
         'enable_font_adjuster' => 'boolean',
     ];

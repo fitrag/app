@@ -1,4 +1,11 @@
-@extends('components.layouts.public')
+@extends('components.layouts.public', [
+    'title' => 'Berita tentang ' . $title . ' - ' . \App\Models\Setting::get('site_title'),
+    'metaDescription' => 'Archive of posts for ' . $title,
+    'ogTitle' => 'Berita tentang ' . $title,
+    'ogDescription' => 'Archive of posts for ' . $title,
+    'ogType' => 'website',
+    'canonicalUrl' => url()->current()
+])
 
 @section('content')
     <!-- Archive Header -->
@@ -12,7 +19,7 @@
                 
                 <!-- Title -->
                 <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 font-serif tracking-tight">
-                    {{ $title }}
+                    {{ $type === 'tag' ? '#' : '' }}{{ $title }}
                 </h1>
                 
                 @auth

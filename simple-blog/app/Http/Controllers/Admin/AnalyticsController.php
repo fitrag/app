@@ -90,13 +90,23 @@ class AnalyticsController extends Controller
             ->orderByDesc('count')
             ->limit(10)
             ->get();
+
+        // City statistics
+        $cityStats = (clone $query)
+            ->select('city', 'country', DB::raw('count(*) as count'))
+            ->whereNotNull('city')
+            ->groupBy('city', 'country')
+            ->orderByDesc('count')
+            ->limit(10)
+            ->get();
         
-        // Daily visits for chart (last 30 days)
+        // Daily visits for chart (last 7 days)
         $dailyVisits = VisitorAnalytic::select(
                 DB::raw('DATE(created_at) as date'),
-                DB::raw('count(*) as visits')
+                DB::raw('count(*) as total_visits'),
+                DB::raw('count(DISTINCT ip_address) as unique_visits')
             )
-            ->where('created_at', '>=', now()->subDays(30))
+            ->where('created_at', '>=', now()->subDays(6)) // Last 7 days including today
             ->groupBy('date')
             ->orderBy('date')
             ->get();
@@ -115,6 +125,7 @@ class AnalyticsController extends Controller
             'popularPages',
             'referrerStats',
             'countryStats',
+            'cityStats',
             'dailyVisits',
             'recentVisitors',
             'period'

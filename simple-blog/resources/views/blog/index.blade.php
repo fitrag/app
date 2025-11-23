@@ -1,4 +1,8 @@
-@extends('components.layouts.public')
+@extends('components.layouts.public', [
+    'title' => \App\Models\Setting::get('site_title') . ' - ' . \App\Models\Setting::get('site_description'),
+    'ogType' => 'website',
+    'canonicalUrl' => route('blog.index')
+])
 
 @section('content')
     <!-- Minimalist Hero / Welcome -->

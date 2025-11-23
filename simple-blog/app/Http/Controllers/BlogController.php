@@ -187,26 +187,28 @@ class BlogController extends Controller
             ->get();
         
         // Get a post for "Read Also" injection (different from relatedPosts to avoid duplication if possible)
-        $readAlsoPost = Post::where('is_published', true)
-            ->where('id', '!=', $post->id)
-            ->where('category_id', $post->category_id)
-            ->inRandomOrder()
-            ->first();
+        if ($post->show_read_also) {
+            $readAlsoPost = Post::where('is_published', true)
+                ->where('id', '!=', $post->id)
+                ->where('category_id', $post->category_id)
+                ->inRandomOrder()
+                ->first();
 
-        if ($readAlsoPost) {
-            $readAlsoHtml = view('blog.partials.read-also', ['post' => $readAlsoPost])->render();
-            
-            // Insert after 2nd paragraph
-            $content = $post->content;
-            $paragraphs = explode('</p>', $content);
-            
-            if (count($paragraphs) > 2) {
-                // Insert after 2nd paragraph (index 1)
-                array_splice($paragraphs, 2, 0, $readAlsoHtml);
-                $post->content = implode('</p>', $paragraphs);
-            } else {
-                // If content is short, just append
-                $post->content .= $readAlsoHtml;
+            if ($readAlsoPost) {
+                $readAlsoHtml = view('blog.partials.read-also', ['post' => $readAlsoPost])->render();
+                
+                // Insert after 2nd paragraph
+                $content = $post->content;
+                $paragraphs = explode('</p>', $content);
+                
+                if (count($paragraphs) > 2) {
+                    // Insert after 2nd paragraph (index 1)
+                    array_splice($paragraphs, 2, 0, $readAlsoHtml);
+                    $post->content = implode('</p>', $paragraphs);
+                } else {
+                    // If content is short, just append
+                    $post->content .= $readAlsoHtml;
+                }
             }
         }
 
@@ -265,7 +267,7 @@ class BlogController extends Controller
             ->first();
             
         return view('blog.archive', [
-            'title' => '#' . $tag->name,
+            'title' => $tag->name,
             'subtitle' => 'Tag',
             'posts' => $posts,
             'model' => $tag,

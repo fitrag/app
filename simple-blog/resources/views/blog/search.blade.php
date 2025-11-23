@@ -14,33 +14,44 @@
 
         @if($totalResults > 0)
             <!-- Tabs -->
+            <style>
+                .no-scrollbar::-webkit-scrollbar {
+                    display: none;
+                }
+                .no-scrollbar {
+                    -ms-overflow-style: none;  /* IE and Edge */
+                    scrollbar-width: none;  /* Firefox */
+                }
+            </style>
             <div class="border-b border-gray-200 mb-8" x-data="{ activeTab: 'posts' }">
-                <nav class="-mb-px flex space-x-8 font-sans" aria-label="Tabs">
-                    <button @click="activeTab = 'posts'" 
-                            :class="activeTab === 'posts' ? 'border-gray-900 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                            class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
-                        Posts
-                        <span class="ml-2 py-0.5 px-2 rounded-full text-xs" :class="activeTab === 'posts' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'">{{ $posts->count() }}</span>
-                    </button>
-                    <button @click="activeTab = 'users'" 
-                            :class="activeTab === 'users' ? 'border-gray-900 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                            class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
-                        People
-                        <span class="ml-2 py-0.5 px-2 rounded-full text-xs" :class="activeTab === 'users' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'">{{ $users->count() }}</span>
-                    </button>
-                    <button @click="activeTab = 'categories'" 
-                            :class="activeTab === 'categories' ? 'border-gray-900 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                            class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
-                        Categories
-                        <span class="ml-2 py-0.5 px-2 rounded-full text-xs" :class="activeTab === 'categories' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'">{{ $categories->count() }}</span>
-                    </button>
-                    <button @click="activeTab = 'tags'" 
-                            :class="activeTab === 'tags' ? 'border-gray-900 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                            class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
-                        Tags
-                        <span class="ml-2 py-0.5 px-2 rounded-full text-xs" :class="activeTab === 'tags' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'">{{ $tags->count() }}</span>
-                    </button>
-                </nav>
+                <div class="overflow-x-auto pb-px no-scrollbar"> <!-- Added wrapper for scroll -->
+                    <nav class="-mb-px flex space-x-8 font-sans min-w-max" aria-label="Tabs">
+                        <button @click="activeTab = 'posts'" 
+                                :class="activeTab === 'posts' ? 'border-gray-900 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+                            Posts
+                            <span class="ml-2 py-0.5 px-2 rounded-full text-xs" :class="activeTab === 'posts' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'">{{ $posts->count() }}</span>
+                        </button>
+                        <button @click="activeTab = 'users'" 
+                                :class="activeTab === 'users' ? 'border-gray-900 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+                            People
+                            <span class="ml-2 py-0.5 px-2 rounded-full text-xs" :class="activeTab === 'users' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'">{{ $users->count() }}</span>
+                        </button>
+                        <button @click="activeTab = 'categories'" 
+                                :class="activeTab === 'categories' ? 'border-gray-900 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+                            Categories
+                            <span class="ml-2 py-0.5 px-2 rounded-full text-xs" :class="activeTab === 'categories' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'">{{ $categories->count() }}</span>
+                        </button>
+                        <button @click="activeTab = 'tags'" 
+                                :class="activeTab === 'tags' ? 'border-gray-900 text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+                            Tags
+                            <span class="ml-2 py-0.5 px-2 rounded-full text-xs" :class="activeTab === 'tags' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'">{{ $tags->count() }}</span>
+                        </button>
+                    </nav>
+                </div>
 
                 <!-- Posts Tab -->
                 <div x-show="activeTab === 'posts'" class="py-8">
