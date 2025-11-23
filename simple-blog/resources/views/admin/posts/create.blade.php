@@ -155,7 +155,15 @@
                                             <p class="text-xs text-gray-500">Write your story</p>
                                         </div>
                                     </div>
-                                    <span class="text-xs text-gray-400" id="word-count">0 words</span>
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-xs text-gray-400" id="word-count">0 words</span>
+                                        <span class="text-xs flex items-center gap-1.5" id="save-status">
+                                            <svg class="w-3.5 h-3.5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            <span class="text-gray-400">Auto-save ready</span>
+                                        </span>
+                                    </div>
                                 </div>
                                 
                                 <textarea name="content" 
@@ -713,6 +721,155 @@
                 if (toolbar) {
                     toolbar.appendChild(button);
                 }
+
+                // Auto-Save Draft Functionality (Server-Side)
+                let autoSaveInterval;
+                let lastSaveTime = null;
+                let currentDraftId = null; // Track current draft ID
+                const AUTO_SAVE_DELAY = 30000; // 30 seconds
+                const CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                // Update save status indicator
+                function updateSaveStatus(status, message = '') {
+                    const statusEl = document.getElementById('save-status');
+                    if (!statusEl) return;
+                    
+                    const iconSvg = statusEl.querySelector('svg');
+                    const textSpan = statusEl.querySelector('span');
+
+                    switch(status) {
+                        case 'saving':
+                            iconSvg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>';
+                            iconSvg.className = 'w-3.5 h-3.5 text-gray-400 animate-spin';
+                            textSpan.className = 'text-gray-400';
+                            textSpan.textContent = 'Saving...';
+                            break;
+                        case 'saved':
+                            iconSvg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>';
+                            iconSvg.className = 'w-3.5 h-3.5 text-green-500';
+                            textSpan.className = 'text-green-600';
+                            textSpan.textContent = 'Draft saved';
+                            lastSaveTime = Date.now();
+                            setTimeout(() => updateTimeSinceLastSave(), 1000);
+                            break;
+                        case 'error':
+                            iconSvg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>';
+                            iconSvg.className = 'w-3.5 h-3.5 text-red-500';
+                            textSpan.className = 'text-red-600';
+                            textSpan.textContent = 'Save failed';
+                            break;
+                        default:
+                            iconSvg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>';
+                            iconSvg.className = 'w-3.5 h-3.5 text-gray-300';
+                            textSpan.className = 'text-gray-400';
+                            textSpan.textContent = 'Auto-save ready';
+                    }
+                }
+
+                // Update time since last save
+                function updateTimeSinceLastSave() {
+                    if (!lastSaveTime) return;
+                    
+                    const seconds = Math.floor((Date.now() - lastSaveTime) / 1000);
+                    const statusEl = document.getElementById('save-status');
+                    if (!statusEl) return;
+                    
+                    const textSpan = statusEl.querySelector('span');
+                    
+                    if (seconds < 60) {
+                        textSpan.textContent = `Saved ${seconds}s ago`;
+                        setTimeout(() => updateTimeSinceLastSave(), 1000);
+                    } else {
+                        const minutes = Math.floor(seconds / 60);
+                        textSpan.textContent = `Saved ${minutes}m ago`;
+                        setTimeout(() => updateTimeSinceLastSave(), 60000);
+                    }
+                }
+
+                // Save draft to server via AJAX
+                function saveDraft() {
+                    try {
+                        updateSaveStatus('saving');
+                        
+                        const formData = {
+                            id: currentDraftId, // null for new draft, ID for update
+                            title: document.getElementById('title').value,
+                            content: editor.getData(),
+                            category_id: document.querySelector('[name="category_id"]')?.value || null,
+                            tags: Array.from(document.querySelectorAll('[name="tags[]"]:checked')).map(cb => cb.value),
+                        };
+
+                        fetch('{{ route("admin.posts.auto-save") }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': CSRF_TOKEN,
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify(formData)
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                currentDraftId = data.post_id; // Store draft ID for future updates
+                                updateSaveStatus('saved');
+                            } else {
+                                updateSaveStatus('error');
+                                console.error('Auto-save error:', data.error);
+                            }
+                        })
+                        .catch(error => {
+                            updateSaveStatus('error');
+                            console.error('Auto-save failed:', error);
+                        });
+
+                    } catch (error) {
+                        updateSaveStatus('error');
+                        console.error('Error saving draft:', error);
+                    }
+                }
+
+                // Start auto-save
+                function startAutoSave() {
+                    let hasChanges = false;
+                    
+                    // Listen to form changes
+                    document.getElementById('title').addEventListener('input', () => {
+                        if (!hasChanges) {
+                            hasChanges = true;
+                            setTimeout(() => {
+                                saveDraft();
+                                hasChanges = false;
+                            }, 2000); // Debounce 2 seconds
+                        }
+                    });
+
+                    editor.model.document.on('change:data', () => {
+                        if (!hasChanges) {
+                            hasChanges = true;
+                            setTimeout(() => {
+                                saveDraft();
+                                hasChanges = false;
+                            }, 2000); // Debounce 2 seconds
+                        }
+                    });
+
+                    // Auto-save every 30 seconds
+                    autoSaveInterval = setInterval(() => {
+                        // Only auto-save if there's content
+                        if (document.getElementById('title').value || editor.getData()) {
+                            saveDraft();
+                        }
+                    }, AUTO_SAVE_DELAY);
+                }
+
+                // Start auto-save
+                startAutoSave();
+
+                // Clear auto-save interval on form submit
+                document.getElementById('post-form').addEventListener('submit', function() {
+                    clearInterval(autoSaveInterval);
+                });
             })
             .catch(error => {
                 console.error(error);

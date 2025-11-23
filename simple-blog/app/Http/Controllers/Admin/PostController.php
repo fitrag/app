@@ -193,6 +193,66 @@ class PostController extends Controller
     }
 
     /**
+     * Auto-save post draft via AJAX
+     */
+    public function autoSave(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'id' => 'nullable|exists:posts,id',
+                'title' => 'nullable|string|max:255',
+                'content' => 'nullable|string',
+                'category_id' => 'nullable|exists:categories,id',
+                'tags' => 'nullable|array',
+                'tags.*' => 'exists:tags,id',
+            ]);
+
+            // If ID exists, update existing draft
+            if ($request->id) {
+                $post = Post::findOrFail($request->id);
+                
+                // Only allow updating if it's user's own post
+                if ($post->user_id !== auth()->id()) {
+                    return response()->json(['error' => 'Unauthorized'], 403);
+                }
+            } else {
+                // Create new draft
+                $post = new Post();
+                $post->user_id = auth()->id();
+                $post->slug = Str::slug($request->title ?: 'untitled-' . time());
+            }
+
+            // Update post data
+            $post->title = $request->title ?: 'Untitled Draft';
+            $post->content = $request->content ?: '';
+            $post->category_id = $request->category_id;
+            $post->status = 'draft';
+            $post->is_auto_saved = true;
+            $post->is_published = false;
+
+            $post->save();
+
+            // Sync tags if provided
+            if ($request->has('tags')) {
+                $post->tags()->sync($request->tags);
+            }
+
+            return response()->json([
+                'success' => true,
+                'post_id' => $post->id,
+                'message' => 'Draft saved successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+    /**
      * Show analytics for a specific post
      */
     public function analytics(Post $post)

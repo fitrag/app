@@ -78,6 +78,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth', 'admin', 'menu.permission'])->group(function () {
     Route::resource('admin/posts', \App\Http\Controllers\Admin\PostController::class)->names('admin.posts');
+    Route::post('admin/posts/auto-save', [\App\Http\Controllers\Admin\PostController::class, 'autoSave'])->name('admin.posts.auto-save');
     Route::post('admin/posts/bulk-action', [\App\Http\Controllers\Admin\PostController::class, 'bulkAction'])->name('admin.posts.bulk-action');
     Route::get('admin/posts/{post}/analytics', [\App\Http\Controllers\Admin\PostController::class, 'analytics'])->name('admin.posts.analytics');
     Route::resource('admin/categories', \App\Http\Controllers\Admin\CategoryController::class)->names('admin.categories');
