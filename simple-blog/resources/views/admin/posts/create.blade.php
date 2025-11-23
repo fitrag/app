@@ -263,45 +263,94 @@
                             @enderror
                         </div>
 
-                        <!-- Tags -->
-                        <div class="bg-white shadow-sm rounded-lg border border-gray-200 p-6">
-                            <h3 class="text-sm font-semibold text-gray-900 mb-4">Tags</h3>
-                            <div class="space-y-2 max-h-64 overflow-y-auto" id="tags-container">
-                                @forelse($tags as $tag)
-                                    <label class="flex items-center">
-                                        <input type="checkbox" 
-                                               name="tags[]" 
-                                               value="{{ $tag->id }}" 
-                                               class="h-4 w-4 text-gray-900 focus:ring-gray-900 border-gray-300 rounded"
-                                               {{ in_array($tag->id, old('tags', [])) ? 'checked' : '' }}>
-                                        <span class="ml-2 text-sm text-gray-700">{{ $tag->name }}</span>
-                                    </label>
-                                @empty
-                                    <p class="text-sm text-gray-500" id="no-tags-message">No tags available</p>
-                                @endforelse
-                            </div>
-                            
-                            <!-- Quick Add Tag -->
-                            <div class="mt-4 pt-4 border-t border-gray-200">
-                                <label for="new_tag" class="block text-xs font-medium text-gray-700 mb-1">Add New Tag</label>
-                                <div class="flex gap-2">
-                                    <input type="text" 
-                                           id="new_tag" 
-                                           class="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-gray-900 focus:border-gray-900" 
-                                           placeholder="Tag name">
-                                    <button type="button" 
-                                            onclick="createNewTag()"
-                                            class="px-3 py-1.5 bg-gray-900 text-white text-xs font-medium rounded-md hover:bg-gray-800 transition">
-                                        Add
-                                    </button>
+                        <!-- Tags Section -->
+                        <div class="bg-white rounded-xl border border-gray-100 overflow-hidden transition-shadow duration-200 hover:shadow-sm">
+                            <div class="p-6">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-gray-50">
+                                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-sm font-semibold text-gray-900">Tags</h3>
+                                        <p class="text-xs text-gray-500">Select relevant tags</p>
+                                    </div>
                                 </div>
-                                <p id="tag-error" class="text-red-500 text-xs mt-1 hidden"></p>
-                            </div>
 
-                            @error('tags')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                            @enderror
+                                <!-- Search Tags -->
+                                <div class="mb-3">
+                                    <div class="relative">
+                                        <input type="text" 
+                                               id="tag-search" 
+                                               class="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-200" 
+                                               placeholder="Search tags..."
+                                               onkeyup="searchTags()">
+                                        <svg class="absolute left-3 top-2.5 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                
+                                <!-- Tags List -->
+                                <div class="space-y-1 max-h-64 overflow-y-auto custom-scrollbar" id="tags-container">
+                                    @forelse($tags as $tag)
+                                        <label class="flex items-center p-2.5 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors duration-200 tag-item" data-tag-name="{{ strtolower($tag->name) }}">
+                                            <input type="checkbox" 
+                                                   name="tags[]" 
+                                                   value="{{ $tag->id }}" 
+                                                   class="h-4 w-4 text-gray-900 focus:ring-gray-900 border-gray-300 rounded"
+                                                   {{ in_array($tag->id, old('tags', [])) ? 'checked' : '' }}>
+                                            <span class="ml-3 text-sm text-gray-700">{{ $tag->name }}</span>
+                                        </label>
+                                    @empty
+                                        <p class="text-sm text-gray-400 text-center py-4" id="no-tags-message">No tags available</p>
+                                    @endforelse
+                                    <p class="text-sm text-gray-400 text-center py-4 hidden" id="no-results-message">No tags found</p>
+                                </div>
+                                
+                                <!-- Quick Add Tag -->
+                                <div class="mt-4 pt-4 border-t border-gray-100">
+                                    <label for="new_tag" class="block text-xs font-medium text-gray-600 mb-2">Quick Add Tag</label>
+                                    <div class="flex gap-2">
+                                        <input type="text" 
+                                               id="new_tag" 
+                                               class="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-200" 
+                                               placeholder="Tag name">
+                                        <button type="button" 
+                                                onclick="createNewTag()"
+                                                class="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors duration-200">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <p id="tag-error" class="text-red-500 text-xs mt-1 hidden"></p>
+                                </div>
+
+                                @error('tags')
+                                    <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+                                @enderror
+                            </div>
                         </div>
+
+                        <!-- Custom Scrollbar Style -->
+                        <style>
+                            .custom-scrollbar::-webkit-scrollbar {
+                                width: 6px;
+                            }
+                            .custom-scrollbar::-webkit-scrollbar-track {
+                                background: #f1f1f1;
+                                border-radius: 10px;
+                            }
+                            .custom-scrollbar::-webkit-scrollbar-thumb {
+                                background: #d1d5db;
+                                border-radius: 10px;
+                            }
+                            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                                background: #9ca3af;
+                            }
+                        </style>
                     </div>
                 </div>
             </form>
@@ -358,6 +407,32 @@
             document.getElementById('previewImg').src = '';
             document.getElementById('imagePreview').classList.add('hidden');
             document.getElementById('uploadArea').classList.remove('hidden');
+        }
+
+        // Live Search Tags
+        function searchTags() {
+            const searchInput = document.getElementById('tag-search');
+            const searchTerm = searchInput.value.toLowerCase();
+            const tagItems = document.querySelectorAll('.tag-item');
+            const noResultsMsg = document.getElementById('no-results-message');
+            let visibleCount = 0;
+
+            tagItems.forEach(item => {
+                const tagName = item.getAttribute('data-tag-name');
+                if (tagName.includes(searchTerm)) {
+                    item.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+
+            // Show/hide no results message
+            if (visibleCount === 0 && tagItems.length > 0) {
+                noResultsMsg.classList.remove('hidden');
+            } else {
+                noResultsMsg.classList.add('hidden');
+            }
         }
 
         function createNewTag() {
