@@ -199,7 +199,7 @@ class PostController extends Controller
     {
         try {
             $data = $request->validate([
-                'id' => 'nullable|exists:posts,id',
+                'id' => 'nullable|integer',
                 'title' => 'nullable|string|max:255',
                 'content' => 'nullable|string',
                 'category_id' => 'nullable|exists:categories,id',
@@ -209,26 +209,41 @@ class PostController extends Controller
 
             // If ID exists, update existing draft
             if ($request->id) {
-                $post = Post::findOrFail($request->id);
+                $post = Post::find($request->id);
+                
+                // Check if post exists
+                if (!$post) {
+                    return response()->json([
+                        'success' => false,
+                        'error' => 'Post not found'
+                    ], 404);
+                }
                 
                 // Only allow updating if it's user's own post
-                if ($post->user_id !== auth()->id()) {
-                    return response()->json(['error' => 'Unauthorized'], 403);
+                if ($post->user_id != auth()->id()) {
+                    return response()->json([
+                        'success' => false,
+                        'error' => 'Unauthorized - You can only edit your own posts'
+                    ], 403);
                 }
             } else {
                 // Create new draft
                 $post = new Post();
                 $post->user_id = auth()->id();
                 $post->slug = Str::slug($request->title ?: 'untitled-' . time());
+                // Set initial status for new posts
+                $post->status = 'draft';
+                $post->is_published = false;
             }
 
             // Update post data
             $post->title = $request->title ?: 'Untitled Draft';
             $post->content = $request->content ?: '';
             $post->category_id = $request->category_id;
-            $post->status = 'draft';
+            
+            // Only set draft status for new posts, preserve status for existing posts
+            // This prevents published posts from being reverted to draft on auto-save
             $post->is_auto_saved = true;
-            $post->is_published = false;
 
             $post->save();
 
@@ -244,6 +259,7 @@ class PostController extends Controller
             ]);
 
         } catch (\Exception $e) {
+            \Log::error('Auto-save error: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'error' => $e->getMessage()
