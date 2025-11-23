@@ -83,6 +83,7 @@ class PostController extends Controller
             'is_commentable' => $request->has('is_commentable'),
             'show_read_also' => $request->has('show_read_also'),
             'enable_font_adjuster' => $request->has('enable_font_adjuster'),
+            'focus_keyword' => $request->focus_keyword,
             'user_id' => auth()->id(),
             'category_id' => $request->category_id,
         ]);
@@ -165,6 +166,7 @@ class PostController extends Controller
             'is_commentable' => $request->has('is_commentable'),
             'show_read_also' => $request->has('show_read_also'),
             'enable_font_adjuster' => $request->has('enable_font_adjuster'),
+            'focus_keyword' => $request->focus_keyword,
             'category_id' => $request->category_id,
         ]);
 

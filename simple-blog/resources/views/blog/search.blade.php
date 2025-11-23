@@ -1,4 +1,12 @@
-@extends('components.layouts.public')
+@extends('components.layouts.public', [
+    'title' => 'Search results for "' . $query . '" - ' . \App\Models\Setting::get('site_title'),
+    'metaDescription' => 'Search results for ' . $query,
+    'canonicalUrl' => url()->current() . '?q=' . urlencode($query)
+])
+
+@push('meta')
+    <meta name="robots" content="noindex, follow">
+@endpush
 
 @section('content')
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

@@ -260,6 +260,23 @@
                                 </div>
                             </div>
 
+                            <!-- Enable SEO Analyzer -->
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                <div>
+                                    <label for="enable_seo_analyzer" class="text-sm font-medium text-gray-700">Enable SEO Analyzer</label>
+                                    <p class="text-sm text-gray-500">Show real-time SEO analysis tool on post create/edit pages</p>
+                                </div>
+                                <label for="enable_seo_analyzer" class="relative inline-block w-12 h-6 transition duration-200 ease-in-out rounded-full cursor-pointer">
+                                    <input type="checkbox" 
+                                           name="enable_seo_analyzer" 
+                                           id="enable_seo_analyzer" 
+                                           value="1" 
+                                           class="peer sr-only" 
+                                           {{ old('enable_seo_analyzer', $settings['enable_seo_analyzer'] ?? '1') == '1' ? 'checked' : '' }}>
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gray-900"></div>
+                                </label>
+                            </div>
+
                             <!-- SEO Info Box -->
                             <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
                                 <div class="flex">

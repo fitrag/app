@@ -100,16 +100,23 @@ class AnalyticsController extends Controller
             ->limit(10)
             ->get();
         
-        // Daily visits for chart (last 7 days)
-        $dailyVisits = VisitorAnalytic::select(
-                DB::raw('DATE(created_at) as date'),
-                DB::raw('count(*) as total_visits'),
-                DB::raw('count(DISTINCT ip_address) as unique_visits')
-            )
-            ->where('created_at', '>=', now()->subDays(6)) // Last 7 days including today
+        // Daily Visits (Last 7 days)
+        $dailyVisits = VisitorAnalytic::selectRaw('DATE(created_at) as date, COUNT(*) as total_visits, COUNT(DISTINCT session_id) as unique_visits')
+            ->where('created_at', '>=', now()->subDays(7))
             ->groupBy('date')
             ->orderBy('date')
             ->get();
+
+        // Bot Statistics
+        $botStats = (clone $query)->where('is_bot', true)
+            ->select('bot_name', \DB::raw('count(*) as count'))
+            ->groupBy('bot_name')
+            ->orderByDesc('count')
+            ->limit(5)
+            ->get();
+
+        $totalBots = (clone $query)->where('is_bot', true)->count();
+        $totalHumans = (clone $query)->where('is_bot', false)->count();
         
         // Recent visitors
         $recentVisitors = VisitorAnalytic::latest()
@@ -127,8 +134,35 @@ class AnalyticsController extends Controller
             'countryStats',
             'cityStats',
             'dailyVisits',
+            'botStats',
+            'totalBots',
+            'totalHumans',
             'recentVisitors',
             'period'
         ));
+    }
+
+    public function recentVisitorsJson()
+    {
+        $visitors = VisitorAnalytic::latest()
+            ->limit(20)
+            ->get()
+            ->map(function ($visitor) {
+                return [
+                    'id' => $visitor->id,
+                    'ip_address' => $visitor->ip_address,
+                    'time' => $visitor->created_at->diffForHumans(),
+                    'country' => $visitor->country,
+                    'city' => $visitor->city ?? '-',
+                    'device_type' => $visitor->device_type ?? 'Unknown',
+                    'browser' => $visitor->browser ?? 'Unknown',
+                    'platform' => $visitor->platform ?? 'Unknown',
+                    'page_url' => $visitor->page_url,
+                ];
+            });
+
+        return response()->json([
+            'visitors' => $visitors
+        ]);
     }
 }

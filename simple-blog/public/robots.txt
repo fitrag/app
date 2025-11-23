@@ -1,2 +1,14 @@
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /admin/
+Disallow: /dashboard
+Disallow: /login
+Disallow: /register
+Disallow: /password/
+Disallow: /email/
+Disallow: /sanctum/
+Disallow: /nova/
+Disallow: /telescope/
+Disallow: /horizon/
+
+Sitemap: /sitemap.xml

@@ -24,8 +24,8 @@ class TrackVisitorAnalytics
             !$request->is('login') &&
             !$request->is('register') &&
             !$request->is('notifications/recent') &&
-            !$request->is('notifications/unread-count') &&
-            !str_contains($request->path(), '.')) {
+            !$request->is('notifications/recent') &&
+            !$request->is('notifications/unread-count')) {
             
             try {
                 $agent = new Agent();
@@ -80,6 +80,8 @@ class TrackVisitorAnalytics
                     'page_title' => null, // Will be updated via JavaScript if needed
                     'session_id' => $sessionId,
                     'visit_duration' => 0,
+                    'is_bot' => $agent->isRobot(),
+                    'bot_name' => $agent->isRobot() ? $agent->robot() : null,
                 ]);
             } catch (\Exception $e) {
                 // Silently fail to not break the application

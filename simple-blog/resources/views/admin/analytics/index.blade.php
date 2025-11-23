@@ -240,16 +240,104 @@
                     </div>
                 </div>
 
+                <!-- Bot Statistics -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Human vs Bot Chart -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Traffic Type</h3>
+                        <div class="h-64">
+                            <canvas id="trafficTypeChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Top Bots -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Top Crawl Bots</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bot Name</th>
+                                        <th class="px-4 py-3 bg-gray-50 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Visits</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @forelse($botStats as $bot)
+                                        <tr>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{{ $bot->bot_name ?: 'Unknown Bot' }}</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 text-right">{{ number_format($bot->count) }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="2" class="px-4 py-3 text-sm text-gray-500 text-center">No bot traffic detected</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Recent Visitors Table -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-200">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden" 
+                     x-data="{
+                         visitors: {{ json_encode($recentVisitors->map(function($v) {
+                             return [
+                                 'id' => $v->id,
+                                 'ip_address' => $v->ip_address,
+                                 'time' => $v->created_at->diffForHumans(),
+                                 'country' => $v->country,
+                                 'city' => $v->city ?? '-',
+                                 'device_type' => $v->device_type ?? 'Unknown',
+                                 'browser' => $v->browser ?? 'Unknown',
+                                 'platform' => $v->platform ?? 'Unknown',
+                                 'page_url' => $v->page_url,
+                             ];
+                         })) }},
+                         newVisitorIds: [],
+                         async fetchVisitors() {
+                             try {
+                                 const response = await fetch('{{ route('admin.analytics.recent-visitors') }}');
+                                 const data = await response.json();
+                                 
+                                 // Track new visitor IDs for animation
+                                 const currentIds = this.visitors.map(v => v.id);
+                                 this.newVisitorIds = data.visitors
+                                     .filter(v => !currentIds.includes(v.id))
+                                     .map(v => v.id);
+                                 
+                                 this.visitors = data.visitors;
+                                 
+                                 // Clear animation after 2 seconds
+                                 setTimeout(() => {
+                                     this.newVisitorIds = [];
+                                 }, 2000);
+                             } catch (error) {
+                                 console.error('Failed to fetch visitors:', error);
+                             }
+                         },
+                         init() {
+                             // Poll every 5 seconds
+                             setInterval(() => {
+                                 this.fetchVisitors();
+                             }, 5000);
+                         }
+                     }">
+                    <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
                         <h3 class="text-lg font-semibold text-gray-900">Recent Visitors</h3>
+                        <span class="text-xs text-gray-500">
+                            <svg class="inline w-3 h-3 animate-pulse text-green-500" fill="currentColor" viewBox="0 0 8 8">
+                                <circle cx="4" cy="4" r="3" />
+                            </svg>
+                            Live
+                        </span>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IP Address</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Country</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">City</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Device</th>
@@ -259,40 +347,32 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                @forelse($recentVisitors as $visitor)
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                            {{ $visitor->created_at->diffForHumans() }}
-                                        </td>
+                                <template x-for="visitor in visitors" :key="visitor.id">
+                                    <tr class="hover:bg-gray-50 transition-colors"
+                                        :class="{ 'bg-green-50 animate-pulse': newVisitorIds.includes(visitor.id) }">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900" x-text="visitor.time"></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-600" x-text="visitor.ip_address"></td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                            @if($visitor->country)
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
-                                                    {{ $visitor->country }}
-                                                </span>
-                                            @endif
+                                            <span x-show="visitor.country" 
+                                                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800"
+                                                  x-text="visitor.country"></span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                            {{ $visitor->city ?? '-' }}
-                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600" x-text="visitor.city"></td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize
-                                                {{ $visitor->device_type == 'mobile' ? 'bg-purple-100 text-purple-800' : '' }}
-                                                {{ $visitor->device_type == 'desktop' ? 'bg-orange-100 text-orange-800' : '' }}
-                                                {{ $visitor->device_type == 'tablet' ? 'bg-blue-100 text-blue-800' : '' }}">
-                                                {{ $visitor->device_type ?? 'Unknown' }}
-                                            </span>
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize"
+                                                  :class="{
+                                                      'bg-purple-100 text-purple-800': visitor.device_type === 'mobile',
+                                                      'bg-orange-100 text-orange-800': visitor.device_type === 'desktop',
+                                                      'bg-blue-100 text-blue-800': visitor.device_type === 'tablet'
+                                                  }"
+                                                  x-text="visitor.device_type"></span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                            {{ $visitor->browser ?? 'Unknown' }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                            {{ $visitor->platform ?? 'Unknown' }}
-                                        </td>
-                                        <td class="px-6 py-4 text-sm text-gray-600 max-w-xs truncate">
-                                            {{ $visitor->page_url }}
-                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600" x-text="visitor.browser"></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600" x-text="visitor.platform"></td>
+                                        <td class="px-6 py-4 text-sm text-gray-600 max-w-xs truncate" x-text="visitor.page_url"></td>
                                     </tr>
-                                @empty
+                                </template>
+                                <template x-if="visitors.length === 0">
                                     <tr>
                                         <td colspan="8" class="px-6 py-12 text-center text-gray-500">
                                             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -301,7 +381,7 @@
                                             <p class="mt-4 text-sm">No visitor data available yet</p>
                                         </td>
                                     </tr>
-                                @endforelse
+                                </template>
                             </tbody>
                         </table>
                     </div>
@@ -412,6 +492,41 @@
                         axis: 'x',
                         intersect: false
                     }
+                }
+            });
+
+            // Traffic Type Chart
+            const trafficCtx = document.getElementById('trafficTypeChart').getContext('2d');
+            new Chart(trafficCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Humans', 'Bots'],
+                    datasets: [{
+                        data: [{{ $totalHumans }}, {{ $totalBots }}],
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.8)', // Blue
+                            'rgba(107, 114, 128, 0.8)'  // Gray
+                        ],
+                        borderColor: [
+                            'rgb(59, 130, 246)',
+                            'rgb(107, 114, 128)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                usePointStyle: true,
+                                boxWidth: 8
+                            }
+                        }
+                    },
+                    cutout: '70%'
                 }
             });
         });

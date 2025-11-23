@@ -88,6 +88,7 @@ Route::middleware(['auth', 'admin', 'menu.permission'])->group(function () {
     Route::get('admin/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('admin.settings.index');
     Route::put('admin/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('admin.settings.update');
     Route::get('admin/analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('admin.analytics.index');
+    Route::get('admin/analytics/recent-visitors', [\App\Http\Controllers\Admin\AnalyticsController::class, 'recentVisitorsJson'])->name('admin.analytics.recent-visitors');
     Route::resource('admin/users', \App\Http\Controllers\Admin\UserController::class)->names('admin.users');
     
     // Monetization Applications - Strict Admin Only

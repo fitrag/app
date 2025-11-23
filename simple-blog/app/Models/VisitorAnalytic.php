@@ -22,6 +22,8 @@ class VisitorAnalytic extends Model
         'page_title',
         'session_id',
         'visit_duration',
+        'is_bot',
+        'bot_name',
     ];
 
     // Scopes for analytics queries

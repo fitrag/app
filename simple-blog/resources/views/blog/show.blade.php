@@ -284,6 +284,67 @@
                 .prose li > p {
                     margin: 0.5rem 0;
                 }
+
+                /* Heading Styling */
+                .prose h1 {
+                    font-size: 1.75rem;
+                    font-weight: 800;
+                    margin-top: 2.5rem;
+                    margin-bottom: 1.25rem;
+                    line-height: 1.1;
+                    color: #111827;
+                    font-family: system-ui, -apple-system, sans-serif;
+                }
+                @media (min-width: 640px) {
+                    .prose h1 { font-size: 2.25rem; }
+                }
+
+                .prose h2 {
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                    margin-top: 2rem;
+                    margin-bottom: 1rem;
+                    line-height: 1.3;
+                    color: #1f2937;
+                    font-family: system-ui, -apple-system, sans-serif;
+                }
+                @media (min-width: 640px) {
+                    .prose h2 { font-size: 1.875rem; }
+                }
+
+                .prose h3 {
+                    font-size: 1.25rem;
+                    font-weight: 600;
+                    margin-top: 1.75rem;
+                    margin-bottom: 0.75rem;
+                    line-height: 1.4;
+                    color: #374151;
+                    font-family: system-ui, -apple-system, sans-serif;
+                }
+                @media (min-width: 640px) {
+                    .prose h3 { font-size: 1.5rem; }
+                }
+
+                /* Blockquote Styling */
+                .prose blockquote {
+                    font-style: italic;
+                    font-weight: 500;
+                    color: #111827;
+                    border-left-width: 0.25rem;
+                    border-left-color: #e5e7eb;
+                    margin-top: 1.6em;
+                    margin-bottom: 1.6em;
+                    padding-left: 1em;
+                    quotes: "\201C""\201D""\2018""\2019";
+                }
+
+                .prose blockquote p:first-of-type::before {
+                    content: open-quote;
+                }
+
+                .prose blockquote p:last-of-type::after {
+                    content: close-quote;
+                }
             </style>
             {!! $post->content !!}
         </div>

@@ -185,6 +185,12 @@
                             </a>
                         </div>
 
+
+                        <!-- SEO Analyzer -->
+                        @if(\App\Models\Setting::get('enable_seo_analyzer', '1') == '1')
+                            @include('admin.posts.partials.seo-analyzer', ['post' => $post])
+                        @endif
+
                         <!-- Category -->
                         <div class="bg-white shadow-sm rounded-lg border border-gray-200 p-6">
                             <h3 class="text-sm font-semibold text-gray-900 mb-4">Category</h3>

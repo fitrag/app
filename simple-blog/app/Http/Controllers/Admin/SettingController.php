@@ -25,6 +25,7 @@ class SettingController extends Controller
             'coins_per_1000_views' => Setting::get('coins_per_1000_views', 5),
             'monetization_min_posts' => Setting::get('monetization_min_posts', 3),
             'monetization_min_views' => Setting::get('monetization_min_views', 100),
+            'enable_seo_analyzer' => Setting::get('enable_seo_analyzer', '1'),
         ];
 
         return view('admin.settings.index', compact('settings'));
@@ -50,8 +51,9 @@ class SettingController extends Controller
         ]);
 
         $data = $request->except('_token');
-        // Handle checkbox: if present it's '1', if missing it's '0'
+        // Handle checkboxes: if present it's '1', if missing it's '0'
         $data['hero_show'] = $request->has('hero_show') ? '1' : '0';
+        $data['enable_seo_analyzer'] = $request->has('enable_seo_analyzer') ? '1' : '0';
 
         foreach ($data as $key => $value) {
             Setting::set($key, $value);

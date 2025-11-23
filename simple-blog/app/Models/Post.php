@@ -26,6 +26,7 @@ class Post extends Model
         'views',
         'user_id',
         'category_id',
+        'focus_keyword',
     ];
 
     protected $casts = [
