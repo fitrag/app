@@ -13,100 +13,164 @@
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <!-- Left Column - Main Content (2/3 width) -->
                     <div class="lg:col-span-2 space-y-6">
-                        <!-- Title -->
-                        <div class="bg-white shadow-sm rounded-lg border border-gray-200 p-6">
-                            <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Title</label>
-                            <input type="text" 
-                                   name="title" 
-                                   id="title" 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent transition @error('title') border-red-500 @enderror" 
-                                   value="{{ old('title') }}" 
-                                   placeholder="Enter post title..."
-                                   required>
-                            @error('title')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Content -->
-                        <div class="bg-white shadow-sm rounded-lg border border-gray-200 p-6">
-                            <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Content</label>
-                            <textarea name="content" 
-                                      id="content" 
-                                      rows="12" 
-                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent transition @error('content') border-red-500 @enderror" 
-                                      placeholder="Write your post content...">{{ old('content') }}</textarea>
-                            @error('content')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Featured Image -->
-                        <div class="bg-white shadow-sm rounded-lg border border-gray-200 p-6">
-                            <label class="block text-sm font-medium text-gray-700 mb-4">Featured Image</label>
-                            
-                            <!-- Upload Method Toggle -->
-                            <div class="flex gap-4 mb-4">
-                                <label class="flex items-center cursor-pointer">
-                                    <input type="radio" name="image_source" value="file" checked class="mr-2" onchange="toggleImageSource()">
-                                    <span class="text-sm text-gray-700">Upload File</span>
-                                </label>
-                                <label class="flex items-center cursor-pointer">
-                                    <input type="radio" name="image_source" value="url" class="mr-2" onchange="toggleImageSource()">
-                                    <span class="text-sm text-gray-700">From URL</span>
-                                </label>
-                            </div>
-
-                            <!-- File Upload Section -->
-                            <div id="fileUploadSection">
-                                <!-- Preview Container -->
-                                <div id="imagePreview" class="hidden mb-4">
-                                    <img id="previewImg" src="" alt="Preview" class="h-48 w-auto rounded-lg border border-gray-200">
-                                    <button type="button" onclick="removePreview()" class="mt-2 text-sm text-red-600 hover:text-red-800">
-                                        Remove image
-                                    </button>
-                                </div>
-
-                                <div id="uploadArea" class="flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-gray-400 transition">
-                                    <div class="space-y-1 text-center">
-                                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                        <div class="flex text-sm text-gray-600">
-                                            <label for="image" class="relative cursor-pointer bg-white rounded-md font-medium text-gray-900 hover:text-gray-700">
-                                                <span>Upload a file</span>
-                                                <input id="image" name="image" type="file" class="sr-only" accept="image/*" onchange="previewImage(event)">
-                                            </label>
-                                            <p class="pl-1">or drag and drop</p>
+                        <!-- Title Section -->
+                        <div class="bg-white rounded-xl border border-gray-100 overflow-hidden transition-shadow duration-200 hover:shadow-sm">
+                            <div class="p-6">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-gray-50">
+                                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
+                                            </svg>
                                         </div>
-                                        <p class="text-xs text-gray-500">PNG, JPG, GIF up to 2MB</p>
+                                        <div>
+                                            <h3 class="text-sm font-semibold text-gray-900">Title</h3>
+                                            <p class="text-xs text-gray-500">Give your post a catchy title</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs text-gray-400">
+                                        <span id="title-count">0</span>/60
+                                    </span>
+                                </div>
+                                
+                                <input type="text" 
+                                       name="title" 
+                                       id="title" 
+                                       maxlength="60"
+                                       class="w-full px-0 py-3 text-2xl font-semibold text-gray-900 placeholder-gray-300 border-0 border-b-2 border-transparent focus:border-gray-900 focus:ring-0 transition-colors duration-200 @error('title') border-red-300 @enderror" 
+                                       value="{{ old('title') }}" 
+                                       placeholder="Enter your post title..."
+                                       required>
+                                
+                                @error('title')
+                                    <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <!-- Featured Image Section -->
+                        <div class="bg-white rounded-xl border border-gray-100 overflow-hidden transition-shadow duration-200 hover:shadow-sm">
+                            <div class="p-6">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-gray-50">
+                                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-sm font-semibold text-gray-900">Featured Image</h3>
+                                        <p class="text-xs text-gray-500">Add a cover image for your post</p>
                                     </div>
                                 </div>
-                            </div>
-
-                            <!-- URL Input Section -->
-                            <div id="urlInputSection" class="hidden">
-                                <input type="text" 
-                                       name="image_url" 
-                                       id="image_url" 
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent transition" 
-                                       placeholder="https://example.com/image.jpg"
-                                       onchange="previewUrlImage(event)">
-                                <p class="text-xs text-gray-500 mt-2">Enter the full URL of the image</p>
                                 
-                                <!-- URL Preview -->
-                                <div id="urlImagePreview" class="hidden mt-4">
-                                    <img id="urlPreviewImg" src="" alt="Preview" class="h-48 w-auto rounded-lg border border-gray-200">
+                                <!-- Upload Method Toggle -->
+                                <div class="flex gap-2 mb-4">
+                                    <label class="flex-1">
+                                        <input type="radio" name="image_source" value="file" checked class="peer sr-only" onchange="toggleImageSource()">
+                                        <div class="flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-600 bg-gray-50 border border-gray-200 rounded-lg cursor-pointer peer-checked:bg-gray-900 peer-checked:text-white peer-checked:border-gray-900 transition-all duration-200">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                                            </svg>
+                                            Upload File
+                                        </div>
+                                    </label>
+                                    <label class="flex-1">
+                                        <input type="radio" name="image_source" value="url" class="peer sr-only" onchange="toggleImageSource()">
+                                        <div class="flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-600 bg-gray-50 border border-gray-200 rounded-lg cursor-pointer peer-checked:bg-gray-900 peer-checked:text-white peer-checked:border-gray-900 transition-all duration-200">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                                            </svg>
+                                            From URL
+                                        </div>
+                                    </label>
                                 </div>
-                            </div>
 
-                            @error('image')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                            @enderror
-                            @error('image_url')
-                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                            @enderror
+                                <!-- File Upload Section -->
+                                <div id="fileUploadSection">
+                                    <div id="imagePreview" class="hidden mb-4">
+                                        <div class="relative group">
+                                            <img id="previewImg" src="" alt="Preview" class="w-full h-64 object-cover rounded-lg">
+                                            <button type="button" 
+                                                    onclick="removePreview()" 
+                                                    class="absolute top-2 right-2 p-2 bg-white/90 backdrop-blur-sm rounded-lg text-gray-700 hover:bg-red-50 hover:text-red-600 transition-all duration-200 opacity-0 group-hover:opacity-100">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div id="uploadArea">
+                                        <label for="image" class="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-200 border-dashed rounded-lg cursor-pointer bg-gray-50/50 hover:bg-gray-50 transition-colors duration-200">
+                                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                                <svg class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                                                </svg>
+                                                <p class="mb-2 text-sm text-gray-600">
+                                                    <span class="font-semibold">Click to upload</span> or drag and drop
+                                                </p>
+                                                <p class="text-xs text-gray-400">PNG, JPG, GIF up to 2MB</p>
+                                            </div>
+                                            <input id="image" name="image" type="file" class="hidden" accept="image/*" onchange="previewImage(event)">
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- URL Input Section -->
+                                <div id="urlInputSection" class="hidden">
+                                    <input type="text" 
+                                           name="image_url" 
+                                           id="image_url" 
+                                           class="w-full px-4 py-3 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-200" 
+                                           placeholder="https://example.com/image.jpg"
+                                           onchange="previewUrlImage(event)">
+                                    <p class="text-xs text-gray-500 mt-2">Enter the full URL of the image</p>
+                                    
+                                    <div id="urlImagePreview" class="hidden mt-4">
+                                        <img id="urlPreviewImg" src="" alt="Preview" class="w-full h-64 object-cover rounded-lg">
+                                    </div>
+                                </div>
+
+                                @error('image')
+                                    <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+                                @enderror
+                                @error('image_url')
+                                    <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+                                @enderror
+                            </div>
                         </div>
+
+                        <!-- Content Section -->
+                        <div class="bg-white rounded-xl border border-gray-100 overflow-hidden transition-shadow duration-200 hover:shadow-sm">
+                            <div class="p-6">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-gray-50">
+                                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-sm font-semibold text-gray-900">Content</h3>
+                                            <p class="text-xs text-gray-500">Write your story</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs text-gray-400" id="word-count">0 words</span>
+                                </div>
+                                
+                                <textarea name="content" 
+                                          id="content" 
+                                          rows="16"
+                                          class="w-full px-0 py-3 text-base text-gray-900 placeholder-gray-300 border-0 focus:ring-0 resize-y @error('content') text-red-600 @enderror" 
+                                          placeholder="Start writing your story...">{{ old('content') }}</textarea>
+                                
+                                @error('content')
+                                    <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                        
                     </div>
 
                     <!-- Right Column - Sidebar (1/3 width) -->
@@ -246,6 +310,36 @@
 
     @push('scripts')
     <script>
+        // Title Character Counter
+        const titleInput = document.getElementById('title');
+        const titleCount = document.getElementById('title-count');
+        
+        if (titleInput && titleCount) {
+            titleInput.addEventListener('input', function() {
+                titleCount.textContent = this.value.length;
+            });
+            // Initialize count
+            titleCount.textContent = titleInput.value.length;
+        }
+
+        // Word Count for Content
+        const contentTextarea = document.getElementById('content');
+        const wordCountEl = document.getElementById('word-count');
+        
+        function updateWordCount() {
+            if (contentTextarea && wordCountEl) {
+                const text = contentTextarea.value.trim();
+                const words = text.split(/\s+/).filter(word => word.length > 0);
+                wordCountEl.textContent = words.length + ' words';
+            }
+        }
+
+        if (contentTextarea) {
+            contentTextarea.addEventListener('input', updateWordCount);
+            // Initialize word count
+            updateWordCount();
+        }
+
         function previewImage(event) {
             const file = event.target.files[0];
             if (file) {
